@@ -13,6 +13,7 @@ class CreateSarprasTables extends Migration
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'nama_kategori' => ['type' => 'VARCHAR', 'constraint' => 100],
             'parent_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'null' => true],
+            'icon' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'is_active' => ['type' => 'BOOLEAN', 'default' => 1],
             'created_at' => ['type' => 'TIMESTAMP', 'null' => true],
             'updated_at' => ['type' => 'TIMESTAMP', 'null' => true],

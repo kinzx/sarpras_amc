@@ -103,6 +103,19 @@
                       <label class="form-label">Nama Kategori</label>
                       <input type="text" class="form-control" name="nama_kategori" placeholder="Contoh: Sarpras Umum" required>
                     </div>
+                    <div class="mb-3">
+                      <label class="form-label">Pilih Ikon</label>
+                      <select class="form-select" name="icon" required>
+                        <option value="bx-category">Default (Kategori)</option>
+                        <option value="bx-laptop">Elektronik (Laptop)</option>
+                        <option value="bx-chair">Non-Elektronik (Kursi)</option>
+                        <option value="bx-plus-medical">Alat Medis (Palang Medis)</option>
+                        <option value="bx-buildings">Fasilitas (Gedung)</option>
+                        <option value="bx-car">Kendaraan (Mobil)</option>
+                        <option value="bx-dashboard">Lain nya </option>
+
+                      </select>
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
@@ -113,6 +126,42 @@
             </div>
           </div>
           <!-- / Content -->
+          <!-- Modal Edit Kategori -->
+          <div class="modal fade" id="modalEditKategori" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Kategori</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!-- Action akan diisi via JavaScript -->
+                <form id="formEditKategori" method="POST">
+                  <?= csrf_field() ?>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label class="form-label">Nama Kategori</label>
+                      <input type="text" class="form-control" name="nama_kategori" id="edit_nama_kategori" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Pilih Ikon</label>
+                      <select class="form-select" name="icon" id="edit_icon" required>
+                        <option value="bx-category">Default (Kategori)</option>
+                        <option value="bx-laptop">Elektronik (Laptop)</option>
+                        <option value="bx-chair">Non-Elektronik (Kursi)</option>
+                        <option value="bx-plus-medical">Alat Medis (Palang Medis)</option>
+                        <option value="bx-buildings">Fasilitas (Gedung)</option>
+                        <option value="bx-car">Kendaraan (Mobil)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
           <!-- Footer -->
           <?= view('adds/footer'); ?>
@@ -136,7 +185,28 @@
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/theme.js  -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Menangkap semua tombol edit
+      const tombolEdit = document.querySelectorAll('.btn-edit');
 
+      tombolEdit.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Ambil data dari atribut tombol
+          const id = this.getAttribute('data-id');
+          const nama = this.getAttribute('data-nama');
+          const icon = this.getAttribute('data-icon');
+
+          // Isi form di dalam modal
+          document.getElementById('edit_nama_kategori').value = nama;
+          document.getElementById('edit_icon').value = icon;
+
+          // Ubah action form agar mengarah ke URL update dengan ID yang benar
+          document.getElementById('formEditKategori').action = "<?= base_url('kategori/update') ?>/" + id;
+        });
+      });
+    });
+  </script>
   <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
 
   <script src="../../assets/vendor/libs/popper/popper.js"></script>

@@ -41,8 +41,6 @@
             </button>
         </div>
     </div>
-
-    <!-- 2. GRID KARTU KATEGORI -->
     <!-- 2. GRID KARTU KATEGORI -->
     <div class="row g-4">
         <?php if (empty($kategori)): ?>
@@ -55,35 +53,32 @@
                     <div class="card h-100 text-center pt-4">
                         <div class="card-body position-relative d-flex flex-column align-items-center justify-content-center py-5">
 
-                            <!-- Tombol Edit (Arahkan ke route edit dengan ID) -->
-                            <a href="<?= base_url('kategori/edit/' . $row['id']) ?>" class="btn btn-icon btn-primary rounded-circle position-absolute top-0 end-0 m-3">
-                                <i class="bx bx-pencil"></i>
-                            </a>
+                            <!-- TOMBOL AKSI (Edit & Hapus) -->
+                            <div class="position-absolute top-0 end-0 m-3 d-flex gap-1">
+                                <!-- Tombol Edit (Memicu Modal) -->
+                                <button type="button" class="btn btn-sm btn-icon btn-primary rounded-circle btn-edit"
+                                    data-id="<?= $row['id'] ?>"
+                                    data-nama="<?= $row['nama_kategori'] ?>"
+                                    data-icon="<?= $row['icon'] ?>"
+                                    data-bs-toggle="modal" data-bs-target="#modalEditKategori">
+                                    <i class="bx bx-pencil"></i>
+                                </button>
+                                <!-- Tombol Hapus -->
+                                <a href="<?= base_url('kategori/hapus/' . $row['id']) ?>"
+                                    class="btn btn-sm btn-icon btn-danger rounded-circle"
+                                    onclick="return confirm('Yakin ingin menonaktifkan kategori ini?')">
+                                    <i class="bx bx-trash"></i>
+                                </a>
+                            </div>
 
-                            <!-- Ikon Dinamis -->
-                            <?php
-                            $nama_kategori = strtolower($row['nama_kategori']);
-                            $icon = 'bx-category'; // Ikon default
-
-                            // Logika sederhana penentuan ikon
-                            if (str_contains($nama_kategori, 'elektronik') && !str_contains($nama_kategori, 'non')) {
-                                $icon = 'bx-laptop';
-                            } elseif (str_contains($nama_kategori, 'non-elektronik')) {
-                                $icon = 'bx-chair';
-                            } elseif (str_contains($nama_kategori, 'medis')) {
-                                $icon = 'bx-plus-medical';
-                            }
-                            ?>
-                            <i class="bx <?= $icon ?> text-secondary mb-4" style="font-size: 5rem;"></i>
-
-                            <!-- Judul Dinamis -->
+                            <!-- Ikon & Judul -->
+                            <i class="bx <?= $row['icon'] ?? 'bx-category' ?> text-secondary mb-4" style="font-size: 5rem;"></i>
                             <h4 class="card-title mb-0 fw-bold text-dark"><?= $row['nama_kategori'] ?></h4>
 
-                            <!-- Tautan ke Sub Kategori (jika nanti sudah dibuat) -->
+                            <!-- Tautan ke Sub Kategori -->
                             <a href="<?= base_url('kategori/sub/' . $row['id']) ?>" class="btn btn-sm btn-outline-primary mt-3">
                                 Lihat Sub-Kategori
                             </a>
-
                         </div>
                     </div>
                 </div>

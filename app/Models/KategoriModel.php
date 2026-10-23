@@ -15,6 +15,7 @@ class KategoriModel extends Model
         protected $allowedFields    = [
         'nama_kategori', 
         'parent_id', 
+        'icon',
         'is_active'
     ];
 
