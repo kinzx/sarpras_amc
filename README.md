@@ -1,69 +1,121 @@
-# CodeIgniter 4 Application Starter
+# SIM-SARPRAS RS AMC (Sistem Informasi Manajemen Sarana & Prasarana)
 
-## What is CodeIgniter?
+Sistem Informasi Manajemen Sarana dan Prasarana (SARPRAS) untuk **Rumah Sakit AMC**, dibangun menggunakan framework **CodeIgniter 4** dan database **MySQL/MariaDB**. Aplikasi ini dirancang untuk mendata, memantau, serta mengelola siklus pemeliharaan aset medis dan non-medis rumah sakit secara terintegrasi dan efisien.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 📌 Fitur Utama
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- **Dashboard Interaktif**: Ringkasan status inventaris, jumlah aset, peringatan jadwal maintenance & kalibrasi.
+- **Master Data**:
+  - **Data Barang / Aset**: Pencatatan spesifikasi teknis barang (merek, tipe, no seri, daya, kepemilikan, interval maintenance).
+  - **Kategori & Sub-Kategori**: Pengelompokan bertingkat (parent-child category) dengan penanda ikon.
+  - **Ruangan & Lokasi**: Penempatan barang berdasarkan ruangan dan lantai rumah sakit.
+  - **Pengguna & Role**: Manajemen hak akses pengguna (Admin & Teknisi).
+- **Manajemen Pemeliharaan & Aset (Database Ready)**:
+  - **Kalibrasi Alat**: Jadwal, catatan, dan unggah sertifikat bukti kalibrasi.
+  - **Maintenance Rutin**: Inspeksi berkala fisik (bodi, display, tombol, aksesoris) dan kesimpulan kondisi alat.
+  - **Perbaikan Kerusakan**: Pencatatan tiket kerusakan, foto sebelum & setelah tindakan, analisis perbaikan, dan histori perbaikan.
+  - **Audit Trail & Activity Log**: Pencatatan riwayat aktivitas pengguna ke dalam `log_apps`.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+---
 
-## Installation & updates
+## 🛠️ Tech Stack & Kebutuhan Sistem
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+- **PHP**: `^8.2` (dengan ekstensi `intl`, `mbstring`, `json`, `mysqlnd`, `curl`)
+- **Framework**: [CodeIgniter 4](https://codeigniter.com/) (v4.7+)
+- **Database**: MySQL / MariaDB
+- **Template / UI**: Sneat Bootstrap 5 Admin Dashboard Template & Boxicons
+- **Dependency Manager**: Composer
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+---
 
-## Setup
+## 🚀 Panduan Instalasi & Menjalankan Proyek
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### 1. Clone Repositori
+```bash
+git clone https://github.com/kinzx/sarpras_amc.git
+cd sarpras_amc
+```
 
-## Important Change with index.php
+### 2. Instalasi Dependensi
+Jalankan Composer untuk mengunduh vendor library:
+```bash
+composer install
+```
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### 3. Konfigurasi Environment (`.env`)
+Salin file konfigurasi contoh `env` menjadi `.env` (atau sesuaikan `.env` yang sudah ada):
+```bash
+cp env .env
+```
+Sesuaikan konfigurasi database dan base URL pada `.env`:
+```ini
+CI_ENVIRONMENT = development
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+app.baseURL = 'http://localhost:8080/'
 
-**Please** read the user guide for a better explanation of how CI4 works!
+database.default.hostname = localhost
+database.default.database = sarpras_amc
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+database.default.port = 3306
+```
 
-## Repository Management
+### 4. Migrasi & Seeding Database
+Jalankan migrasi untuk membuat seluruh skema tabel sarpras:
+```bash
+php spark migrate
+```
+*(Opsional)* Jalankan seeder untuk data awal kategori:
+```bash
+php spark db:seed KategoriSeeder
+```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 5. Menjalankan Server Lokal
+Jalankan development server CodeIgniter:
+```bash
+php spark serve
+```
+Atau jika ingin dapat diakses dari jaringan lokal / IP spesifik:
+```bash
+php spark serve --host 0.0.0.0 --port 8080
+```
+Buka browser dan akses aplikasi melalui `http://localhost:8080`.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+---
 
-## Server Requirements
+## 📁 Struktur Direktori Singkat
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+```text
+sarpras_amc/
+├── app/
+│   ├── Config/              # Konfigurasi sistem (Routes, Database, App, dll.)
+│   ├── Controllers/         # Controller aplikasi (Dashboard, Kategori, Home, dll.)
+│   ├── Database/
+│   │   ├── Migrations/      # Skema tabel database (CreateSarprasTables)
+│   │   └── Seeds/           # Data awal / seeder
+│   ├── Models/              # Model database
+│   └── Views/               # Tampilan antarmuka Blade/PHP
+│       ├── adds/            # Komponen layout (navbar, sidebar, header, footer)
+│       ├── barang/          # Halaman manajemen barang
+│       ├── kategori/        # Halaman kategori & sub-kategori
+│       ├── ruang/           # Halaman manajemen ruangan
+│       └── dashboard/       # Tampilan dashboard
+├── public/                  # Document root (index.php, CSS, JS, logo, file statis)
+├── writable/                # File cache, logs, dan upload session
+└── spark                    # CLI tool CodeIgniter 4
+```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+---
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+## 👥 Kontributor
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+- **RS AMC Development Team** / [kinzx](https://github.com/kinzx)
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+---
+
+## 📄 Lisensi
+
+Proyek ini berada di bawah lisensi [MIT License](LICENSE).
