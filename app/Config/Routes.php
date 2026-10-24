@@ -6,7 +6,6 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'Home::index');
 
-$routes->get('/barang', 'Home::barang');
 $routes->get('/ruang', 'Home::ruang');
 
 
@@ -17,3 +16,7 @@ $routes->get('kategori/hapus/(:num)', 'Kategori::hapus/$1');
 
 $routes->get('kategori/sub/(:num)', 'Kategori::subKategori/$1');
 $routes->post('kategori/simpan-sub', 'Kategori::simpanSub');
+
+
+$routes->get('/barang', 'Home::barang');
+// $routes->get('', vars(''));

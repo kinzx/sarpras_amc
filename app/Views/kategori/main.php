@@ -50,12 +50,13 @@
         <?php else: ?>
             <?php foreach ($kategori as $row): ?>
                 <div class="col-md-4">
-                    <div class="card h-100 text-center pt-4">
+                    <!-- Tambahkan class card-hover-effect -->
+                    <div class="card h-100 text-center pt-4 card-hover-effect">
                         <div class="card-body position-relative d-flex flex-column align-items-center justify-content-center py-5">
 
-                            <!-- TOMBOL AKSI (Edit & Hapus) -->
-                            <div class="position-absolute top-0 end-0 m-3 d-flex gap-1">
-                                <!-- Tombol Edit (Memicu Modal) -->
+                            <!-- TOMBOL AKSI (Edit & Hapus) - Tambahkan class action-buttons -->
+                            <div class="position-absolute top-0 end-0 m-3 d-flex gap-1 action-buttons">
+                                <!-- Tombol Edit -->
                                 <button type="button" class="btn btn-sm btn-icon btn-primary rounded-circle btn-edit"
                                     data-id="<?= $row['id'] ?>"
                                     data-nama="<?= $row['nama_kategori'] ?>"
@@ -64,15 +65,18 @@
                                     <i class="bx bx-pencil"></i>
                                 </button>
                                 <!-- Tombol Hapus -->
-                                <a href="<?= base_url('kategori/hapus/' . $row['id']) ?>"
-                                    class="btn btn-sm btn-icon btn-danger rounded-circle"
-                                    onclick="return confirm('Yakin ingin menonaktifkan kategori ini?')">
+                                <button type="button" class="btn btn-sm btn-icon btn-danger rounded-circle btn-hapus"
+                                    data-id="<?= $row['id'] ?>"
+                                    data-nama="<?= $row['nama_kategori'] ?>"
+                                    data-bs-toggle="modal" data-bs-target="#modalHapusKategori">
                                     <i class="bx bx-trash"></i>
-                                </a>
+                                </button>
                             </div>
 
-                            <!-- Ikon & Judul -->
-                            <i class="bx <?= $row['icon'] ?? 'bx-category' ?> text-secondary mb-4" style="font-size: 5rem;"></i>
+                            <!-- Ikon - Tambahkan class icon-hover -->
+                            <i class="bx <?= $row['icon'] ?? 'bx-category' ?> text-secondary mb-4 icon-hover" style="font-size: 5rem;"></i>
+
+                            <!-- Judul -->
                             <h4 class="card-title mb-0 fw-bold text-dark"><?= $row['nama_kategori'] ?></h4>
 
                             <!-- Tautan ke Sub Kategori -->

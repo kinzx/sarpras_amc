@@ -57,6 +57,43 @@
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 
   <script src="../../assets/js/config.js"></script>
+  <style>
+    /* Efek Card saat di-hover */
+    .card-hover-effect {
+      transition: all 0.3s ease-in-out;
+      border: 1px solid transparent;
+    }
+
+    .card-hover-effect:hover {
+      transform: translateY(-5px);
+      /* Card sedikit naik */
+      box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+      /* Shadow lebih tebal */
+      border-color: rgba(105, 108, 255, 0.2);
+      /* Border warna primary tipis */
+    }
+
+    /* Efek Tombol Aksi (Sembunyi -> Muncul) */
+    .action-buttons {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .card-hover-effect:hover .action-buttons {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Efek Ikon sedikit membesar saat card di-hover */
+    .icon-hover {
+      transition: transform 0.3s ease;
+    }
+
+    .card-hover-effect:hover .icon-hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 
 <body>

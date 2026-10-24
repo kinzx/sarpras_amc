@@ -14,7 +14,7 @@ class Home extends BaseController
     }
     public function barang(): string
     {
-        return view('barang/barang');
+        return view('barang/index');
     }
     public function ruang(): string
     {
