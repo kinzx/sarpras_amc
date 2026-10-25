@@ -15,7 +15,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>Demo: Collapsed menu - Layouts | Sneat - Bootstrap Dashboard PRO</title>
+   <title>Barang | AMC</title>
 
   <meta name="description" content="" />
 
