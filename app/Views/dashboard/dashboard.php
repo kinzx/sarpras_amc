@@ -14,12 +14,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Demo: Dashboard - Analytics | Sneat - Bootstrap Dashboard PRO</title>
+    <title>Dashboard | AMC</title>
 
-    <meta name="description" content="" />
+    <meta name="description" content="Aplikasi Sarana Prasarana AMC" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="<?=base_url('AMC-tanpa-nama-pad.png') ?>" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
