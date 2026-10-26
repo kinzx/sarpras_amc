@@ -18,7 +18,9 @@ class BarangModel extends Model
         'kode_aset',
         'nama_barang',
         'merek',
-        'no_seri', // 'tipe' dan 'daya' sudah dihapus
+        'tipe',
+        'no_seri',
+        'daya',
         'tahun_pembelian',
         'interval_maintenance_hari',
         'foto',

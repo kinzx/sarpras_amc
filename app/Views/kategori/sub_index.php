@@ -98,7 +98,7 @@
                                   <?php $no = 1; foreach($subKategori as $sub): ?>
                                   <tr>
                                       <td><?= $no++ ?></td>
-                                      <td><strong><?= $sub['nama_kategori'] ?></strong></td>
+                                      <td><strong><?= $sub['nama_sub_kategori'] ?></strong></td>
                                       <td>
                                           <?php if($sub['is_active'] == 1): ?>
                                               <span class="badge bg-label-success">Aktif</span>
@@ -148,12 +148,12 @@
               <form action="<?= base_url('kategori/simpan-sub') ?>" method="POST">
                   <?= csrf_field() ?>
                   <!-- Kirim ID Induk secara sembunyi -->
-                  <input type="hidden" name="parent_id" value="<?= $kategoriInduk['id'] ?>">
+                  <input type="hidden" name="kategori_id" value="<?= $kategoriInduk['id'] ?>">
                   
                   <div class="modal-body">
                       <div class="mb-3">
                           <label class="form-label">Nama Sub Kategori</label>
-                          <input type="text" class="form-control" name="nama_kategori" placeholder="Contoh: AC, Komputer, Kursi Roda" required>
+                          <input type="text" class="form-control" name="nama_sub_kategori" placeholder="Contoh: AC, Komputer, Kursi Roda" required>
                       </div>
                   </div>
                   <div class="modal-footer">

@@ -1,5 +1,5 @@
 <div class="container-xxl flex-grow-1 container-p-y">
-    
+
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
@@ -67,40 +67,56 @@
         </div>
     </div>
 
-    <!-- FILTER & SEARCH SECTION (Lokasi Ruangan Dihapus) -->
+
     <div class="card mb-4">
         <div class="card-body">
-            <!-- Baris 1: Search & Tombol Utama -->
-            <div class="row g-3 mb-3">
+
+            <!-- Baris 1: Search, Tombol Tambah & Export -->
+            <div class="row g-3 mb-3 align-items-center">
                 <div class="col-md-6">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class="bx bx-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Cari berdasarkan nama, kode QR, merek, atau ruangan...">
+                        <input type="text" class="form-control" placeholder="Cari nama, kode aset, merek, atau ruangan...">
                     </div>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <a href="<?= base_url('barang/tambah') ?>" class="btn btn-primary me-2">
+                <div class="col-md-6 d-flex justify-content-md-end gap-2">
+                    <button class="btn btn-outline-secondary">
+                        <i class="bx bx-download me-1"></i> Export
+                    </button>
+                    <a href="<?= base_url('barang/tambah') ?>" class="btn btn-primary">
                         <i class="bx bx-plus me-1"></i> Tambah Barang
                     </a>
-                    <button class="btn btn-outline-secondary">
-                        <i class="bx bx-download me-1"></i> Export Excel
-                    </button>
                 </div>
             </div>
 
-            <!-- Baris 2: Dropdown Filter (Kategori & Status) -->
+            <!-- Baris 2: Filter Dropdown -->
             <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label text-muted small fw-bold">KATEGORI</label>
+                <!-- Filter Kategori -->
+                <div class="col-md-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Kategori</label>
                     <select class="form-select">
                         <option selected>Semua Kategori</option>
                         <option value="1">Elektronik</option>
                         <option value="2">Non-Elektronik</option>
                         <option value="3">Alat Medis</option>
+                        <option value="4">Sarpras</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted small fw-bold">STATUS OPERASIONAL</label>
+
+                <!-- Filter Sub-Kategori -->
+                <div class="col-md-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Sub Kategori</label>
+                    <select class="form-select">
+                        <option selected>Semua Sub</option>
+                        <option value="1">AC</option>
+                        <option value="2">Komputer</option>
+                        <option value="3">Kipas Angin</option>
+                    </select>
+                </div>
+
+                <!-- Filter Status -->
+                <div class="col-md-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Status Operasional</label>
                     <select class="form-select">
                         <option selected>Semua Status</option>
                         <option value="aktif">Aktif</option>
@@ -108,12 +124,15 @@
                         <option value="rusak">Rusak</option>
                     </select>
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button class="btn btn-label-secondary w-100">
-                        <i class="bx bx-filter-alt me-1"></i> Reset Filter
+
+                <!-- Tombol Reset -->
+                <div class="col-md-3 col-sm-6 d-flex align-items-end">
+                    <button class="btn btn-label-danger w-100" title="Reset Semua Filter">
+                        <i class="bx bx-refresh me-1"></i> Reset Filter
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -174,7 +193,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="card-footer d-flex justify-content-between align-items-center">
             <small class="text-muted">Menampilkan 1-2 dari 1,248 entri aset</small>
