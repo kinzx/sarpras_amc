@@ -8,7 +8,7 @@ class CreateSarprasTables extends Migration
 {
     public function up()
     {
-        // 1. Tabel Kategori (Tanpa interval)
+        // 1. Tabel Kategori
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'nama_kategori' => ['type' => 'VARCHAR', 'constraint' => 100],
@@ -34,21 +34,7 @@ class CreateSarprasTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->createTable('sarpras_ruang');
 
-        // 3. Tabel Users
-        $this->forge->addField([
-            'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
-            'nama_lengkap' => ['type' => 'VARCHAR', 'constraint' => 100],
-            'username' => ['type' => 'VARCHAR', 'constraint' => 50, 'unique' => true],
-            'password' => ['type' => 'VARCHAR', 'constraint' => 255],
-            'role' => ['type' => 'ENUM', 'constraint' => ['admin', 'teknisi'], 'default' => 'teknisi'],
-            'is_active' => ['type' => 'BOOLEAN', 'default' => 1],
-            'created_at' => ['type' => 'TIMESTAMP', 'null' => true],
-            'updated_at' => ['type' => 'TIMESTAMP', 'null' => true],
-        ]);
-        $this->forge->addKey('id', true);
-        $this->forge->createTable('sarpras_users');
-
-        // 4. Tabel Barang (Tambahkan interval_maintenance_hari di sini)
+        // 3. Tabel Barang (Tanpa 'daya', tanpa 'tipe')
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'kategori_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
@@ -56,13 +42,11 @@ class CreateSarprasTables extends Migration
             'kode_aset' => ['type' => 'VARCHAR', 'constraint' => 100, 'unique' => true],
             'nama_barang' => ['type' => 'VARCHAR', 'constraint' => 150],
             'merek' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
-            'tipe' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
             'no_seri' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
-            'daya' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'tahun_pembelian' => ['type' => 'YEAR', 'null' => true],
-            'interval_maintenance_hari' => ['type' => 'INT', 'unsigned' => true, 'null' => true, 'default' => 90], // <-- PINDAH KE SINI
+            'interval_maintenance_hari' => ['type' => 'INT', 'unsigned' => true, 'null' => true, 'default' => 90],
             'foto' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
-            'keterangan' => ['type' => 'TEXT', 'null' => true],
+            'keterangan' => ['type' => 'TEXT', 'null' => true], 
             'kepemilikan' => ['type' => 'ENUM', 'constraint' => ['milik_rs', 'milik_vendor'], 'default' => 'milik_rs'],
             'is_active' => ['type' => 'BOOLEAN', 'default' => 1],
             'created_at' => ['type' => 'TIMESTAMP', 'null' => true],
@@ -73,7 +57,7 @@ class CreateSarprasTables extends Migration
         $this->forge->addForeignKey('ruang_id', 'sarpras_ruang', 'id', 'RESTRICT', 'CASCADE');
         $this->forge->createTable('sarpras_barang');
 
-        // 5. Tabel Kalibrasi (Sama seperti sebelumnya)
+        // 4. Tabel Kalibrasi
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'barang_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
@@ -88,7 +72,7 @@ class CreateSarprasTables extends Migration
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('sarpras_kalibrasi');
 
-        // 6. Tabel Maintenance (Sama seperti sebelumnya)
+        // 5. Tabel Maintenance (user_id ke tabel 'users' Myth:Auth)
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'barang_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
@@ -106,10 +90,10 @@ class CreateSarprasTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'sarpras_users', 'id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE');
         $this->forge->createTable('sarpras_maintenance');
 
-        // 7. Tabel Perbaikan (Sama seperti sebelumnya)
+        // 6. Tabel Perbaikan
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'barang_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
@@ -127,10 +111,10 @@ class CreateSarprasTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'sarpras_users', 'id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE');
         $this->forge->createTable('sarpras_perbaikan');
 
-        // 8. Tabel Log Apps (Sama seperti sebelumnya)
+        // 7. Tabel Log Apps
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'username' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
@@ -151,7 +135,6 @@ class CreateSarprasTables extends Migration
         $this->forge->dropTable('sarpras_maintenance');
         $this->forge->dropTable('sarpras_kalibrasi');
         $this->forge->dropTable('sarpras_barang');
-        $this->forge->dropTable('sarpras_users');
         $this->forge->dropTable('sarpras_ruang');
         $this->forge->dropTable('sarpras_kategori');
     }
