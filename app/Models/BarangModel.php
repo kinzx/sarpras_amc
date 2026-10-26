@@ -12,21 +12,19 @@ class BarangModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
+    protected $allowedFields = [
         'kategori_id',
         'ruang_id',
         'kode_aset',
         'nama_barang',
         'merek',
-        'tipe',
-        'no_seri',
-        'daya',
+        'no_seri', // 'tipe' dan 'daya' sudah dihapus
         'tahun_pembelian',
         'interval_maintenance_hari',
         'foto',
         'keterangan',
         'kepemilikan',
-        'is_active',
+        'is_active'
     ];
 
     // Dates

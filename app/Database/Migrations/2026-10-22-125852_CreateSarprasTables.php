@@ -34,7 +34,7 @@ class CreateSarprasTables extends Migration
         $this->forge->addKey('id', true);
         $this->forge->createTable('sarpras_ruang');
 
-        // 3. Tabel Barang (Tanpa kolom 'daya')
+        // 3. Tabel Barang (Tanpa 'daya', tanpa 'tipe')
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'kategori_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
@@ -42,12 +42,11 @@ class CreateSarprasTables extends Migration
             'kode_aset' => ['type' => 'VARCHAR', 'constraint' => 100, 'unique' => true],
             'nama_barang' => ['type' => 'VARCHAR', 'constraint' => 150],
             'merek' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
-            'tipe' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
             'no_seri' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => true],
             'tahun_pembelian' => ['type' => 'YEAR', 'null' => true],
             'interval_maintenance_hari' => ['type' => 'INT', 'unsigned' => true, 'null' => true, 'default' => 90],
             'foto' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
-            'keterangan' => ['type' => 'TEXT', 'null' => true], // Info daya bisa ditaruh di sini nanti
+            'keterangan' => ['type' => 'TEXT', 'null' => true], 
             'kepemilikan' => ['type' => 'ENUM', 'constraint' => ['milik_rs', 'milik_vendor'], 'default' => 'milik_rs'],
             'is_active' => ['type' => 'BOOLEAN', 'default' => 1],
             'created_at' => ['type' => 'TIMESTAMP', 'null' => true],
@@ -73,11 +72,11 @@ class CreateSarprasTables extends Migration
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('sarpras_kalibrasi');
 
-        // 5. Tabel Maintenance (user_id terhubung ke tabel 'users' Myth:Auth)
+        // 5. Tabel Maintenance (user_id ke tabel 'users' Myth:Auth)
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'barang_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
-            'user_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true], // Terhubung ke Myth:Auth
+            'user_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
             'tanggal_maintenance' => ['type' => 'DATE'],
             'kondisi_bodi' => ['type' => 'VARCHAR', 'constraint' => 255],
             'kondisi_display' => ['type' => 'VARCHAR', 'constraint' => 255],
@@ -91,14 +90,14 @@ class CreateSarprasTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE'); // <-- Ubah ke 'users'
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE');
         $this->forge->createTable('sarpras_maintenance');
 
-        // 6. Tabel Perbaikan (user_id terhubung ke tabel 'users' Myth:Auth)
+        // 6. Tabel Perbaikan
         $this->forge->addField([
             'id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true, 'auto_increment' => true],
             'barang_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
-            'user_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true], // Terhubung ke Myth:Auth
+            'user_id' => ['type' => 'BIGINT', 'constraint' => 20, 'unsigned' => true],
             'tanggal_perbaikan' => ['type' => 'DATE'],
             'laporan_kerusakan' => ['type' => 'TEXT'],
             'foto_sebelum' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
@@ -112,7 +111,7 @@ class CreateSarprasTables extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('barang_id', 'sarpras_barang', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE'); // <-- Ubah ke 'users'
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'RESTRICT', 'CASCADE');
         $this->forge->createTable('sarpras_perbaikan');
 
         // 7. Tabel Log Apps
@@ -138,6 +137,5 @@ class CreateSarprasTables extends Migration
         $this->forge->dropTable('sarpras_barang');
         $this->forge->dropTable('sarpras_ruang');
         $this->forge->dropTable('sarpras_kategori');
-        // Tabel sarpras_users sudah dihapus dari migration ini
     }
 }
