@@ -25,6 +25,10 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
 
     // --- Ruang ---
     $routes->get('ruang', 'Home::ruang');
+    $routes->post('ruang/simpan', 'Home::simpanRuang');
+    $routes->get('ruang/hapus/(:num)', 'Home::hapusRuang/$1');
+    $routes->post('ruang/update/(:num)', 'Home::updateRuang/$1');
+
 
     // --- Kategori ---
     $routes->get('kategori', 'Kategori::index');
@@ -38,6 +42,8 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
     $routes->get('barang', 'Barang::index');
     $routes->get('barang/tambah', 'Barang::create');
     $routes->post('barang/simpan', 'Barang::simpan');
+    $routes->get('barang/getSubKategori/(:num)', 'Barang::getSubKategori/$1');
+    $routes->get('barang/getSubKategori', 'Barang::getSubKategori');
     $routes->post('barang/getSubKategori', 'Barang::getSubKategori');
     $routes->get('barang/detail/(:num)', 'Barang::detail/$1');
     $routes->get('barang/barcode/(:segment)', 'Barang::barcode/$1'); // Route untuk generate gambar barcode

@@ -14,6 +14,7 @@ class BarangModel extends Model
     protected $protectFields    = true;
     protected $allowedFields = [
         'kategori_id',
+        'sub_kategori_id',
         'ruang_id',
         'kode_aset',
         'nama_barang',
@@ -37,15 +38,24 @@ class BarangModel extends Model
 
     public function getBarangWithRelations($id = null)
     {
-        $builder = $this->select('sarpras_barang.*, sarpras_kategori.nama_kategori, sarpras_ruang.nama_ruang')
+        $builder = $this->select('
+                sarpras_barang.*, 
+                sarpras_kategori.nama_kategori, 
+                sarpras_sub_kategori.nama_sub_kategori, 
+                sarpras_ruang.nama_ruang, 
+                sarpras_ruang.lantai
+            ')
             ->join('sarpras_kategori', 'sarpras_kategori.id = sarpras_barang.kategori_id', 'left')
+            ->join('sarpras_sub_kategori', 'sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id', 'left')
             ->join('sarpras_ruang', 'sarpras_ruang.id = sarpras_barang.ruang_id', 'left')
             ->where('sarpras_barang.is_active', 1);
 
         if ($id !== null) {
+            // Mengambil 1 data (untuk halaman Detail)
             return $builder->where('sarpras_barang.id', $id)->first();
         }
 
+        // Mengambil semua data (untuk halaman Tabel Daftar Barang)
         return $builder->orderBy('sarpras_barang.id', 'DESC')->findAll();
     }
 }

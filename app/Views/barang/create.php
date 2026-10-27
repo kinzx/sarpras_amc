@@ -98,7 +98,7 @@
 
                             <div class="card-body">
                                 <!-- ACTION mengarah ke fungsi simpan di Controller -->
-                                <form action="<?= base_url('barang/simpan') ?>" method="POST" enctype="multipart/form-data">
+                                <form action="<?= base_url('barang/simpan') ?>" method="POST" enctype="multipart/form-data" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = '<i class=\'bx bx-loader-alt bx-spin me-1\'></i> Menyimpan...';">
                                     <?= csrf_field() ?>
 
                                     <div class="row">
@@ -228,6 +228,18 @@
     </div>
     <!-- / Layout wrapper -->
 
+    <!-- Core JS -->
+    <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/@algolia/autocomplete-js.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/pickr/pickr.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/hammer/hammer.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
+    <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
+    <script src="<?= base_url('assets/js/main.js') ?>"></script>
+
     <script>
         $(document).ready(function() {
             $('#kategori_id').change(function() {
@@ -236,18 +248,22 @@
 
                 if (kategori_id) {
                     $.ajax({
-                        url: "<?= base_url('barang/getSubKategori') ?>",
-                        type: "POST",
-                        data: {
-                            kategori_id: kategori_id
-                        },
+                        url: "<?= base_url('barang/getSubKategori') ?>/" + kategori_id,
+                        type: "GET",
                         dataType: "JSON",
                         success: function(data) {
                             $('#sub_kategori_id').prop('disabled', false);
                             $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori --</option>');
-                            $.each(data, function(key, value) {
-                                $('#sub_kategori_id').append('<option value="' + value.id + '">' + value.nama_sub_kategori + '</option>');
-                            });
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    $('#sub_kategori_id').append('<option value="' + value.id + '">' + value.nama_sub_kategori + '</option>');
+                                });
+                            } else {
+                                $('#sub_kategori_id').html('<option value="">-- Tidak ada sub kategori --</option>');
+                            }
+                        },
+                        error: function() {
+                            $('#sub_kategori_id').prop('disabled', true).html('<option value="">Gagal memuat sub kategori</option>');
                         }
                     });
                 } else {
@@ -257,33 +273,6 @@
             });
         });
     </script>
-
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/theme.js  -->
-
-    <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
-
-    <script src="../../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../../assets/vendor/js/bootstrap.js"></script>
-    <script src="../../assets/vendor/libs/@algolia/autocomplete-js.js"></script>
-
-    <script src="../../assets/vendor/libs/pickr/pickr.js"></script>
-
-    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
-    <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
-
-    <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
-
-    <script src="../../assets/vendor/js/menu.js"></script>
-
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
-
-    <script src="../../assets/js/main.js"></script>
 
     <!-- Page JS -->
     <a href="<?= base_url('scan') ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"

@@ -17,28 +17,60 @@ class Barang extends BaseController
 
     public function index()
     {
+        $db = \Config\Database::connect();
+
         $data = [
-            'title'  => 'Daftar Aset Sarpras',
-            'barang' => $this->barangModel->getBarangWithRelations(),
+            'title'        => 'Daftar Aset Sarpras',
+            'barang'       => $this->barangModel->getBarangWithRelations(),
+            'totalAset'    => $db->table('sarpras_barang')->countAllResults(),
+            'asetAktif'    => $db->table('sarpras_barang')->where('is_active', 1)->countAllResults(),
+            'kategoriList' => $db->table('sarpras_kategori')->where('is_active', 1)->get()->getResultArray(),
+            'subList'      => $db->table('sarpras_sub_kategori')->where('is_active', 1)->get()->getResultArray(),
         ];
 
         return view('barang/index', $data);
     }
 
+    // Fungsi untuk men-generate Barcode (Format Gambar PNG)
+    public function barcode($kode_aset)
+    {
+        // Load library Picqer
+        $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+
+        // Set ukuran dan warna
+        $barcode = $generator->getBarcode($kode_aset, $generator::TYPE_CODE_128, 2, 50);
+
+        // Kembalikan sebagai gambar
+        return $this->response
+            ->setHeader('Content-Type', 'image/png')
+            ->setBody($barcode);
+    }
+
     public function detail($id = null)
     {
+        // 1. Ambil data barang beserta relasi
         $item = $this->barangModel->getBarangWithRelations($id);
 
         if (!$item) {
             throw PageNotFoundException::forPageNotFound('Barang tidak ditemukan: ' . $id);
         }
 
+        // 2. Ambil Riwayat Maintenance
+        $db = \Config\Database::connect();
+        $maintenance = $db->table('sarpras_maintenance')
+            ->select('sarpras_maintenance.*, users.username as nama_petugas')
+            ->join('users', 'users.id = sarpras_maintenance.user_id', 'left')
+            ->where('barang_id', $id)
+            ->orderBy('tanggal_maintenance', 'DESC')
+            ->get()->getResultArray();
+
         $data = [
-            'title'  => 'Detail Barang - ' . $item['nama_barang'],
-            'item'   => $item,
+            'title'       => 'Detail Barang - ' . $item['nama_barang'],
+            'item'        => $item,
+            'maintenance' => $maintenance
         ];
 
-        return view('barang/index', $data); // Pastikan view detail kamu benar
+        return view('barang/detail', $data);
     }
 
     // ==========================================
@@ -64,9 +96,9 @@ class Barang extends BaseController
     }
 
     // 2. AJAX: Mengambil Sub-Kategori berdasarkan Kategori ID
-    public function getSubKategori()
+    public function getSubKategori($kategori_id = null)
     {
-        $kategori_id = $this->request->getPost('kategori_id');
+        $kategori_id = $kategori_id ?: $this->request->getGet('kategori_id');
 
         $db = \Config\Database::connect();
         $subKategori = $db->table('sarpras_sub_kategori')
@@ -86,7 +118,12 @@ class Barang extends BaseController
             'kategori_id' => 'required',
             'nama_barang' => 'required|min_length[3]',
             'ruang_id'    => 'required',
+            'no_seri'     => 'permit_empty|is_unique[sarpras_barang.no_seri,is_active,1]',
             'foto'        => 'max_size[foto,2048]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]',
+        ], [
+            'no_seri' => [
+                'is_unique' => 'Nomor seri ini sudah terdaftar pada barang lain.'
+            ]
         ]);
 
         if (!$validation->withRequest($this->request)->run()) {
@@ -100,8 +137,8 @@ class Barang extends BaseController
         if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
             // Generate nama random agar tidak bentrok
             $namaFoto = $fileFoto->getRandomName();
-            // Pastikan folder public/uploads/barang sudah dibuat!
-            $fileFoto->move('uploads/barang', $namaFoto);
+            // Simpan ke direktori publik FCPATH/uploads/barang
+            $fileFoto->move(FCPATH . 'uploads/barang', $namaFoto);
         }
 
         // --- Simpan ke Database ---
@@ -123,9 +160,13 @@ class Barang extends BaseController
             'is_active'                 => 1
         ]);
 
+        // 1. Ambil ID Barang yang baru saja disimpan
+        $barangId = $this->barangModel->getInsertID();
+
         // Catat Log
         catat_log('CREATE', 'Menambahkan barang baru: ' . $this->request->getPost('nama_barang'));
 
-        return redirect()->to('/barang')->with('success', 'Barang berhasil ditambahkan!');
+        // 2. PERBAIKAN: Redirect langsung ke halaman detail barang
+        return redirect()->to('/barang/detail/' . $barangId)->with('success', 'Barang berhasil ditambahkan! Silakan cetak barcode di bawah ini.');
     }
 }
