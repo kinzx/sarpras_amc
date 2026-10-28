@@ -148,8 +148,9 @@
                                                 <?php endif; ?>
                                             </div>
                                             <!-- QR Code / Barcode -->
+                                            <!-- KODE BARU (QR Code Kotak) -->
                                             <div class="text-end">
-                                                <img src="<?= base_url('barang/barcode/' . $item['kode_aset']) ?>" alt="Barcode <?= esc($item['kode_aset']) ?>" class="img-fluid" style="max-height: 50px;">
+                                                <img src="<?= base_url('barang/qrcode/' . $item['kode_aset']) ?>" alt="QR Code" class="img-fluid rounded border p-1 bg-white" style="width: 90px; height: 90px; object-fit: contain;">
                                             </div>
                                         </div>
                                     </div>

@@ -114,13 +114,19 @@ class Barang extends BaseController
     {
         // --- Validasi Input ---
         $validation = \Config\Services::validation();
-        $validation->setRules([
+        $rules = [
             'kategori_id' => 'required',
             'nama_barang' => 'required|min_length[3]',
             'ruang_id'    => 'required',
             'no_seri'     => 'permit_empty|is_unique[sarpras_barang.no_seri,is_active,1]',
-            'foto'        => 'max_size[foto,2048]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]',
-        ], [
+        ];
+
+        $fileFoto = $this->request->getFile('foto');
+        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
+            $rules['foto'] = 'max_size[foto,5120]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png,image/webp]';
+        }
+
+        $validation->setRules($rules, [
             'no_seri' => [
                 'is_unique' => 'Nomor seri ini sudah terdaftar pada barang lain.'
             ]
@@ -131,7 +137,6 @@ class Barang extends BaseController
         }
 
         // --- Proses Upload Foto ---
-        $fileFoto = $this->request->getFile('foto');
         $namaFoto = null;
 
         if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
@@ -141,23 +146,30 @@ class Barang extends BaseController
             $fileFoto->move(FCPATH . 'uploads/barang', $namaFoto);
         }
 
+        $kodeAset = trim((string) $this->request->getPost('kode_aset'));
+        if (empty($kodeAset)) {
+            $kodeAset = 'AMC-' . strtoupper(substr(md5(uniqid()), 0, 8));
+        }
+
         // --- Simpan ke Database ---
         $this->barangModel->save([
-            'kategori_id'               => $this->request->getPost('kategori_id'),
-            'sub_kategori_id'           => $this->request->getPost('sub_kategori_id') ?: null,
-            'ruang_id'                  => $this->request->getPost('ruang_id'),
-            'kode_aset'                 => 'AMC-' . strtoupper(substr(md5(uniqid()), 0, 8)), // Auto-generate kode unik
-            'nama_barang'               => $this->request->getPost('nama_barang'),
-            'merek'                     => $this->request->getPost('merek'),
-            'tipe'                      => $this->request->getPost('tipe'),
-            'no_seri'                   => $this->request->getPost('no_seri'),
-            'daya'                      => $this->request->getPost('daya'),
-            'tahun_pembelian'           => $this->request->getPost('tahun_pembelian'),
-            'interval_maintenance_hari' => $this->request->getPost('interval_maintenance_hari'),
-            'foto'                      => $namaFoto,
-            'keterangan'                => $this->request->getPost('keterangan'),
-            'kepemilikan'               => $this->request->getPost('kepemilikan'),
-            'is_active'                 => 1
+            'kategori_id'                => $this->request->getPost('kategori_id'),
+            'sub_kategori_id'            => $this->request->getPost('sub_kategori_id') ?: null,
+            'ruang_id'                   => $this->request->getPost('ruang_id'),
+            'kode_aset'                  => $kodeAset,
+            'nama_barang'                => $this->request->getPost('nama_barang'),
+            'merek'                      => $this->request->getPost('merek'),
+            'tipe'                       => $this->request->getPost('tipe'),
+            'no_seri'                    => $this->request->getPost('no_seri'),
+            'daya'                       => $this->request->getPost('daya'),
+            'tahun_pembelian'            => $this->request->getPost('tahun_pembelian'),
+            'interval_maintenance_hari'  => $this->request->getPost('interval_maintenance_hari') ?: 90,
+            'foto'                       => $namaFoto,
+            'keterangan'                 => $this->request->getPost('keterangan'),
+            'kepemilikan'                => $this->request->getPost('kepemilikan') ?: 'RS',
+            'kondisi_barang'             => $this->request->getPost('kondisi_barang') ?: 'Baik',
+            'tanggal_perbaikan_terakhir' => $this->request->getPost('tanggal_perbaikan_terakhir') ?: null,
+            'is_active'                  => $this->request->getPost('is_active') !== null ? (int)$this->request->getPost('is_active') : 1
         ]);
 
         // 1. Ambil ID Barang yang baru saja disimpan
@@ -168,5 +180,133 @@ class Barang extends BaseController
 
         // 2. PERBAIKAN: Redirect langsung ke halaman detail barang
         return redirect()->to('/barang/detail/' . $barangId)->with('success', 'Barang berhasil ditambahkan! Silakan cetak barcode di bawah ini.');
+    }
+
+    // 4. Form Edit Barang
+    public function edit($id)
+    {
+        $barang = $this->barangModel->find($id);
+        if (!$barang) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Barang tidak ditemukan: ' . $id);
+        }
+
+        $db = \Config\Database::connect();
+        $kategori = $db->table('sarpras_kategori')->where('is_active', 1)->get()->getResultArray();
+        $ruang    = $db->table('sarpras_ruang')->where('is_active', 1)->get()->getResultArray();
+        $subKategori = [];
+        if (!empty($barang['kategori_id'])) {
+            $subKategori = $db->table('sarpras_sub_kategori')
+                ->where('kategori_id', $barang['kategori_id'])
+                ->where('is_active', 1)
+                ->get()->getResultArray();
+        }
+
+        $data = [
+            'title'       => 'Edit Barang - ' . $barang['nama_barang'],
+            'barang'      => $barang,
+            'kategori'    => $kategori,
+            'subKategori' => $subKategori,
+            'ruang'       => $ruang
+        ];
+
+        return view('barang/edit', $data);
+    }
+
+    // 5. Update Barang
+    public function update($id)
+    {
+        $barang = $this->barangModel->find($id);
+        if (!$barang) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Barang tidak ditemukan: ' . $id);
+        }
+
+        $validation = \Config\Services::validation();
+        $rules = [
+            'kategori_id' => 'required',
+            'nama_barang' => 'required|min_length[3]',
+            'ruang_id'    => 'required',
+            'no_seri'     => "permit_empty|is_unique[sarpras_barang.no_seri,id,{$id}]",
+        ];
+
+        $fileFoto = $this->request->getFile('foto');
+        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
+            $rules['foto'] = 'max_size[foto,5120]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png,image/webp]';
+        }
+
+        $validation->setRules($rules, [
+            'no_seri' => [
+                'is_unique' => 'Nomor seri ini sudah terdaftar pada barang lain.'
+            ]
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $namaFoto = $barang['foto'];
+        if ($fileFoto && $fileFoto->isValid() && !$fileFoto->hasMoved()) {
+            $namaFoto = $fileFoto->getRandomName();
+            $fileFoto->move(FCPATH . 'uploads/barang', $namaFoto);
+
+            if (!empty($barang['foto']) && file_exists(FCPATH . 'uploads/barang/' . $barang['foto'])) {
+                @unlink(FCPATH . 'uploads/barang/' . $barang['foto']);
+            }
+        }
+
+        $this->barangModel->update($id, [
+            'kategori_id'                => $this->request->getPost('kategori_id'),
+            'sub_kategori_id'            => $this->request->getPost('sub_kategori_id') ?: null,
+            'ruang_id'                   => $this->request->getPost('ruang_id'),
+            'nama_barang'                => $this->request->getPost('nama_barang'),
+            'merek'                      => $this->request->getPost('merek'),
+            'tipe'                       => $this->request->getPost('tipe'),
+            'no_seri'                    => $this->request->getPost('no_seri'),
+            'daya'                       => $this->request->getPost('daya'),
+            'tahun_pembelian'            => $this->request->getPost('tahun_pembelian'),
+            'interval_maintenance_hari'  => $this->request->getPost('interval_maintenance_hari') ?: 90,
+            'foto'                       => $namaFoto,
+            'keterangan'                 => $this->request->getPost('keterangan'),
+            'kepemilikan'                => $this->request->getPost('kepemilikan') ?: 'RS',
+            'kondisi_barang'             => $this->request->getPost('kondisi_barang') ?: 'Baik',
+            'tanggal_perbaikan_terakhir' => $this->request->getPost('tanggal_perbaikan_terakhir') ?: null,
+            'is_active'                  => $this->request->getPost('is_active') !== null ? (int)$this->request->getPost('is_active') : 1
+        ]);
+
+        catat_log('EDIT', 'Mengubah data barang: ' . $this->request->getPost('nama_barang'));
+
+        return redirect()->to('/barang/detail/' . $id)->with('success', 'Data barang berhasil diperbarui!');
+    }
+
+    // 6. Hapus Barang (Soft Delete)
+    public function hapus($id)
+    {
+        $barang = $this->barangModel->find($id);
+        if ($barang) {
+            $this->barangModel->update($id, ['is_active' => 0]);
+            catat_log('DELETE', 'Menonaktifkan barang: ' . $barang['nama_barang']);
+            return redirect()->to('/barang')->with('success', 'Barang berhasil dinonaktifkan!');
+        }
+
+        return redirect()->to('/barang')->with('error', 'Barang tidak ditemukan.');
+    }
+
+    public function qrcode($kode_aset)
+    {
+        // 1. Buat URL website lengkap yang mengarah ke halaman scan
+        // Hasilnya nanti seperti: http://192.168.1.15:8080/scan/AMC-B091821E
+        $url_target = site_url('scan/' . $kode_aset);
+
+        // 2. Masukkan URL tersebut (bukan kode_aset) ke dalam QR Code
+        // Ukuran dan margin diatur lewat constructor pada Endroid QR Code v6.
+        $qrCode = new \Endroid\QrCode\QrCode($url_target, size: 300, margin: 10);
+
+        // 4. Tulis sebagai gambar PNG
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $result = $writer->write($qrCode);
+
+        // 5. Tampilkan di browser
+        return $this->response
+            ->setHeader('Content-Type', $result->getMimeType())
+            ->setBody($result->getString());
     }
 }

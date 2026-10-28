@@ -27,6 +27,8 @@ class BarangModel extends Model
         'foto',
         'keterangan',
         'kepemilikan',
+        'kondisi_barang',
+        'tanggal_perbaikan_terakhir',
         'is_active'
     ];
 
@@ -57,5 +59,16 @@ class BarangModel extends Model
 
         // Mengambil semua data (untuk halaman Tabel Daftar Barang)
         return $builder->orderBy('sarpras_barang.id', 'DESC')->findAll();
+    }
+
+    public function getBarangForGuest(string $kodeAset): ?array
+    {
+        return $this->select('sarpras_barang.*, sarpras_kategori.nama_kategori, sarpras_sub_kategori.nama_sub_kategori, sarpras_ruang.nama_ruang, sarpras_ruang.lantai')
+            ->join('sarpras_kategori', 'sarpras_kategori.id = sarpras_barang.kategori_id', 'left')
+            ->join('sarpras_sub_kategori', 'sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id', 'left')
+            ->join('sarpras_ruang', 'sarpras_ruang.id = sarpras_barang.ruang_id', 'left')
+            ->where('sarpras_barang.kode_aset', $kodeAset)
+            ->where('sarpras_barang.is_active', 1)
+            ->first();
     }
 }

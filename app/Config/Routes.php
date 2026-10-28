@@ -20,17 +20,16 @@ $routes->get('scan/(:segment)', 'Scan::detail/$1');
 // ==========================================
 $routes->group('', ['filter' => 'login'], function ($routes) {
 
-    // --- Dashboard ---
+    // Dashboard
     $routes->get('dashboard', 'Dashboard::index');
 
-    // --- Ruang ---
+    // Ruang
     $routes->get('ruang', 'Home::ruang');
     $routes->post('ruang/simpan', 'Home::simpanRuang');
-    $routes->get('ruang/hapus/(:num)', 'Home::hapusRuang/$1');
     $routes->post('ruang/update/(:num)', 'Home::updateRuang/$1');
+    $routes->get('ruang/hapus/(:num)', 'Home::hapusRuang/$1');
 
-
-    // --- Kategori ---
+    // Kategori
     $routes->get('kategori', 'Kategori::index');
     $routes->post('kategori/simpan', 'Kategori::simpan');
     $routes->post('kategori/update/(:num)', 'Kategori::update/$1');
@@ -38,15 +37,28 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
     $routes->get('kategori/sub/(:num)', 'Kategori::subKategori/$1');
     $routes->post('kategori/simpan-sub', 'Kategori::simpanSub');
 
-    // --- Barang (Inventaris) ---
+    // Barang (Inventaris)
     $routes->get('barang', 'Barang::index');
     $routes->get('barang/tambah', 'Barang::create');
     $routes->post('barang/simpan', 'Barang::simpan');
+    $routes->get('barang/edit/(:num)', 'Barang::edit/$1');
+    $routes->post('barang/update/(:num)', 'Barang::update/$1');
+    $routes->get('barang/hapus/(:num)', 'Barang::hapus/$1');
     $routes->get('barang/getSubKategori/(:num)', 'Barang::getSubKategori/$1');
-    $routes->get('barang/getSubKategori', 'Barang::getSubKategori');
     $routes->post('barang/getSubKategori', 'Barang::getSubKategori');
     $routes->get('barang/detail/(:num)', 'Barang::detail/$1');
-    $routes->get('barang/barcode/(:segment)', 'Barang::barcode/$1'); // Route untuk generate gambar barcode
+    $routes->get('barang/qrcode/(:segment)', 'Barang::qrcode/$1');
+    $routes->get('barang/barcode/(:segment)', 'Barang::barcode/$1');
+
+    // Laporan
+    $routes->get('laporan', 'Laporan::index');
+
+    // Pemeliharaan (Maintenance)
+    $routes->get('maintenance', 'Maintenance::index');
+    $routes->get('maintenance/create', 'Maintenance::create');
+    $routes->post('maintenance/simpan', 'Maintenance::simpan');
+    $routes->get('maintenance/hapus/(:num)', 'Maintenance::hapus/$1');
+
 
     // --- Logout ---
     $routes->get('logout', 'AuthController::logout');

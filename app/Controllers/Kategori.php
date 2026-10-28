@@ -109,30 +109,53 @@ class Kategori extends BaseController
 
     public function simpanSub()
     {
-        // Validasi
-        $validation = \Config\Services::validation();
-        $validation->setRules([
-            'nama_sub_kategori' => 'required|min_length[3]',
-            'kategori_id'       => 'required|numeric',
-        ]);
+        $kategori_id = $this->request->getPost('kategori_id');
+        $rawNames    = $this->request->getPost('nama_sub_kategori');
+        $names       = is_array($rawNames) ? $rawNames : [$rawNames];
+        $names       = array_values(array_filter(array_map(
+            static fn ($name) => trim((string) $name),
+            $names
+        ), static fn ($name) => $name !== ''));
 
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        $errors = [];
+
+        if (!is_numeric($kategori_id) || !$this->kategoriModel->find($kategori_id)) {
+            $errors['kategori_id'] = 'Kategori induk tidak valid.';
         }
 
-        $kategori_id       = $this->request->getPost('kategori_id');
-        $nama_sub_kategori = $this->request->getPost('nama_sub_kategori');
+        if ($names === []) {
+            $errors['nama_sub_kategori'] = 'Isi minimal satu nama sub-kategori.';
+        }
 
-        // Simpan ke database sarpras_sub_kategori
-        $this->subKategoriModel->save([
+        foreach ($names as $index => $name) {
+            if (mb_strlen($name) < 3) {
+                $errors['nama_sub_kategori.' . $index] = 'Nama sub-kategori minimal 3 karakter: ' . $name;
+            } elseif (mb_strlen($name) > 100) {
+                $errors['nama_sub_kategori.' . $index] = 'Nama sub-kategori maksimal 100 karakter.';
+            }
+        }
+
+        if ($errors !== []) {
+            return redirect()->back()->withInput()->with('errors', $errors);
+        }
+
+        $rows = array_map(static fn ($name) => [
             'kategori_id'       => $kategori_id,
-            'nama_sub_kategori' => $nama_sub_kategori,
-            'is_active'         => 1
-        ]);
+            'nama_sub_kategori' => $name,
+            'is_active'         => 1,
+        ], $names);
 
-        // Catat Log
-        catat_log('CREATE', 'Menambahkan sub-kategori: ' . $nama_sub_kategori);
+        if ($this->subKategoriModel->insertBatch($rows) === false) {
+            return redirect()->back()->withInput()->with('errors', [
+                'database' => 'Sub-kategori gagal disimpan. Periksa kembali data dan coba lagi.',
+            ]);
+        }
 
-        return redirect()->to('kategori/sub/' . $kategori_id)->with('success', 'Sub-Kategori berhasil ditambahkan!');
+        catat_log('CREATE', 'Menambahkan ' . count($names) . ' sub-kategori untuk kategori ID ' . $kategori_id);
+
+        return redirect()->to('kategori/sub/' . $kategori_id)->with(
+            'success',
+            count($names) . ' sub-kategori berhasil ditambahkan!'
+        );
     }
 }

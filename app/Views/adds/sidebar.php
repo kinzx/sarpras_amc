@@ -143,7 +143,7 @@
       </li>
 
       <!-- 2. Data Master (Hanya Admin) -->
-      <?php if (in_groups('admin')): ?>
+      
         <li class="menu-item <?= (url_is('kategori*') || url_is('ruang*') || url_is('pengguna*') || url_is('sub-kategori*')) ? 'active open' : '' ?>">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-layer"></i>
@@ -168,7 +168,6 @@
             </li>
           </ul>
         </li>
-      <?php endif; ?>
 
       <!-- 3. Inventaris Alat -->
       <li class="menu-item <?= (url_is('inventaris*')) ? 'active open' : '' ?>">
