@@ -15,7 +15,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-   <title>Ruangan | AMC</title>
+  <title>Ruangan | AMC</title>
 
   <meta name="description" content="" />
 
@@ -86,11 +86,28 @@
 
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/theme.js  -->
-
+  <!-- 1. Panggil JQuery & Bootstrap DULU -->
   <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
-
   <script src="../../assets/vendor/libs/popper/popper.js"></script>
   <script src="../../assets/vendor/js/bootstrap.js"></script>
+
+  <!-- 2. Baru panggil script kustom milikmu -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tombolEdit = document.querySelectorAll('.btn-edit');
+      tombolEdit.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const nama = this.getAttribute('data-nama');
+          const lantai = this.getAttribute('data-lantai');
+
+          document.getElementById('edit_nama_ruang').value = nama;
+          document.getElementById('edit_lantai').value = lantai;
+          document.getElementById('formEditRuang').action = "<?= base_url('ruang/update') ?>/" + id;
+        });
+      });
+    });
+  </script>
   <script src="../../assets/vendor/libs/@algolia/autocomplete-js.js"></script>
 
   <script src="../../assets/vendor/libs/pickr/pickr.js"></script>

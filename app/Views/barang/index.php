@@ -104,29 +104,53 @@
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/theme.js  -->
 
-  <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/@algolia/autocomplete-js.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/pickr/pickr.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/hammer/hammer.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
+  <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
+  <script src="<?= base_url('assets/js/main.js') ?>"></script>
 
-  <script src="../../assets/vendor/libs/popper/popper.js"></script>
-  <script src="../../assets/vendor/js/bootstrap.js"></script>
-  <script src="../../assets/vendor/libs/@algolia/autocomplete-js.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Filter tabel instan via jQuery
+      function filterTable() {
+        var search = $('#searchBarang').val().toLowerCase();
+        var kategori = $('#filterKategori').val().toLowerCase();
+        var subKategori = $('#filterSubKategori').val().toLowerCase();
+        var status = $('#filterStatus').val().toLowerCase();
 
-  <script src="../../assets/vendor/libs/pickr/pickr.js"></script>
+        $('tbody tr').each(function() {
+          var rowText = $(this).text().toLowerCase();
+          var matchSearch = search === '' || rowText.indexOf(search) > -1;
+          var matchKategori = kategori === '' || rowText.indexOf(kategori) > -1;
+          var matchSub = subKategori === '' || rowText.indexOf(subKategori) > -1;
+          var matchStatus = status === '' || rowText.indexOf(status) > -1;
 
-  <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+          if (matchSearch && matchKategori && matchSub && matchStatus) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
 
-  <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
+      $('#searchBarang').on('keyup', filterTable);
+      $('#filterKategori, #filterSubKategori, #filterStatus').on('change', filterTable);
 
-  <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
-
-  <script src="../../assets/vendor/js/menu.js"></script>
-
-  <!-- endbuild -->
-
-  <!-- Vendors JS -->
-
-  <!-- Main JS -->
-
-  <script src="../../assets/js/main.js"></script>
+      $('#btnResetFilter').on('click', function() {
+        $('#searchBarang').val('');
+        $('#filterKategori').val('');
+        $('#filterSubKategori').val('');
+        $('#filterStatus').val('');
+        $('tbody tr').show();
+      });
+    });
+  </script>
 
   <!-- Page JS -->
   <a href="<?= base_url('scan') ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"

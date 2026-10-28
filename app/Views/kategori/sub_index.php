@@ -77,6 +77,18 @@
                   </div>
               <?php endif; ?>
 
+              <?php if (session()->getFlashdata('errors')): ?>
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <strong>Sub-kategori belum tersimpan:</strong>
+                      <ul class="mb-0 mt-2">
+                          <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                              <li><?= esc($error) ?></li>
+                          <?php endforeach; ?>
+                      </ul>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              <?php endif; ?>
+
               <!-- Tabel Sub Kategori -->
               <div class="card">
                   <div class="table-responsive text-nowrap">
@@ -98,7 +110,7 @@
                                   <?php $no = 1; foreach($subKategori as $sub): ?>
                                   <tr>
                                       <td><?= $no++ ?></td>
-                                      <td><strong><?= $sub['nama_kategori'] ?></strong></td>
+                                      <td><strong><?= $sub['nama_sub_kategori'] ?></strong></td>
                                       <td>
                                           <?php if($sub['is_active'] == 1): ?>
                                               <span class="badge bg-label-success">Aktif</span>
@@ -148,13 +160,20 @@
               <form action="<?= base_url('kategori/simpan-sub') ?>" method="POST">
                   <?= csrf_field() ?>
                   <!-- Kirim ID Induk secara sembunyi -->
-                  <input type="hidden" name="parent_id" value="<?= $kategoriInduk['id'] ?>">
+                  <input type="hidden" name="kategori_id" value="<?= $kategoriInduk['id'] ?>">
                   
                   <div class="modal-body">
-                      <div class="mb-3">
-                          <label class="form-label">Nama Sub Kategori</label>
-                          <input type="text" class="form-control" name="nama_kategori" placeholder="Contoh: AC, Komputer, Kursi Roda" required>
+                  <label class="form-label">Nama Sub Kategori</label>
+                  <p class="text-muted small">Isi satu nama per baris. Baris kosong akan diabaikan.</p>
+                  <div id="subKategoriInputs">
+                      <div class="input-group mb-2 sub-kategori-row">
+                          <input type="text" class="form-control" name="nama_sub_kategori[]" placeholder="Contoh: AC" minlength="3" maxlength="100" style="min-height: 56px;">
+                          <button type="button" class="btn btn-outline-danger btn-hapus-baris" aria-label="Hapus baris" style="min-width: 56px;">&times;</button>
                       </div>
+                  </div>
+                  <button type="button" class="btn btn-outline-primary" id="btnTambahBaris" style="min-height: 56px;">
+                      <i class="bx bx-plus me-1"></i>Tambah baris
+                  </button>
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
@@ -176,6 +195,28 @@
   <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
   <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
   <script src="<?= base_url('assets/js/main.js') ?>"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.getElementById('subKategoriInputs');
+
+      document.getElementById('btnTambahBaris').addEventListener('click', function () {
+        const row = document.createElement('div');
+        row.className = 'input-group mb-2 sub-kategori-row';
+        row.innerHTML = '<input type="text" class="form-control" name="nama_sub_kategori[]" placeholder="Nama sub-kategori" minlength="3" maxlength="100" style="min-height: 56px;">' +
+          '<button type="button" class="btn btn-outline-danger btn-hapus-baris" aria-label="Hapus baris" style="min-width: 56px;">&times;</button>';
+        container.appendChild(row);
+        row.querySelector('input').focus();
+      });
+
+      container.addEventListener('click', function (event) {
+        const removeButton = event.target.closest('.btn-hapus-baris');
+        if (removeButton && container.querySelectorAll('.sub-kategori-row').length > 1) {
+          removeButton.closest('.sub-kategori-row').remove();
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
