@@ -66,6 +66,11 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
     $routes->post('perbaikan/simpan', 'Perbaikan::simpan');
     $routes->get('perbaikan/hapus/(:num)', 'Perbaikan::hapus/$1');
 
+    // Kalibrasi
+    $routes->get('kalibrasi', 'Kalibrasi::index');
+    $routes->post('kalibrasi/simpan', 'Kalibrasi::simpan');
+    $routes->get('kalibrasi/hapus/(:num)', 'Kalibrasi::hapus/$1');
+
 
     // --- Logout ---
     $routes->get('logout', 'AuthController::logout');
