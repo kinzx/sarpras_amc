@@ -87,14 +87,14 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Sub Kategori <span class="text-danger">*</span></label>
-                                                <select class="form-select" name="sub_kategori_id" id="sub_kategori_id" required>
-                                                    <option value="">-- Pilih Sub Kategori --</option>
+                                                <label class="form-label">Sub Kategori <small class="text-muted">(Opsional)</small></label>
+                                                <select class="form-select" name="sub_kategori_id" id="sub_kategori_id">
+                                                    <option value="">-- Tanpa Sub Kategori --</option>
                                                     <?php foreach ($subKategori as $row): ?>
                                                         <option value="<?= $row['id'] ?>" <?= old('sub_kategori_id', $barang['sub_kategori_id']) == $row['id'] ? 'selected' : '' ?>><?= esc($row['nama_sub_kategori']) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <small class="text-muted">Interval maintenance barang</small>
+                                                <small class="text-muted">Sub kategori barang (bisa dikosongkan jika tidak ada)</small>
                                             </div>
 
                                             <div class="mb-3">
@@ -324,13 +324,13 @@
                         dataType: "JSON",
                         success: function(data) {
                             $('#sub_kategori_id').prop('disabled', false);
-                            $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori --</option>');
+                            $('#sub_kategori_id').html('<option value="">-- Tanpa Sub Kategori (Opsional) --</option>');
                             if (data.length > 0) {
                                 $.each(data, function(key, value) {
                                     $('#sub_kategori_id').append('<option value="' + value.id + '">' + value.nama_sub_kategori + '</option>');
                                 });
                             } else {
-                                $('#sub_kategori_id').html('<option value="">-- Tidak ada sub kategori --</option>');
+                                $('#sub_kategori_id').html('<option value="">-- Tidak ada sub kategori (Opsional) --</option>');
                             }
                         },
                         error: function(xhr) {
