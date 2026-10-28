@@ -3,6 +3,9 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseService;
+use CodeIgniter\Model;
+use Myth\Auth\Authentication\Passwords\PasswordValidator;
+use Myth\Auth\Config\Auth as AuthConfig;
 
 /**
  * Services Configuration file.
@@ -19,14 +22,18 @@ use CodeIgniter\Config\BaseService;
  */
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
-     */
+    public static function authentication(string $lib = 'local', ?Model $userModel = null, ?Model $loginModel = null, bool $getShared = true)
+    {
+        return \Myth\Auth\Config\Services::authentication($lib, $userModel, $loginModel, $getShared);
+    }
+
+    public static function authorization(?Model $groupModel = null, ?Model $permissionModel = null, ?Model $userModel = null, bool $getShared = true)
+    {
+        return \Myth\Auth\Config\Services::authorization($groupModel, $permissionModel, $userModel, $getShared);
+    }
+
+    public static function passwords(?AuthConfig $config = null, bool $getShared = true): PasswordValidator
+    {
+        return \Myth\Auth\Config\Services::passwords($config, $getShared);
+    }
 }
