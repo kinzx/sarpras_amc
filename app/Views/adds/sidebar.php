@@ -169,29 +169,7 @@
           </ul>
         </li>
 
-      <!-- 3. Inventaris Alat -->
-      <li class="menu-item <?= (url_is('inventaris*')) ? 'active open' : '' ?>">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class="menu-icon icon-base bx bx-box"></i>
-          <div data-i18n="Inventaris Alat">Inventaris Alat</div>
-        </a>
-        <ul class="menu-sub">
-          <li class="menu-item <?= url_is('alat*') ? 'active' : '' ?>">
-            <a href="<?= base_url('alat') ?>" class="menu-link">
-              <div data-i18n="Daftar Alat">Daftar Alat</div>
-            </a>
-          </li>
-          <?php if (in_groups('admin')): ?>
-            <li class="menu-item <?= url_is('alat/riwayat') ? 'active' : '' ?>">
-              <a href="<?= base_url('alat/riwayat') ?>" class="menu-link">
-                <div data-i18n="Riwayat Alat">Riwayat Alat</div>
-              </a>
-            </li>
-          <?php endif; ?>
-        </ul>
-      </li>
-
-      <!-- 4. Pemeliharaan -->
+      <!-- 3. Pemeliharaan -->
       <li class="menu-item <?= url_is('maintenance*') ? 'active open' : '' ?>">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
           <i class="menu-icon icon-base bx bx-wrench"></i>

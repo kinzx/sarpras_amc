@@ -114,7 +114,8 @@
                             </div>
                             <div>
                                 <a href="<?= base_url('barang') ?>" class="btn btn-outline-secondary me-2">Kembali</a>
-                                <a href="#" class="btn btn-warning me-2"><i class="bx bx-pencil me-1"></i> Ubah</a>
+                                <a href="<?= base_url('barang/label/' . $item['id']) ?>" target="_blank" class="btn btn-outline-primary me-2"><i class="bx bx-download me-1"></i> Label Aset (QR)</a>
+                                <a href="<?= base_url('barang/edit/' . $item['id']) ?>" class="btn btn-warning me-2"><i class="bx bx-pencil me-1"></i> Ubah</a>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMaintenance"><i class="bx bx-plus me-1"></i> Input Maintenance</button>
                             </div>
                         </div>
@@ -150,7 +151,14 @@
                                             <!-- QR Code / Barcode -->
                                             <!-- KODE BARU (QR Code Kotak) -->
                                             <div class="text-end">
-                                                <img src="<?= base_url('barang/qrcode/' . $item['kode_aset']) ?>" alt="QR Code" class="img-fluid rounded border p-1 bg-white" style="width: 90px; height: 90px; object-fit: contain;">
+                                                <a href="<?= base_url('barang/label/' . $item['id']) ?>" target="_blank" title="Klik untuk unduh/cetak label aset">
+                                                    <img src="<?= base_url('barang/qrcode/' . $item['kode_aset']) ?>" alt="QR Code" class="img-fluid rounded border p-1 bg-white" style="width: 90px; height: 90px; object-fit: contain;">
+                                                </a>
+                                                <div class="mt-1">
+                                                    <a href="<?= base_url('barang/label/' . $item['id']) ?>" target="_blank" class="badge bg-label-primary text-decoration-none" style="font-size: 11px;">
+                                                        <i class="bx bx-download me-1"></i> Label
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

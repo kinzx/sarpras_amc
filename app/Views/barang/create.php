@@ -116,12 +116,12 @@
                                         <!-- Kolom Kiri -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Kode barang <span class="text-danger">*</span></label>
+                                                <label class="form-label">Kode Barang <span class="badge bg-label-info ms-1">Otomatis</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="kode_aset" value="<?= esc(old('kode_aset')) ?>" placeholder="AMC-AC-001" required>
+                                                    <input type="text" class="form-control bg-light" name="kode_aset" value="<?= esc(old('kode_aset', $autoKode ?? '')) ?>" readonly>
                                                     <span class="input-group-text"><i class="bx bx-barcode"></i></span>
                                                 </div>
-                                                <small class="text-muted">Masukkan kode barcode barang</small>
+                                                <small class="text-muted">Kode barcode unik dibuat otomatis oleh sistem</small>
                                             </div>
 
                                             <div class="mb-3">

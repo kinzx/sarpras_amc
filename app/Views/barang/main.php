@@ -76,7 +76,7 @@
                 <div class="col-md-6">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class="bx bx-search"></i></span>
-                        <input type="text" class="form-control" id="searchBarang" placeholder="Cari nama, kode aset, merek, atau ruangan...">
+                        <input type="text" class="form-control" id="searchBarang" placeholder="Cari nama, kode aset, merek, atau ruangan..." value="<?= esc($keyword ?? '') ?>">
                     </div>
                 </div>
                 <div class="col-md-6 d-flex justify-content-md-end gap-2">

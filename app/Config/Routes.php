@@ -47,6 +47,7 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
     $routes->get('barang/getSubKategori/(:num)', 'Barang::getSubKategori/$1');
     $routes->post('barang/getSubKategori', 'Barang::getSubKategori');
     $routes->get('barang/detail/(:num)', 'Barang::detail/$1');
+    $routes->get('barang/label/(:num)', 'Barang::labelAset/$1');
     $routes->get('barang/qrcode/(:segment)', 'Barang::qrcode/$1');
     $routes->get('barang/barcode/(:segment)', 'Barang::barcode/$1');
 
@@ -58,6 +59,12 @@ $routes->group('', ['filter' => 'login'], function ($routes) {
     $routes->get('maintenance/create', 'Maintenance::create');
     $routes->post('maintenance/simpan', 'Maintenance::simpan');
     $routes->get('maintenance/hapus/(:num)', 'Maintenance::hapus/$1');
+
+    // Perbaikan
+    $routes->get('perbaikan', 'Perbaikan::index');
+    $routes->get('perbaikan/create', 'Perbaikan::create');
+    $routes->post('perbaikan/simpan', 'Perbaikan::simpan');
+    $routes->get('perbaikan/hapus/(:num)', 'Perbaikan::hapus/$1');
 
 
     // --- Logout ---

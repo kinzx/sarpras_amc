@@ -18,10 +18,12 @@ class Barang extends BaseController
     public function index()
     {
         $db = \Config\Database::connect();
+        $keyword = trim((string) $this->request->getGet('q'));
 
         $data = [
             'title'        => 'Daftar Aset Sarpras',
-            'barang'       => $this->barangModel->getBarangWithRelations(),
+            'keyword'      => $keyword,
+            'barang'       => $this->barangModel->getBarangWithRelations(null, $keyword),
             'totalAset'    => $db->table('sarpras_barang')->countAllResults(),
             'asetAktif'    => $db->table('sarpras_barang')->where('is_active', 1)->countAllResults(),
             'kategoriList' => $db->table('sarpras_kategori')->where('is_active', 1)->get()->getResultArray(),
@@ -86,10 +88,29 @@ class Barang extends BaseController
         $kategori = $db->table('sarpras_kategori')->where('is_active', 1)->get()->getResultArray();
         $ruang    = $db->table('sarpras_ruang')->where('is_active', 1)->get()->getResultArray();
 
+        // Generate Kode Barang Otomatis: AMC-YYYYMMDD-XXXX
+        $todayPrefix = 'AMC-' . date('Ymd') . '-';
+        $lastBarang = $db->table('sarpras_barang')
+            ->like('kode_aset', $todayPrefix, 'after')
+            ->orderBy('id', 'DESC')
+            ->get()
+            ->getFirstRow('array');
+
+        $nextNumber = 1;
+        if ($lastBarang && !empty($lastBarang['kode_aset'])) {
+            $parts = explode('-', $lastBarang['kode_aset']);
+            $lastSeq = end($parts);
+            if (is_numeric($lastSeq)) {
+                $nextNumber = (int)$lastSeq + 1;
+            }
+        }
+        $autoKode = $todayPrefix . str_pad((string)$nextNumber, 4, '0', STR_PAD_LEFT);
+
         $data = [
             'title'    => 'Tambah Barang Baru',
             'kategori' => $kategori,
-            'ruang'    => $ruang
+            'ruang'    => $ruang,
+            'autoKode' => $autoKode
         ];
 
         return view('barang/create', $data);
@@ -148,7 +169,23 @@ class Barang extends BaseController
 
         $kodeAset = trim((string) $this->request->getPost('kode_aset'));
         if (empty($kodeAset)) {
-            $kodeAset = 'AMC-' . strtoupper(substr(md5(uniqid()), 0, 8));
+            $db = \Config\Database::connect();
+            $todayPrefix = 'AMC-' . date('Ymd') . '-';
+            $lastBarang = $db->table('sarpras_barang')
+                ->like('kode_aset', $todayPrefix, 'after')
+                ->orderBy('id', 'DESC')
+                ->get()
+                ->getFirstRow('array');
+
+            $nextNumber = 1;
+            if ($lastBarang && !empty($lastBarang['kode_aset'])) {
+                $parts = explode('-', $lastBarang['kode_aset']);
+                $lastSeq = end($parts);
+                if (is_numeric($lastSeq)) {
+                    $nextNumber = (int)$lastSeq + 1;
+                }
+            }
+            $kodeAset = $todayPrefix . str_pad((string)$nextNumber, 4, '0', STR_PAD_LEFT);
         }
 
         // --- Simpan ke Database ---
@@ -288,6 +325,19 @@ class Barang extends BaseController
         }
 
         return redirect()->to('/barang')->with('error', 'Barang tidak ditemukan.');
+    }
+
+    // 7. Unduh Label / Tag Kartu Aset (Format Print Card)
+    public function labelAset($id)
+    {
+        $item = $this->barangModel->getBarangWithRelations($id);
+        if (!$item) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Barang tidak ditemukan: ' . $id);
+        }
+
+        return view('barang/label_aset', [
+            'item' => $item
+        ]);
     }
 
     public function qrcode($kode_aset)
