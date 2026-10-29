@@ -131,7 +131,7 @@
                     <?php if (empty($riwayat)): ?>
                         <tr>
                             <td colspan="9" class="text-center py-5 text-muted">
-                                <i class="bx bx-info-circle fs-1 d-block mb-2 text-secondary"></i>
+                                
                                 Belum ada riwayat perbaikan yang tercatat.
                             </td>
                         </tr>

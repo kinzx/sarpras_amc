@@ -204,7 +204,7 @@
                     <?php if (empty($riwayat)): ?>
                         <tr>
                             <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="bx bx-clipboard d-block mb-2" style="font-size: 2rem;"></i>
+                                
                                 Belum ada catatan pemeliharaan<?= ($keyword !== '' || $bulan !== '') ? ' yang sesuai filter' : '' ?>.
                                 Silakan klik <strong>+ Input Pemeliharaan</strong>.
                             </td>

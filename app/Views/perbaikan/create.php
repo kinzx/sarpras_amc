@@ -89,7 +89,7 @@
                   <div class="card-body p-0">
                     <?php if (empty($barangRusak)): ?>
                       <div class="text-center py-5 text-muted">
-                        <i class="bx bx-check-circle fs-1 text-success d-block mb-2"></i>
+
                         Semua aset saat ini dalam kondisi Baik.
                       </div>
                     <?php else: ?>

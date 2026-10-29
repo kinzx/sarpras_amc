@@ -1,45 +1,87 @@
 <?php helper("auth"); ?>
 <style>
-  /* 1. Membuat Sidebar menjadi Flexbox (Atas-Bawah) */
+  /* =========================================================
+     SIDEBAR — tema terang & gelap (mengikuti data-bs-theme)
+     ========================================================= */
   .layout-menu {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    /* Memenuhi tinggi layar */
+    background-color: var(--bs-menu-bg, var(--bs-paper-bg));
+    color: var(--bs-menu-color, var(--bs-body-color));
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
-  /* 2. Area Logo (Tetap di atas) */
+  /* 1. Area logo (tetap di atas) */
   .sidebar-logo-area {
     flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 20px;
-    border-bottom: 1px solid #e7e7e8;
+    border-bottom: 1px solid var(--bs-border-color);
+    background-color: transparent;
   }
 
-  /* 3. Area Menu (Bisa di-scroll) */
+  /* Logo memakai warna navy gelap, jadi diberi alas putih saat mode malam
+     agar tetap terbaca dan tidak menyatu dengan sidebar gelap. */
+  [data-bs-theme="dark"] .sidebar-logo-area .app-brand-link,
+  [data-semidark-menu="true"] .sidebar-logo-area .app-brand-link {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 4px 10px;
+    line-height: 0;
+  }
+
+  /* 2. Area menu (bisa di-scroll) */
   .sidebar-menu-scroll {
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    overscroll-behavior: contain;
   }
 
-  /* Menghilangkan scrollbar bawaan browser agar lebih rapi */
+  /* Scrollbar tipis yang ikut tema */
   .sidebar-menu-scroll::-webkit-scrollbar {
     width: 5px;
   }
 
+  .sidebar-menu-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   .sidebar-menu-scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--bs-border-color);
     border-radius: 4px;
   }
 
-  /* 4. Area Bawah: Logout & Profil (Terkunci di bawah) */
+  .sidebar-menu-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bs-secondary-color);
+  }
+
+  .sidebar-menu-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-border-color) transparent;
+  }
+
+  /* Indikator menu aktif mengikuti style bawaan Sneat (dot + garis kanan).
+     Jangan menambah pseudo-element ::before pada menu-link karena
+     bertabrakan dengan indikator aktif bawaan template. */
+
+  /* Ikon menu sedikit "hidup" saat hover */
+  .sidebar-menu-scroll .menu-link .menu-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .sidebar-menu-scroll .menu-link:hover .menu-icon {
+    transform: translateY(-1px) scale(1.08);
+  }
+
+  /* 3. Area bawah: logout & profil (terkunci di bawah) */
   .sidebar-bottom-area {
     flex-shrink: 0;
-    background-color: #fff;
-    border-top: 1px solid #e7e7e8;
+    background-color: var(--bs-menu-bg, var(--bs-paper-bg));
+    border-top: 1px solid var(--bs-border-color);
     padding: 10px;
   }
 
@@ -48,13 +90,13 @@
   }
 
   .sidebar-user-role {
-    color: #a1acb8 !important;
+    color: var(--bs-secondary-color) !important;
     font-size: 11px;
     font-weight: 500;
   }
 
   .sidebar-user-name {
-    color: #566a7f !important;
+    color: var(--bs-heading-color) !important;
     font-weight: 600;
     font-size: 14px;
   }
@@ -110,9 +152,13 @@
     max-height: 34px;
     width: auto;
   }
+
+  [data-bs-theme="dark"] .layout-menu-collapsed:not(.layout-menu-hover) .sidebar-logo-area .app-brand-link {
+    padding: 3px;
+  }
 </style>
 
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-white">
+<aside id="layout-menu" class="layout-menu menu-vertical menu">
 
   <div class="sidebar-logo-area app-brand demo justify-content-center">
     <a href="<?= base_url("/") ?>" class="app-brand-link">
@@ -148,37 +194,37 @@
         <span class="menu-header-text">Data Master & Manajemen</span>
       </li>
 
-      <!-- 2. Data Master (Hanya Admin) -->
+      <!-- 2. Data Master -->
+      <li class="menu-item <?= url_is("barang*") ||
+      url_is("kategori*") ||
+      url_is("ruang*") ||
+      url_is("pengguna*") ||
+      url_is("sub-kategori*")
+          ? "active open"
+          : "" ?>">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon icon-base bx bx-layer"></i>
+          <div data-i18n="Data Master">Data Master</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item <?= url_is("barang*") ? "active" : "" ?>">
+            <a href="<?= base_url("barang") ?>" class="menu-link">
+              <div data-i18n="Barang">Barang</div>
+            </a>
+          </li>
+          <li class="menu-item <?= url_is("kategori*") ? "active" : "" ?>">
+            <a href="<?= base_url("kategori") ?>" class="menu-link">
+              <div data-i18n="Kategori">Kategori</div>
+            </a>
+          </li>
 
-        <li class="menu-item <?= url_is("kategori*") ||
-        url_is("ruang*") ||
-        url_is("pengguna*") ||
-        url_is("sub-kategori*")
-            ? "active open"
-            : "" ?>">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon icon-base bx bx-layer"></i>
-            <div data-i18n="Data Master">Data Master</div>
-          </a>
-          <ul class="menu-sub">
-            <li class="menu-item <?= url_is("barang*") ? "active" : "" ?>">
-              <a href="<?= base_url("barang") ?>" class="menu-link">
-                <div data-i18n="Barang">Barang</div>
-              </a>
-            </li>
-            <li class="menu-item <?= url_is("kategori*") ? "active" : "" ?>">
-              <a href="<?= base_url("kategori") ?>" class="menu-link">
-                <div data-i18n="Kategori">Kategori</div>
-              </a>
-            </li>
-
-            <li class="menu-item <?= url_is("ruang*") ? "active" : "" ?>">
-              <a href="<?= base_url("ruang") ?>" class="menu-link">
-                <div data-i18n="Ruangan">Ruangan</div>
-              </a>
-            </li>
-          </ul>
-        </li>
+          <li class="menu-item <?= url_is("ruang*") ? "active" : "" ?>">
+            <a href="<?= base_url("ruang") ?>" class="menu-link">
+              <div data-i18n="Ruangan">Ruangan</div>
+            </a>
+          </li>
+        </ul>
+      </li>
 
       <!-- 3. Pemeliharaan -->
       <li class="menu-item <?= url_is("maintenance*") ? "active open" : "" ?>">
