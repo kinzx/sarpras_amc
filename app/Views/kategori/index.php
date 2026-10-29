@@ -20,7 +20,12 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -102,7 +107,7 @@
     <div class="layout-container">
       <!-- Menu -->
 
-      <?= view('adds/sidebar'); ?>
+      <?= view("adds/sidebar") ?>
 
       <div class="menu-mobile-toggler d-xl-none rounded-1">
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
@@ -116,12 +121,12 @@
       <div class="layout-page">
         <!-- Navbar -->
 
-        <?= view('adds/navbar'); ?>
+        <?= view("adds/navbar") ?>
 
         <!-- Content wrapper -->
         <div class="content-wrapper">
           <!-- Content -->
-          <?= view('kategori/main') ?>
+          <?= view("kategori/main") ?>
 
           <!-- MODAL TAMBAH KATEGORI (Contoh, sesuaikan dengan form-mu) -->
           <!-- Modal Tambah Kategori -->
@@ -133,7 +138,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <!-- Action ke /kategori/simpan -->
-                <form action="<?= base_url('kategori/simpan') ?>" method="POST">
+                <form action="<?= base_url("kategori/simpan") ?>" method="POST">
                   <?= csrf_field() ?>
                   <div class="modal-body">
                     <div class="mb-3">
@@ -201,7 +206,7 @@
           </div>
 
           <!-- Footer -->
-          <?= view('adds/footer'); ?>
+          <?= view("adds/footer") ?>
 
           <!-- / Footer -->
 
@@ -239,7 +244,9 @@
           document.getElementById('edit_icon').value = icon;
 
           // Ubah action form agar mengarah ke URL update dengan ID yang benar
-          document.getElementById('formEditKategori').action = "<?= base_url('kategori/update') ?>/" + id;
+          document.getElementById('formEditKategori').action = "<?= base_url(
+              "kategori/update",
+          ) ?>/" + id;
         });
       });
     });

@@ -1,26 +1,49 @@
 <!doctype html>
-<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url('assets/') ?>" data-template="vertical-menu-template" data-bs-theme="light">
+<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url(
+    "assets/",
+) ?>" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-  <title><?= $title ?? 'Kalibrasi Alat' ?> | RS AMC</title>
-  <link rel="icon" type="image/x-icon" href="<?= base_url('assets/img/favicon/favicon.ico') ?>" />
+  <title><?= $title ?? "Kalibrasi Alat" ?> | RS AMC</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/fonts/iconify-icons.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/pickr/pickr-themes.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/css/core.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/css/demo.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-  <script src="<?= base_url('assets/vendor/js/helpers.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/template-customizer.js') ?>"></script>
-  <script src="<?= base_url('assets/js/config.js') ?>"></script>
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/fonts/iconify-icons.css",
+  ) ?>" />
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/libs/pickr/pickr-themes.css",
+  ) ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/vendor/css/core.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+
+  <!-- FilePond CSS -->
+  <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+  <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+  <style>
+    .filepond--root { margin-bottom: 0; font-family: inherit; }
+    .filepond--panel-root { background-color: #f8f9fa; border: 2px dashed #d9dee3; border-radius: 0.5rem; }
+  </style>
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
+  ) ?>" />
+  <script src="<?= base_url("assets/vendor/js/helpers.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/js/template-customizer.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/js/config.js") ?>"></script>
 </head>
 <body>
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      <?= view('adds/sidebar'); ?>
+      <?= view("adds/sidebar") ?>
       <div class="menu-mobile-toggler d-xl-none rounded-1">
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
           <i class="bx bx-menu icon-base"></i>
@@ -28,29 +51,34 @@
         </a>
       </div>
       <div class="layout-page">
-        <?= view('adds/navbar'); ?>
+        <?= view("adds/navbar") ?>
         <div class="content-wrapper">
 
           <div class="container-xxl flex-grow-1 container-p-y">
             <!-- BREADCRUMB -->
             <nav aria-label="breadcrumb" class="mb-4">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
+                <li class="breadcrumb-item"><a href="<?= base_url(
+                    "dashboard",
+                ) ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Kalibrasi Alat Medis</li>
               </ol>
             </nav>
 
-            <?php if (session()->getFlashdata('success')): ?>
+            <?php if (session()->getFlashdata("success")): ?>
               <div class="alert alert-success alert-dismissible" role="alert">
-                <?= esc(session()->getFlashdata('success')) ?>
+                <?= esc(session()->getFlashdata("success")) ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             <?php endif; ?>
 
-            <?php if (session()->getFlashdata('errors')): ?>
+            <?php if (session()->getFlashdata("errors")): ?>
               <div class="alert alert-danger alert-dismissible" role="alert">
                 <ul class="mb-0">
-                  <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                  <?php foreach (
+                      session()->getFlashdata("errors")
+                      as $error
+                  ): ?>
                     <li><?= esc($error) ?></li>
                   <?php endforeach; ?>
                 </ul>
@@ -80,7 +108,9 @@
                   <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                       <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">TOTAL SERTIFIKASI</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format($ringkasan['total'] ?? 0) ?></h3>
+                      <h3 class="mb-0 fw-bolder"><?= number_format(
+                          $ringkasan["total"] ?? 0,
+                      ) ?></h3>
                     </div>
                     <div class="bg-label-primary rounded p-3">
                       <i class="bx bx-certification fs-3"></i>
@@ -93,7 +123,9 @@
                   <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                       <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">DIKALIBRASI TAHUN INI</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format($ringkasan['tahun_ini'] ?? 0) ?></h3>
+                      <h3 class="mb-0 fw-bolder"><?= number_format(
+                          $ringkasan["tahun_ini"] ?? 0,
+                      ) ?></h3>
                     </div>
                     <div class="bg-label-success rounded p-3">
                       <i class="bx bx-check-shield fs-3"></i>
@@ -106,7 +138,9 @@
                   <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                       <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">TOTAL ALAT MEDIS</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format($ringkasan['total_alat_medis'] ?? 0) ?></h3>
+                      <h3 class="mb-0 fw-bolder"><?= number_format(
+                          $ringkasan["total_alat_medis"] ?? 0,
+                      ) ?></h3>
                     </div>
                     <div class="bg-label-info rounded p-3">
                       <i class="bx bx-pulse fs-3"></i>
@@ -119,22 +153,32 @@
             <!-- FILTER & SEARCH -->
             <div class="card mb-4">
               <div class="card-body">
-                <form method="GET" action="<?= base_url('kalibrasi') ?>" class="row g-3">
+                <form method="GET" action="<?= base_url(
+                    "kalibrasi",
+                ) ?>" class="row g-3">
                   <div class="col-md-6">
                     <label class="form-label">Cari Nama Alat / No. Seri / Kode Aset</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="bx bx-search"></i></span>
-                      <input type="text" name="q" class="form-control" placeholder="Contoh: Defibrillator, AMC-20261028-0001, SN12345..." value="<?= esc($keyword ?? '') ?>">
+                      <input type="text" name="q" class="form-control" placeholder="Contoh: Defibrillator, AMC-20261028-0001, SN12345..." value="<?= esc(
+                          $keyword ?? "",
+                      ) ?>">
                     </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label">Tahun</label>
-                    <input type="number" name="tahun" class="form-control" placeholder="Contoh: <?= date('Y') ?>" min="2020" max="2099" value="<?= esc($tahun ?? '') ?>">
+                    <input type="number" name="tahun" class="form-control" placeholder="Contoh: <?= date(
+                        "Y",
+                    ) ?>" min="2020" max="2099" value="<?= esc(
+    $tahun ?? "",
+) ?>">
                   </div>
                   <div class="col-md-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary w-100"><i class="bx bx-filter-alt me-1"></i> Filter</button>
                     <?php if (!empty($keyword) || !empty($tahun)): ?>
-                      <a href="<?= base_url('kalibrasi') ?>" class="btn btn-outline-secondary">Reset</a>
+                      <a href="<?= base_url(
+                          "kalibrasi",
+                      ) ?>" class="btn btn-outline-secondary">Reset</a>
                     <?php endif; ?>
                   </div>
                 </form>
@@ -145,7 +189,9 @@
             <div class="card">
               <div class="card-header border-bottom d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Daftar Sertifikat Kalibrasi</h5>
-                <span class="badge bg-label-info"><?= count($riwayat) ?> Sertifikat</span>
+                <span class="badge bg-label-info"><?= count(
+                    $riwayat,
+                ) ?> Sertifikat</span>
               </div>
               <div class="table-responsive text-nowrap">
                 <table class="table table-hover">
@@ -169,27 +215,41 @@
                         </td>
                       </tr>
                     <?php else: ?>
-                      <?php $no = 1; foreach ($riwayat as $row): ?>
+                      <?php
+                      $no = 1;
+                      foreach ($riwayat as $row): ?>
                         <tr>
-                          <td><?= sprintf('%02d', $no++) ?></td>
+                          <td><?= sprintf("%02d", $no++) ?></td>
                           <td>
-                            <span class="fw-semibold"><?= date('d M Y', strtotime($row['tanggal_kalibrasi'])) ?></span>
+                            <span class="fw-semibold"><?= date(
+                                "d M Y",
+                                strtotime($row["tanggal_kalibrasi"]),
+                            ) ?></span>
                           </td>
                           <td>
-                            <strong><?= esc($row['nama_barang']) ?></strong>
-                            <small class="text-muted d-block font-monospace"><?= esc($row['kode_aset'] ?? '-') ?></small>
+                            <strong><?= esc($row["nama_barang"]) ?></strong>
+                            <small class="text-muted d-block font-monospace"><?= esc(
+                                $row["kode_aset"] ?? "-",
+                            ) ?></small>
                           </td>
                           <td>
-                            <?= esc($row['nama_ruang'] ?? '-') ?>
-                            <small class="text-muted d-block">Lantai <?= esc($row['lantai'] ?? '1') ?></small>
+                            <?= esc($row["nama_ruang"] ?? "-") ?>
+                            <small class="text-muted d-block">Lantai <?= esc(
+                                $row["lantai"] ?? "1",
+                            ) ?></small>
                           </td>
                           <td>
-                            <?= esc($row['no_seri'] ?: '-') ?><br>
-                            <small class="text-muted"><?= esc($row['merek'] ?: '-') ?></small>
+                            <?= esc($row["no_seri"] ?: "-") ?><br>
+                            <small class="text-muted"><?= esc(
+                                $row["merek"] ?: "-",
+                            ) ?></small>
                           </td>
                           <td>
-                            <?php if (!empty($row['file_sertifikat'])): ?>
-                              <a href="<?= base_url('uploads/kalibrasi/' . $row['file_sertifikat']) ?>" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <?php if (!empty($row["file_sertifikat"])): ?>
+                              <a href="<?= base_url(
+                                  "uploads/kalibrasi/" .
+                                      $row["file_sertifikat"],
+                              ) ?>" target="_blank" class="btn btn-sm btn-outline-primary">
                                 <i class="bx bx-file me-1"></i> Lihat File
                               </a>
                             <?php else: ?>
@@ -197,15 +257,18 @@
                             <?php endif; ?>
                           </td>
                           <td style="max-width: 250px; white-space: normal;">
-                            <small><?= esc($row['catatan'] ?: '-') ?></small>
+                            <small><?= esc($row["catatan"] ?: "-") ?></small>
                           </td>
                           <td class="text-center">
-                            <a href="<?= base_url('kalibrasi/hapus/' . $row['id']) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus">
+                            <a href="<?= base_url(
+                                "kalibrasi/hapus/" . $row["id"],
+                            ) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus">
                               <i class="bx bx-trash"></i>
                             </a>
                           </td>
                         </tr>
-                      <?php endforeach; ?>
+                      <?php endforeach;
+                      ?>
                     <?php endif; ?>
                   </tbody>
                 </table>
@@ -217,7 +280,9 @@
           <div class="modal fade" id="modalTambahKalibrasi" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
-                <form action="<?= base_url('kalibrasi/simpan') ?>" method="POST" enctype="multipart/form-data">
+                <form action="<?= base_url(
+                    "kalibrasi/simpan",
+                ) ?>" method="POST" enctype="multipart/form-data">
                   <?= csrf_field() ?>
                   <div class="modal-header border-bottom">
                     <h5 class="modal-title"><i class="bx bx-check-shield text-primary me-2"></i> Tambah Data Kalibrasi</h5>
@@ -229,8 +294,10 @@
                       <select class="form-select" name="barang_id" required>
                         <option value="">-- Pilih Alat --</option>
                         <?php foreach ($barang as $b): ?>
-                          <option value="<?= $b['id'] ?>">
-                            <?= esc($b['nama_barang']) ?> (<?= esc($b['kode_aset']) ?>) - <?= esc($b['nama_ruang'] ?? '-') ?>
+                          <option value="<?= $b["id"] ?>">
+                            <?= esc($b["nama_barang"]) ?> (<?= esc(
+     $b["kode_aset"],
+ ) ?>) - <?= esc($b["nama_ruang"] ?? "-") ?>
                           </option>
                         <?php endforeach; ?>
                       </select>
@@ -238,13 +305,17 @@
 
                     <div class="mb-3">
                       <label class="form-label">Tanggal Pelaksanaan Kalibrasi <span class="text-danger">*</span></label>
-                      <input type="date" class="form-control" name="tanggal_kalibrasi" value="<?= date('Y-m-d') ?>" required>
+                      <input type="date" class="form-control" name="tanggal_kalibrasi" value="<?= date(
+                          "Y-m-d",
+                      ) ?>" required>
                     </div>
 
                     <div class="mb-3">
                       <label class="form-label">File Sertifikat (PDF / JPG / PNG) <span class="text-danger">*</span></label>
-                      <input type="file" class="form-control" name="file_sertifikat" accept=".pdf,image/jpeg,image/png" required>
-                      <small class="text-muted">Maksimal 5 MB</small>
+                      <div class="rounded-3 border bg-light p-2">
+                        <input type="file" class="filepond" id="file_sertifikat" name="file_sertifikat" accept="application/pdf,image/jpeg,image/png" required>
+                        <small class="text-muted d-block mt-1">Format PDF, JPG, atau PNG maks 5 MB</small>
+                      </div>
                     </div>
 
                     <div class="mb-3">
@@ -261,7 +332,7 @@
             </div>
           </div>
 
-          <?= view('adds/footer'); ?>
+          <?= view("adds/footer") ?>
           <div class="content-backdrop fade"></div>
         </div>
       </div>
@@ -270,11 +341,41 @@
     <div class="drag-target"></div>
   </div>
 
-  <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
-  <script src="<?= base_url('assets/js/main.js') ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/jquery/jquery.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/popper/popper.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/bootstrap.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
+  <script src="<?= base_url("assets/js/main.js") ?>"></script>
+
+  <!-- FilePond JS -->
+  <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+  <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+  <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+  <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+  <script>
+    FilePond.registerPlugin(
+      FilePondPluginFileValidateType,
+      FilePondPluginFileValidateSize,
+      FilePondPluginImagePreview
+    );
+
+    var elSertifikat = document.getElementById('file_sertifikat');
+    if (elSertifikat) {
+      FilePond.create(elSertifikat, {
+        storeAsFile: true,
+        allowMultiple: false,
+        acceptedFileTypes: ['application/pdf', 'image/jpeg', 'image/png'],
+        maxFileSize: '5MB',
+        labelIdle: '<span class="filepond--label-action"><i class="bx bx-cloud-upload fs-4 d-block text-primary mb-1"></i>Pilih atau seret berkas sertifikat</span>',
+        labelFileTypeNotAllowed: 'Format berkas tidak valid',
+        fileValidateTypeLabelExpectedTypes: 'Hanya PDF, JPG, atau PNG',
+        labelMaxFileSizeExceeded: 'Ukuran berkas terlalu besar',
+        labelMaxFileSize: 'Maksimal 5 MB'
+      });
+    }
+  </script>
 </body>
 </html>

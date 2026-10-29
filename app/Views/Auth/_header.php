@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+    <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+        "AMC-tanpa-nama-pad.png",
+    ) ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+        "AMC-tanpa-nama-pad.png",
+    ) ?>" />
 
     <title>Myth:Auth</title>
 
@@ -21,6 +26,6 @@
 
 <body>
 
-<?= view('App\Views\Auth\_navbar') ?>
+<?= view("App\Views\Auth\_navbar") ?>
 
 <main role="main" class="container">

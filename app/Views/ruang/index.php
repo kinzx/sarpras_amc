@@ -20,7 +20,12 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,17 +69,17 @@
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
 
-      <?= view('adds/sidebar'); ?>
+      <?= view("adds/sidebar") ?>
 
       <div class="layout-page">
-        <?= view('adds/navbar'); ?>
+        <?= view("adds/navbar") ?>
 
         <div class="content-wrapper">
 
           <!-- BAGIAN INI YANG BERUBAH -->
-          <?= view('ruang/main') ?>
+          <?= view("ruang/main") ?>
 
-          <?= view('adds/footer'); ?>
+          <?= view("adds/footer") ?>
           <div class="content-backdrop fade"></div>
         </div>
       </div>
@@ -103,7 +108,9 @@
 
           document.getElementById('edit_nama_ruang').value = nama;
           document.getElementById('edit_lantai').value = lantai;
-          document.getElementById('formEditRuang').action = "<?= base_url('ruang/update') ?>/" + id;
+          document.getElementById('formEditRuang').action = "<?= base_url(
+              "ruang/update",
+          ) ?>/" + id;
         });
       });
     });
