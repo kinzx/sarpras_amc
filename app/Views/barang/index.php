@@ -65,7 +65,7 @@
     <div class="layout-container">
       <!-- Menu -->
 
-      <?= view('adds/sidebar'); ?>
+      <?= view("adds/sidebar") ?>
 
       <div class="menu-mobile-toggler d-xl-none rounded-1">
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
@@ -77,14 +77,14 @@
       <!-- Layout container -->
       <div class="layout-page">
         <!-- Navbar -->
-        <?= view('adds/navbar'); ?>
+        <?= view("adds/navbar") ?>
         <!-- Content wrapper -->
         <div class="content-wrapper">
           <!-- Content -->
-          <?= view('barang/main'); ?>
+          <?= view("barang/main") ?>
           <!-- / Content -->
           <!-- Footer -->
-          <?= view('adds/footer'); ?>
+          <?= view("adds/footer") ?>
           <!-- / Footer -->
           <div class="content-backdrop fade"></div>
         </div>
@@ -104,34 +104,36 @@
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/theme.js  -->
 
-  <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/@algolia/autocomplete-js.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/pickr/pickr.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/hammer/hammer.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
-  <script src="<?= base_url('assets/js/main.js') ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/jquery/jquery.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/popper/popper.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/bootstrap.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/libs/@algolia/autocomplete-js.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/pickr/pickr.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/hammer/hammer.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/i18n/i18n.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
+  <script src="<?= base_url("assets/js/main.js") ?>"></script>
 
   <script>
     $(document).ready(function() {
       // Filter tabel instan via jQuery
       function filterTable() {
-        var search = $('#searchBarang').val().toLowerCase();
         var kategori = $('#filterKategori').val().toLowerCase();
         var subKategori = $('#filterSubKategori').val().toLowerCase();
         var status = $('#filterStatus').val().toLowerCase();
 
         $('tbody tr').each(function() {
           var rowText = $(this).text().toLowerCase();
-          var matchSearch = search === '' || rowText.indexOf(search) > -1;
           var matchKategori = kategori === '' || rowText.indexOf(kategori) > -1;
           var matchSub = subKategori === '' || rowText.indexOf(subKategori) > -1;
           var matchStatus = status === '' || rowText.indexOf(status) > -1;
 
-          if (matchSearch && matchKategori && matchSub && matchStatus) {
+          if (matchKategori && matchSub && matchStatus) {
             $(this).show();
           } else {
             $(this).hide();
@@ -139,21 +141,19 @@
         });
       }
 
-      $('#searchBarang').on('keyup', filterTable);
       $('#filterKategori, #filterSubKategori, #filterStatus').on('change', filterTable);
 
       $('#btnResetFilter').on('click', function() {
-        $('#searchBarang').val('');
-        $('#filterKategori').val('');
-        $('#filterSubKategori').val('');
-        $('#filterStatus').val('');
-        $('tbody tr').show();
+        $('#filterKategori, #filterSubKategori, #filterStatus').val('');
+        filterTable();
       });
     });
   </script>
 
   <!-- Page JS -->
-  <a href="<?= base_url('scan') ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
+  <a href="<?= base_url(
+      "scan",
+  ) ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
     style="width: 65px; height: 65px; bottom: 30px; right: 30px; z-index: 9999;">
     <i class="bx bx-qr-scan text-white" style="font-size: 2rem;"></i>
   </a>

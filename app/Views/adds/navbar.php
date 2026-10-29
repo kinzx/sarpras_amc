@@ -9,14 +9,16 @@
   </div>
 
   <!-- Search -->
-  <div class="navbar-nav align-items-center">
-    <div class="nav-item navbar-search-wrapper mb-0">
-      <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
-        <!-- Cukup gunakan ikon dan teks statis, hapus id="autocomplete" agar tidak ditimpa JS template -->
-        <span class="d-inline-block text-body-secondary fw-normal">
-          <i class="bx bx-search align-middle me-1"></i> Cari aset, serial number, atau ruangan...
-        </span>
-      </a>
+  <div class="navbar-nav align-items-center flex-grow-1 me-3">
+    <div class="nav-item navbar-search-wrapper mb-0 w-100">
+      <form action="<?= base_url('barang') ?>" method="GET" class="d-flex align-items-center">
+        <div class="input-group input-group-merge w-100">
+          <span class="input-group-text border-0 ps-0" id="topbar-search-icon">
+            <i class="bx bx-search fs-4 text-muted"></i>
+          </span>
+          <input type="text" name="q" class="form-control border-0 shadow-none ps-2" placeholder="Cari nama aset, kode barcode, serial number, atau ruangan..." aria-label="Search..." value="<?= esc($keyword ?? request()->getGet('q') ?? '') ?>" style="background: transparent;">
+        </div>
+      </form>
     </div>
   </div>
 </nav>

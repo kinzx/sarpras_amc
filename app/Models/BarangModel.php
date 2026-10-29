@@ -38,7 +38,7 @@ class BarangModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    public function getBarangWithRelations($id = null)
+    public function getBarangWithRelations($id = null, ?string $keyword = null)
     {
         $builder = $this->select('
                 sarpras_barang.*, 
@@ -55,6 +55,17 @@ class BarangModel extends Model
         if ($id !== null) {
             // Mengambil 1 data (untuk halaman Detail)
             return $builder->where('sarpras_barang.id', $id)->first();
+        }
+
+        if (!empty($keyword)) {
+            $builder->groupStart()
+                ->like('sarpras_barang.nama_barang', $keyword)
+                ->orLike('sarpras_barang.kode_aset', $keyword)
+                ->orLike('sarpras_barang.merek', $keyword)
+                ->orLike('sarpras_barang.no_seri', $keyword)
+                ->orLike('sarpras_ruang.nama_ruang', $keyword)
+                ->orLike('sarpras_kategori.nama_kategori', $keyword)
+                ->groupEnd();
         }
 
         // Mengambil semua data (untuk halaman Tabel Daftar Barang)
