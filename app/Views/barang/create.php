@@ -20,7 +20,12 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+        "AMC-tanpa-nama-pad.png",
+    ) ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+        "AMC-tanpa-nama-pad.png",
+    ) ?>" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

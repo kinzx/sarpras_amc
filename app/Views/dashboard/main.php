@@ -1,57 +1,78 @@
 <?php
-helper('auth');
+helper("auth");
 
-$userAktif    = function_exists('user') ? user() : null;
-$namaPengguna = $userAktif ? $userAktif->username : 'Pengguna';
+$userAktif = function_exists("user") ? user() : null;
+$namaPengguna = $userAktif ? $userAktif->username : "Pengguna";
 
 /* Sapaan & tanggal dalam Bahasa Indonesia (zona waktu rumah sakit) */
-$zonaWaktu   = new DateTimeZone('Asia/Jakarta');
-$sekarang    = new DateTime('now', $zonaWaktu);
-$jamSekarang = (int) $sekarang->format('G');
+$zonaWaktu = new DateTimeZone("Asia/Jakarta");
+$sekarang = new DateTime("now", $zonaWaktu);
+$jamSekarang = (int) $sekarang->format("G");
 if ($jamSekarang < 11) {
-    $sapaan = 'Selamat pagi';
+    $sapaan = "Selamat pagi";
 } elseif ($jamSekarang < 15) {
-    $sapaan = 'Selamat siang';
+    $sapaan = "Selamat siang";
 } elseif ($jamSekarang < 18) {
-    $sapaan = 'Selamat sore';
+    $sapaan = "Selamat sore";
 } else {
-    $sapaan = 'Selamat malam';
+    $sapaan = "Selamat malam";
 }
 
-$namaHari  = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-$namaBulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-$tanggalHariIni = $namaHari[(int) $sekarang->format('w')] . ', ' . $sekarang->format('j') . ' ' . $namaBulan[(int) $sekarang->format('n')] . ' ' . $sekarang->format('Y');
+$namaHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+$namaBulan = [
+    1 => "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+];
+$tanggalHariIni =
+    $namaHari[(int) $sekarang->format("w")] .
+    ", " .
+    $sekarang->format("j") .
+    " " .
+    $namaBulan[(int) $sekarang->format("n")] .
+    " " .
+    $sekarang->format("Y");
 
 $totalAsetVal = (int) ($totalAset ?? 0);
-$asetBaikVal  = (int) ($asetAktif ?? 0);
-$persenBaik   = $totalAsetVal > 0 ? (int) round(($asetBaikVal / $totalAsetVal) * 100) : 0;
+$asetBaikVal = (int) ($asetAktif ?? 0);
+$persenBaik =
+    $totalAsetVal > 0 ? (int) round(($asetBaikVal / $totalAsetVal) * 100) : 0;
 
 /* Waktu relatif untuk log aktivitas */
 $waktuRelatif = function ($datetime) {
     if (empty($datetime)) {
-        return '-';
+        return "-";
     }
     $ts = strtotime($datetime);
     if (!$ts) {
-        return '-';
+        return "-";
     }
     $selisih = time() - $ts;
     if ($selisih < 0) {
-        return date('d M Y, H:i', $ts);
+        return date("d M Y, H:i", $ts);
     }
     if ($selisih < 60) {
-        return 'Baru saja';
+        return "Baru saja";
     }
     if ($selisih < 3600) {
-        return floor($selisih / 60) . ' menit lalu';
+        return floor($selisih / 60) . " menit lalu";
     }
     if ($selisih < 86400) {
-        return floor($selisih / 3600) . ' jam lalu';
+        return floor($selisih / 3600) . " jam lalu";
     }
     if ($selisih < 604800) {
-        return floor($selisih / 86400) . ' hari lalu';
+        return floor($selisih / 86400) . " hari lalu";
     }
-    return date('d M Y, H:i', $ts);
+    return date("d M Y, H:i", $ts);
 };
 ?>
 
@@ -69,8 +90,8 @@ $waktuRelatif = function ($datetime) {
     overflow: hidden;
     border: 0;
     border-radius: 1.125rem;
-    background: linear-gradient(120deg, #696cff 0%, #8e54e9 52%, #4834d4 100%);
-    box-shadow: 0 1rem 2.25rem -1rem rgba(105, 108, 255, 0.65);
+    background: linear-gradient(120deg, var(--bs-primary, #696cff) 0%, rgba(var(--bs-primary-rgb, 105, 108, 255), 0.88) 45%, #232733 100%);
+    box-shadow: 0 1rem 2.25rem -1rem rgba(var(--bs-primary-rgb, 105, 108, 255), 0.55);
     color: #fff;
   }
 
@@ -130,7 +151,7 @@ $waktuRelatif = function ($datetime) {
   .btn-hero-light {
     background: #fff;
     border-color: #fff;
-    color: #5b5fc7;
+    color: var(--bs-primary, #696cff);
     font-weight: 600;
   }
 
@@ -138,7 +159,8 @@ $waktuRelatif = function ($datetime) {
   .btn-hero-light:focus {
     background: #f2f2ff;
     border-color: #f2f2ff;
-    color: #4834d4;
+    color: var(--bs-primary, #696cff);
+    filter: brightness(0.9);
   }
 
   .btn-hero-ghost {
@@ -183,7 +205,7 @@ $waktuRelatif = function ($datetime) {
     width: 116px;
     height: 116px;
     border-radius: 50%;
-    background: rgba(38, 32, 92, 0.72);
+    background: rgba(18, 21, 35, 0.78);
     backdrop-filter: blur(6px);
     color: #fff;
   }
@@ -477,7 +499,9 @@ $waktuRelatif = function ($datetime) {
             <div class="row align-items-center g-4">
                 <div class="col-lg-7">
                     <span class="dashboard-hero__eyebrow mb-3">
-                        <i class="bx bx-calendar-event"></i> <?= esc($tanggalHariIni) ?>
+                        <i class="bx bx-calendar-event"></i> <?= esc(
+                            $tanggalHariIni,
+                        ) ?>
                     </span>
                     <h3 class="dashboard-hero__title text-white mb-2">
                         <?= esc($sapaan) ?>, <?= esc($namaPengguna) ?>! 👋
@@ -487,38 +511,56 @@ $waktuRelatif = function ($datetime) {
                         Pantau jadwal pemeliharaan dan aset yang perlu penanganan langsung dari satu tempat.
                     </p>
                     <div class="d-flex flex-wrap gap-2">
-                        <a href="<?= base_url('barang/tambah') ?>" class="btn btn-hero-light">
+                        <a href="<?= base_url(
+                            "barang/tambah",
+                        ) ?>" class="btn btn-hero-light">
                             <i class="bx bx-plus me-1 align-middle"></i> Tambah Aset
                         </a>
-                        <a href="<?= base_url('maintenance') ?>" class="btn btn-hero-ghost">
+                        <a href="<?= base_url(
+                            "maintenance",
+                        ) ?>" class="btn btn-hero-ghost">
                             <i class="bx bx-calendar-check me-1 align-middle"></i> Jadwal Pemeliharaan
+                        </a>
+                        <a href="<?= base_url(
+                            "scan",
+                        ) ?>" class="btn btn-hero-ghost">
+                            <i class="bx bx-qr-scan me-1 align-middle"></i> Buka Scanner
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <div class="hero-health">
-                        <div class="hero-ring" style="--ring-value: <?= $persenBaik ?>;" role="img"
-                             aria-label="Persentase aset kondisi baik <?= $persenBaik ?> persen">
-                            <div class="hero-ring__inner">
-                                <span class="hero-ring__value"><?= $persenBaik ?>%</span>
-                                <span class="hero-ring__label">Kondisi Baik</span>
+                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-end gap-4">
+                        <div class="hero-health">
+                            <div class="hero-ring" style="--ring-value: <?= $persenBaik ?>;" role="img"
+                                 aria-label="Persentase aset kondisi baik <?= $persenBaik ?> persen">
+                                <div class="hero-ring__inner">
+                                    <span class="hero-ring__value"><?= $persenBaik ?>%</span>
+                                    <span class="hero-ring__label">Kondisi Baik</span>
+                                </div>
+                            </div>
+                            <div class="hero-mini-stats">
+                                <div>
+                                    <span class="hero-mini-stats__value"><?= number_format(
+                                        $totalAsetVal,
+                                    ) ?></span>
+                                    <span class="hero-mini-stats__label">Total Aset</span>
+                                </div>
+                                <div>
+                                    <span class="hero-mini-stats__value"><?= number_format(
+                                        count($chartLabels ?? []),
+                                    ) ?></span>
+                                    <span class="hero-mini-stats__label">Kategori</span>
+                                </div>
+                                <div>
+                                    <span class="hero-mini-stats__value"><?= number_format(
+                                        (int) ($perluMaintenanceCount ?? 0),
+                                    ) ?></span>
+                                    <span class="hero-mini-stats__label">Perlu Servis</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="hero-mini-stats">
-                            <div>
-                                <span class="hero-mini-stats__value"><?= number_format($totalAsetVal) ?></span>
-                                <span class="hero-mini-stats__label">Total Aset</span>
-                            </div>
-                            <div>
-                                <span class="hero-mini-stats__value"><?= number_format(count($chartLabels ?? [])) ?></span>
-                                <span class="hero-mini-stats__label">Kategori</span>
-                            </div>
-                            <div>
-                                <span class="hero-mini-stats__value"><?= number_format((int) ($perluMaintenanceCount ?? 0)) ?></span>
-                                <span class="hero-mini-stats__label">Perlu Servis</span>
-                            </div>
+
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -532,9 +574,13 @@ $waktuRelatif = function ($datetime) {
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <span class="stat-icon"><i class="bx bx-box"></i></span>
-                        <a href="<?= base_url('barang') ?>" class="stat-link">Lihat Semua <i class="bx bx-right-arrow-alt align-middle"></i></a>
+                        <a href="<?= base_url(
+                            "barang",
+                        ) ?>" class="stat-link">Lihat Semua <i class="bx bx-right-arrow-alt align-middle"></i></a>
                     </div>
-                    <div class="stat-value"><?= number_format($totalAsetVal) ?></div>
+                    <div class="stat-value"><?= number_format(
+                        $totalAsetVal,
+                    ) ?></div>
                     <div class="stat-label mt-1">Total Seluruh Aset</div>
                 </div>
             </div>
@@ -548,7 +594,9 @@ $waktuRelatif = function ($datetime) {
                         <span class="stat-icon"><i class="bx bx-check-shield"></i></span>
                         <span class="badge bg-label-success"><?= $persenBaik ?>%</span>
                     </div>
-                    <div class="stat-value"><?= number_format($asetBaikVal) ?></div>
+                    <div class="stat-value"><?= number_format(
+                        $asetBaikVal,
+                    ) ?></div>
                     <div class="stat-label mt-1">Aset Kondisi Baik</div>
                     <div class="progress mt-3" style="height: 6px;" role="progressbar"
                          aria-valuenow="<?= $persenBaik ?>" aria-valuemin="0" aria-valuemax="100"
@@ -565,9 +613,13 @@ $waktuRelatif = function ($datetime) {
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <span class="stat-icon"><i class="bx bx-wrench"></i></span>
-                        <a href="<?= base_url('maintenance') ?>" class="stat-link">Jadwal <i class="bx bx-right-arrow-alt align-middle"></i></a>
+                        <a href="<?= base_url(
+                            "maintenance",
+                        ) ?>" class="stat-link">Jadwal <i class="bx bx-right-arrow-alt align-middle"></i></a>
                     </div>
-                    <div class="stat-value" style="color: var(--bs-warning-text-emphasis);"><?= number_format((int) ($perluMaintenanceCount ?? 0)) ?></div>
+                    <div class="stat-value" style="color: var(--bs-warning-text-emphasis);"><?= number_format(
+                        (int) ($perluMaintenanceCount ?? 0),
+                    ) ?></div>
                     <div class="stat-label mt-1">Jatuh Tempo Servis (&le; 14 Hari)</div>
                 </div>
             </div>
@@ -579,9 +631,13 @@ $waktuRelatif = function ($datetime) {
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <span class="stat-icon"><i class="bx bx-error-circle"></i></span>
-                        <a href="<?= base_url('perbaikan/create') ?>" class="stat-link">Tindak <i class="bx bx-right-arrow-alt align-middle"></i></a>
+                        <a href="<?= base_url(
+                            "perbaikan/create",
+                        ) ?>" class="stat-link">Tindak <i class="bx bx-right-arrow-alt align-middle"></i></a>
                     </div>
-                    <div class="stat-value" style="color: var(--bs-danger-text-emphasis);"><?= number_format((int) ($asetRusakCount ?? 0)) ?></div>
+                    <div class="stat-value" style="color: var(--bs-danger-text-emphasis);"><?= number_format(
+                        (int) ($asetRusakCount ?? 0),
+                    ) ?></div>
                     <div class="stat-label mt-1">Aset Rusak (Perlu Servis)</div>
                 </div>
             </div>
@@ -601,10 +657,15 @@ $waktuRelatif = function ($datetime) {
                             <small class="text-muted">Jumlah aset per kategori</small>
                         </div>
                     </div>
-                    <a href="<?= base_url('kategori') ?>" class="btn btn-sm btn-outline-primary">Kelola</a>
+                    <a href="<?= base_url(
+                        "kategori",
+                    ) ?>" class="btn btn-sm btn-outline-primary">Kelola</a>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center align-items-center pt-4">
-                    <?php if (empty($chartSeries) || array_sum($chartSeries) === 0): ?>
+                    <?php if (
+                        empty($chartSeries) ||
+                        array_sum($chartSeries) === 0
+                    ): ?>
                         <div class="empty-state">
                             <i class="bx bx-pie-chart-alt fs-1 d-block mb-2"></i>
                             Belum ada aset yang terdaftar pada kategori.
@@ -629,7 +690,9 @@ $waktuRelatif = function ($datetime) {
                             <small class="text-muted">14 hari ke depan</small>
                         </div>
                     </div>
-                    <span class="badge bg-label-warning"><?= count($alertJadwal ?? []) ?> Unit</span>
+                    <span class="badge bg-label-warning"><?= count(
+                        $alertJadwal ?? [],
+                    ) ?> Unit</span>
                 </div>
                 <div class="card-body p-0">
                     <?php if (empty($alertJadwal)): ?>
@@ -639,43 +702,70 @@ $waktuRelatif = function ($datetime) {
                     <?php else: ?>
                         <ul class="maintenance-timeline">
                             <?php foreach ($alertJadwal as $j):
-                                $sisaHari = (int) $j['sisa_hari'];
-                                $kelasItem = $sisaHari < 0 ? 'is-overdue' : ($sisaHari <= 3 ? 'is-urgent' : '');
+
+                                $sisaHari = (int) $j["sisa_hari"];
+                                $kelasItem =
+                                    $sisaHari < 0
+                                        ? "is-overdue"
+                                        : ($sisaHari <= 3
+                                            ? "is-urgent"
+                                            : "");
                                 ?>
                                 <li class="maintenance-item <?= $kelasItem ?>">
                                     <span class="maintenance-item__dot"></span>
                                     <div class="d-flex justify-content-between align-items-start gap-2">
                                         <div class="min-w-0">
-                                            <div class="maintenance-item__title text-truncate"><?= esc($j['nama_barang']) ?></div>
+                                            <div class="maintenance-item__title text-truncate"><?= esc(
+                                                $j["nama_barang"],
+                                            ) ?></div>
                                             <div class="small text-muted font-monospace text-truncate">
-                                                <?= esc($j['kode_aset']) ?> &bull; <?= esc($j['nama_ruang'] ?? '-') ?>
+                                                <?= esc(
+                                                    $j["kode_aset"],
+                                                ) ?> &bull; <?= esc(
+     $j["nama_ruang"] ?? "-",
+ ) ?>
                                             </div>
                                         </div>
-                                        <a href="<?= base_url('maintenance/create?barang_id=' . $j['id']) ?>"
+                                        <a href="<?= base_url(
+                                            "maintenance/create?barang_id=" .
+                                                $j["id"],
+                                        ) ?>"
                                            class="btn btn-sm btn-icon btn-outline-primary flex-shrink-0"
-                                           title="Input Pemeliharaan" aria-label="Input pemeliharaan <?= esc($j['nama_barang']) ?>">
+                                           title="Input Pemeliharaan" aria-label="Input pemeliharaan <?= esc(
+                                               $j["nama_barang"],
+                                           ) ?>">
                                             <i class="bx bx-wrench"></i>
                                         </a>
                                     </div>
                                     <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
                                         <?php if ($sisaHari < 0): ?>
-                                            <span class="badge bg-label-danger"><i class="bx bx-error me-1"></i>Lewat <?= abs($sisaHari) ?> hari</span>
+                                            <span class="badge bg-label-danger"><i class="bx bx-error me-1"></i>Lewat <?= abs(
+                                                $sisaHari,
+                                            ) ?> hari</span>
                                         <?php elseif ($sisaHari === 0): ?>
                                             <span class="badge bg-label-danger"><i class="bx bx-time me-1"></i>Jatuh tempo hari ini</span>
                                         <?php else: ?>
                                             <span class="badge bg-label-warning"><i class="bx bx-time me-1"></i>Sisa <?= $sisaHari ?> hari</span>
                                         <?php endif; ?>
                                         <small class="text-muted">
-                                            <i class="bx bx-calendar me-1"></i><?= date('d M Y', strtotime($j['jadwal_berikutnya'])) ?>
+                                            <i class="bx bx-calendar me-1"></i><?= date(
+                                                "d M Y",
+                                                strtotime(
+                                                    $j["jadwal_berikutnya"],
+                                                ),
+                                            ) ?>
                                         </small>
                                     </div>
                                 </li>
-                            <?php endforeach; ?>
+                            <?php
+                            endforeach; ?>
                         </ul>
                     <?php endif; ?>
                 </div>
                 <div class="card-footer text-center border-top bg-transparent">
-                    <a href="<?= base_url('maintenance') ?>" class="text-primary text-decoration-none small fw-semibold">
+                    <a href="<?= base_url(
+                        "maintenance",
+                    ) ?>" class="text-primary text-decoration-none small fw-semibold">
                         Lihat Semua Jadwal Pemeliharaan <i class="bx bx-right-arrow-alt align-middle"></i>
                     </a>
                 </div>
@@ -695,7 +785,9 @@ $waktuRelatif = function ($datetime) {
                     <small class="text-muted">Perlu penanganan cepat oleh teknisi</small>
                 </div>
             </div>
-            <a href="<?= base_url('perbaikan/create') ?>" class="btn btn-sm btn-danger">
+            <a href="<?= base_url(
+                "perbaikan/create",
+            ) ?>" class="btn btn-sm btn-danger">
                 <i class="bx bx-wrench me-1"></i> Tangani di Modul Perbaikan
             </a>
         </div>
@@ -727,33 +819,59 @@ $waktuRelatif = function ($datetime) {
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="item-icon bg-label-danger"><i class="bx bx-box"></i></span>
                                         <div class="min-w-0">
-                                            <span class="fw-semibold text-heading d-block text-truncate"><?= esc($rusak['nama_barang']) ?></span>
-                                            <small class="text-muted font-monospace"><?= esc($rusak['kode_aset']) ?></small>
+                                            <span class="fw-semibold text-heading d-block text-truncate"><?= esc(
+                                                $rusak["nama_barang"],
+                                            ) ?></span>
+                                            <small class="text-muted font-monospace"><?= esc(
+                                                $rusak["kode_aset"],
+                                            ) ?></small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="text-body"><?= esc($rusak['nama_ruang'] ?? '-') ?></span>
-                                    <small class="text-muted d-block">Lantai <?= esc($rusak['lantai'] ?? '1') ?></small>
+                                    <span class="text-body"><?= esc(
+                                        $rusak["nama_ruang"] ?? "-",
+                                    ) ?></span>
+                                    <small class="text-muted d-block">Lantai <?= esc(
+                                        $rusak["lantai"] ?? "1",
+                                    ) ?></small>
                                 </td>
                                 <td>
-                                    <span class="text-body"><?= esc($rusak['nama_kategori'] ?? '-') ?></span>
-                                    <small class="text-muted d-block"><?= esc($rusak['merek'] ?: '-') ?></small>
+                                    <span class="text-body"><?= esc(
+                                        $rusak["nama_kategori"] ?? "-",
+                                    ) ?></span>
+                                    <small class="text-muted d-block"><?= esc(
+                                        $rusak["merek"] ?: "-",
+                                    ) ?></small>
                                 </td>
                                 <td>
-                                    <?php if ($rusak['kondisi_barang'] === 'Rusak Berat'): ?>
+                                    <?php if (
+                                        $rusak["kondisi_barang"] ===
+                                        "Rusak Berat"
+                                    ): ?>
                                         <span class="badge bg-danger"><i class="bx bx-error me-1"></i>Rusak Berat</span>
                                     <?php else: ?>
                                         <span class="badge bg-label-warning"><i class="bx bx-error-circle me-1"></i>Rusak Ringan</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <small class="text-muted" title="<?= esc($rusak['updated_at'] ?? '-') ?>">
-                                        <?= !empty($rusak['updated_at']) ? esc($waktuRelatif($rusak['updated_at'])) : '-' ?>
+                                    <small class="text-muted" title="<?= esc(
+                                        $rusak["updated_at"] ?? "-",
+                                    ) ?>">
+                                        <?= !empty($rusak["updated_at"])
+                                            ? esc(
+                                                $waktuRelatif(
+                                                    $rusak["updated_at"],
+                                                ),
+                                            )
+                                            : "-" ?>
                                     </small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('perbaikan/create?barang_id=' . $rusak['id']) ?>" class="btn btn-sm btn-outline-danger">
+                                    <a href="<?= base_url(
+                                        "perbaikan/create?barang_id=" .
+                                            $rusak["id"],
+                                    ) ?>" class="btn btn-sm btn-outline-danger">
                                         <i class="bx bx-wrench me-1"></i> Perbaiki
                                     </a>
                                 </td>
@@ -785,22 +903,23 @@ $waktuRelatif = function ($datetime) {
                 </div>
             <?php else: ?>
                 <?php foreach ($logs as $log):
-                    $aksi = strtoupper($log['aksi'] ?? 'INFO');
-                    $badgeAksi = 'bg-label-primary';
-                    $iconAksi = 'bx-info-circle';
-                    $softAksi = 'bg-label-primary';
-                    if ($aksi === 'CREATE' || $aksi === 'TAMBAH') {
-                        $badgeAksi = 'bg-label-success';
-                        $softAksi = 'bg-label-success';
-                        $iconAksi = 'bx-plus-circle';
-                    } elseif ($aksi === 'EDIT' || $aksi === 'UPDATE') {
-                        $badgeAksi = 'bg-label-warning';
-                        $softAksi = 'bg-label-warning';
-                        $iconAksi = 'bx-edit';
-                    } elseif ($aksi === 'DELETE' || $aksi === 'HAPUS') {
-                        $badgeAksi = 'bg-label-danger';
-                        $softAksi = 'bg-label-danger';
-                        $iconAksi = 'bx-trash';
+
+                    $aksi = strtoupper($log["aksi"] ?? "INFO");
+                    $badgeAksi = "bg-label-primary";
+                    $iconAksi = "bx-info-circle";
+                    $softAksi = "bg-label-primary";
+                    if ($aksi === "CREATE" || $aksi === "TAMBAH") {
+                        $badgeAksi = "bg-label-success";
+                        $softAksi = "bg-label-success";
+                        $iconAksi = "bx-plus-circle";
+                    } elseif ($aksi === "EDIT" || $aksi === "UPDATE") {
+                        $badgeAksi = "bg-label-warning";
+                        $softAksi = "bg-label-warning";
+                        $iconAksi = "bx-edit";
+                    } elseif ($aksi === "DELETE" || $aksi === "HAPUS") {
+                        $badgeAksi = "bg-label-danger";
+                        $softAksi = "bg-label-danger";
+                        $iconAksi = "bx-trash";
                     }
                     ?>
                     <div class="activity-item">
@@ -808,22 +927,35 @@ $waktuRelatif = function ($datetime) {
                         <div class="flex-grow-1 min-w-0">
                             <div class="d-flex justify-content-between align-items-center gap-2">
                                 <span class="fw-semibold text-heading text-truncate">
-                                    <i class="bx bx-user me-1"></i><?= esc($log['username'] ?? 'admin') ?>
+                                    <i class="bx bx-user me-1"></i><?= esc(
+                                        $log["username"] ?? "admin",
+                                    ) ?>
                                 </span>
-                                <small class="text-muted text-nowrap" title="<?= esc($log['created_at'] ?? '-') ?>">
-                                    <?= !empty($log['created_at']) ? esc($waktuRelatif($log['created_at'])) : '-' ?>
+                                <small class="text-muted text-nowrap" title="<?= esc(
+                                    $log["created_at"] ?? "-",
+                                ) ?>">
+                                    <?= !empty($log["created_at"])
+                                        ? esc($waktuRelatif($log["created_at"]))
+                                        : "-" ?>
                                 </small>
                             </div>
-                            <p class="mb-1 small text-body"><?= esc($log['message'] ?? '-') ?></p>
+                            <p class="mb-1 small text-body"><?= esc(
+                                $log["message"] ?? "-",
+                            ) ?></p>
                             <div class="d-flex flex-wrap align-items-center gap-2">
-                                <span class="badge <?= $badgeAksi ?>"><?= esc($aksi) ?></span>
+                                <span class="badge <?= $badgeAksi ?>"><?= esc(
+    $aksi,
+) ?></span>
                                 <small class="text-muted font-monospace">
-                                    <i class="bx bx-globe me-1"></i><?= esc($log['ipaddress'] ?? '127.0.0.1') ?>
+                                    <i class="bx bx-globe me-1"></i><?= esc(
+                                        $log["ipaddress"] ?? "127.0.0.1",
+                                    ) ?>
                                 </small>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             <?php endif; ?>
         </div>
     </div>
@@ -854,8 +986,13 @@ $waktuRelatif = function ($datetime) {
                     background: "transparent",
                     animations: { speed: 500 }
                 },
-                labels: <?= json_encode($chartLabels ?? [], JSON_UNESCAPED_UNICODE) ?>,
-                series: <?= json_encode(array_map('intval', $chartSeries ?? [])) ?>,
+                labels: <?= json_encode(
+                    $chartLabels ?? [],
+                    JSON_UNESCAPED_UNICODE,
+                ) ?>,
+                series: <?= json_encode(
+                    array_map("intval", $chartSeries ?? []),
+                ) ?>,
                 colors: palette,
                 stroke: {
                     width: 2,

@@ -284,10 +284,6 @@
             <!-- Kolom Kiri: QR Code + Kode Aset -->
             <div class="left-col">
                 <div class="qr-wrapper">
-                    <span class="qr-corner-tl"></span>
-                    <span class="qr-corner-tr"></span>
-                    <span class="qr-corner-bl"></span>
-                    <span class="qr-corner-br"></span>
                     <img src="<?= base_url('barang/qrcode/' . $item['kode_aset']) ?>" alt="QR Code" class="qr-image" crossOrigin="anonymous">
                 </div>
                 <div class="code-pill">

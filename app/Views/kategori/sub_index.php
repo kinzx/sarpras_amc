@@ -1,32 +1,47 @@
 <!doctype html>
-<html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url('assets/') ?>" data-template="vertical-menu-template" data-bs-theme="light">
+<html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url(
+    "assets/",
+) ?>" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-  <title><?= $title ?? 'Sub Kategori' ?> | RS AMC</title>
-  
-  <link rel="icon" type="image/x-icon" href="<?= base_url('assets/img/favicon/favicon.ico') ?>" />
+  <title><?= $title ?? "Sub Kategori" ?> | RS AMC</title>
+
+  <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+      "AMC-tanpa-nama-pad.png",
+  ) ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/fonts/iconify-icons.css') ?>" />
-  
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/pickr/pickr-themes.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/css/core.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/css/demo.css') ?>" />
-  <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-  
-  <script src="<?= base_url('assets/vendor/js/helpers.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/template-customizer.js') ?>"></script>
-  <script src="<?= base_url('assets/js/config.js') ?>"></script>
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/fonts/iconify-icons.css",
+  ) ?>" />
+
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/libs/pickr/pickr-themes.css",
+  ) ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/vendor/css/core.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url(
+      "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
+  ) ?>" />
+
+  <script src="<?= base_url("assets/vendor/js/helpers.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/js/template-customizer.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/js/config.js") ?>"></script>
 </head>
 
 <body>
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
-      
+
       <!-- MENU SIDEBAR -->
-      <?= view('adds/sidebar'); ?>
+      <?= view("adds/sidebar") ?>
 
       <div class="menu-mobile-toggler d-xl-none rounded-1">
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
@@ -37,29 +52,35 @@
 
       <!-- Layout container -->
       <div class="layout-page">
-        
+
         <!-- NAVBAR -->
-        <?= view('adds/navbar'); ?>
+        <?= view("adds/navbar") ?>
 
         <!-- Content wrapper -->
         <div class="content-wrapper">
-          
+
           <!-- ========================================== -->
           <!-- KONTEN SUB KATEGORI DIMULAI DARI SINI -->
           <!-- ========================================== -->
           <div class="container-xxl flex-grow-1 container-p-y">
-              
+
               <!-- Header Card -->
               <div class="card mb-4">
                   <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                       <div class="mb-3 mb-md-0">
                           <h4 class="card-title mb-1">
-                              <span class="text-primary me-2">|</span> Sub Kategori: <?= $kategoriInduk['nama_kategori'] ?>
+                              <span class="text-primary me-2">|</span> Sub Kategori: <?= $kategoriInduk[
+                                  "nama_kategori"
+                              ] ?>
                           </h4>
-                          <p class="text-muted mb-0">Daftar pengelompokan spesifik di bawah <?= $kategoriInduk['nama_kategori'] ?>.</p>
+                          <p class="text-muted mb-0">Daftar pengelompokan spesifik di bawah <?= $kategoriInduk[
+                              "nama_kategori"
+                          ] ?>.</p>
                       </div>
                       <div class="d-flex gap-2">
-                          <a href="<?= base_url('kategori') ?>" class="btn btn-outline-secondary">
+                          <a href="<?= base_url(
+                              "kategori",
+                          ) ?>" class="btn btn-outline-secondary">
                               <i class="bx bx-arrow-back me-1"></i> Kembali
                           </a>
                           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSub">
@@ -70,18 +91,21 @@
               </div>
 
               <!-- Alert Sukses/Error -->
-              <?php if(session()->getFlashdata('success')): ?>
+              <?php if (session()->getFlashdata("success")): ?>
                   <div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <?= session()->getFlashdata('success') ?>
+                      <?= session()->getFlashdata("success") ?>
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
               <?php endif; ?>
 
-              <?php if (session()->getFlashdata('errors')): ?>
+              <?php if (session()->getFlashdata("errors")): ?>
                   <div class="alert alert-danger alert-dismissible fade show" role="alert">
                       <strong>Sub-kategori belum tersimpan:</strong>
                       <ul class="mb-0 mt-2">
-                          <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                          <?php foreach (
+                              session()->getFlashdata("errors")
+                              as $error
+                          ): ?>
                               <li><?= esc($error) ?></li>
                           <?php endforeach; ?>
                       </ul>
@@ -102,29 +126,36 @@
                               </tr>
                           </thead>
                           <tbody class="table-border-bottom-0">
-                              <?php if(empty($subKategori)): ?>
+                              <?php if (empty($subKategori)): ?>
                                   <tr>
                                       <td colspan="4" class="text-center py-4 text-muted">Belum ada sub-kategori.</td>
                                   </tr>
                               <?php else: ?>
-                                  <?php $no = 1; foreach($subKategori as $sub): ?>
+                                  <?php
+                                  $no = 1;
+                                  foreach ($subKategori as $sub): ?>
                                   <tr>
                                       <td><?= $no++ ?></td>
-                                      <td><strong><?= $sub['nama_sub_kategori'] ?></strong></td>
+                                      <td><strong><?= $sub[
+                                          "nama_sub_kategori"
+                                      ] ?></strong></td>
                                       <td>
-                                          <?php if($sub['is_active'] == 1): ?>
+                                          <?php if ($sub["is_active"] == 1): ?>
                                               <span class="badge bg-label-success">Aktif</span>
                                           <?php else: ?>
                                               <span class="badge bg-label-danger">Non-Aktif</span>
                                           <?php endif; ?>
                                       </td>
                                       <td>
-                                          <a href="<?= base_url('kategori/hapus/'.$sub['id']) ?>" class="btn btn-sm btn-icon btn-danger" onclick="return confirm('Yakin ingin menonaktifkan sub-kategori ini?')">
+                                          <a href="<?= base_url(
+                                              "kategori/hapus/" . $sub["id"],
+                                          ) ?>" class="btn btn-sm btn-icon btn-danger" onclick="return confirm('Yakin ingin menonaktifkan sub-kategori ini?')">
                                               <i class="bx bx-trash"></i>
                                           </a>
                                       </td>
                                   </tr>
-                                  <?php endforeach; ?>
+                                  <?php endforeach;
+                                  ?>
                               <?php endif; ?>
                           </tbody>
                       </table>
@@ -136,7 +167,7 @@
           <!-- ========================================== -->
 
           <!-- FOOTER -->
-          <?= view('adds/footer'); ?>
+          <?= view("adds/footer") ?>
 
           <div class="content-backdrop fade"></div>
         </div>
@@ -157,11 +188,15 @@
                   <h5 class="modal-title">Tambah Sub Kategori</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form action="<?= base_url('kategori/simpan-sub') ?>" method="POST">
+              <form action="<?= base_url(
+                  "kategori/simpan-sub",
+              ) ?>" method="POST">
                   <?= csrf_field() ?>
                   <!-- Kirim ID Induk secara sembunyi -->
-                  <input type="hidden" name="kategori_id" value="<?= $kategoriInduk['id'] ?>">
-                  
+                  <input type="hidden" name="kategori_id" value="<?= $kategoriInduk[
+                      "id"
+                  ] ?>">
+
                   <div class="modal-body">
                   <label class="form-label">Nama Sub Kategori</label>
                   <p class="text-muted small">Isi satu nama per baris. Baris kosong akan diabaikan.</p>
@@ -185,16 +220,20 @@
   </div>
 
   <!-- Core JS -->
-  <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/@algolia/autocomplete-js.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/pickr/pickr.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/hammer/hammer.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
-  <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
-  <script src="<?= base_url('assets/js/main.js') ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/jquery/jquery.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/popper/popper.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/bootstrap.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/libs/@algolia/autocomplete-js.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/pickr/pickr.js") ?>"></script>
+  <script src="<?= base_url(
+      "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
+  ) ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/hammer/hammer.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/libs/i18n/i18n.js") ?>"></script>
+  <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
+  <script src="<?= base_url("assets/js/main.js") ?>"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
