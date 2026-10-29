@@ -3,7 +3,9 @@
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= base_url('/') ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url(
+                "/",
+            ) ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
             <li class="breadcrumb-item"><a href="#">Inventaris</a></li>
             <li class="breadcrumb-item active" aria-current="page">Daftar Aset</li>
         </ol>
@@ -18,6 +20,16 @@
                 </h4>
                 <p class="text-muted mb-0">Kelola data aset, pelacakan lokasi, dan status operasional alat rumah sakit.</p>
             </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-secondary">
+                    <i class="bx bx-download me-1"></i> Export
+                </button>
+                <a href="<?= base_url(
+                    "barang/tambah",
+                ) ?>" class="btn btn-primary">
+                    <i class="bx bx-plus me-1"></i> Tambah Barang
+                </a>
+            </div>
         </div>
     </div>
 
@@ -29,7 +41,9 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">TOTAL ASET</p>
-                        <h3 class="mb-0 fw-bolder"><?= number_format($totalAset ?? 0) ?></h3>
+                        <h3 class="mb-0 fw-bolder"><?= number_format(
+                            $totalAset ?? 0,
+                        ) ?></h3>
                     </div>
                     <div class="bg-label-primary rounded p-3">
                         <i class="bx bx-box fs-3"></i>
@@ -43,7 +57,9 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">ASET AKTIF</p>
-                        <h3 class="mb-0 fw-bolder"><?= number_format($asetAktif ?? 0) ?></h3>
+                        <h3 class="mb-0 fw-bolder"><?= number_format(
+                            $asetAktif ?? 0,
+                        ) ?></h3>
                     </div>
                     <div class="bg-label-success rounded p-3">
                         <i class="bx bx-check-shield fs-3"></i>
@@ -71,55 +87,50 @@
     <div class="card mb-4">
         <div class="card-body">
 
-            <!-- Baris 1: Search, Tombol Tambah & Export -->
-            <div class="row g-3 mb-3 align-items-center">
-                <div class="col-md-6">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text"><i class="bx bx-search"></i></span>
-                        <input type="text" class="form-control" id="searchBarang" placeholder="Cari nama, kode aset, merek, atau ruangan..." value="<?= esc($keyword ?? '') ?>">
-                    </div>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                <div>
+                    <h5 class="mb-1"><i class="bx bx-filter-alt text-primary me-1"></i> Filter Inventaris</h5>
+                    <small class="text-muted">Saring daftar aset berdasarkan kategori dan status.</small>
                 </div>
-                <div class="col-md-6 d-flex justify-content-md-end gap-2">
-                    <button class="btn btn-outline-secondary">
-                        <i class="bx bx-download me-1"></i> Export
-                    </button>
-                    <a href="<?= base_url('barang/tambah') ?>" class="btn btn-primary">
-                        <i class="bx bx-plus me-1"></i> Tambah Barang
-                    </a>
-                </div>
+
             </div>
 
-            <!-- Baris 2: Filter Dropdown -->
-            <div class="row g-3">
+            <div class="row g-3 align-items-end">
                 <!-- Filter Kategori -->
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label text-muted small fw-bold text-uppercase">Kategori</label>
+                <div class="col-lg-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase mb-2">Kategori</label>
                     <select class="form-select" id="filterKategori">
                         <option value="" selected>Semua Kategori</option>
                         <?php if (!empty($kategoriList)): ?>
                             <?php foreach ($kategoriList as $k): ?>
-                                <option value="<?= esc($k['nama_kategori']) ?>"><?= esc($k['nama_kategori']) ?></option>
+                                <option value="<?= esc(
+                                    $k["nama_kategori"],
+                                ) ?>"><?= esc($k["nama_kategori"]) ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
                 </div>
 
                 <!-- Filter Sub-Kategori -->
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label text-muted small fw-bold text-uppercase">Sub Kategori</label>
+                <div class="col-lg-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase mb-2">Sub Kategori</label>
                     <select class="form-select" id="filterSubKategori">
                         <option value="" selected>Semua Sub</option>
                         <?php if (!empty($subList)): ?>
                             <?php foreach ($subList as $s): ?>
-                                <option value="<?= esc($s['nama_sub_kategori']) ?>"><?= esc($s['nama_sub_kategori']) ?></option>
+                                <option value="<?= esc(
+                                    $s["nama_sub_kategori"],
+                                ) ?>"><?= esc(
+    $s["nama_sub_kategori"],
+) ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
                 </div>
 
                 <!-- Filter Status -->
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label text-muted small fw-bold text-uppercase">Status Operasional</label>
+                <div class="col-lg-3 col-sm-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase mb-2">Status Operasional</label>
                     <select class="form-select" id="filterStatus">
                         <option value="" selected>Semua Status</option>
                         <option value="Aktif">Aktif</option>
@@ -128,8 +139,8 @@
                 </div>
 
                 <!-- Tombol Reset -->
-                <div class="col-md-3 col-sm-6 d-flex align-items-end">
-                    <button class="btn btn-label-danger w-100" id="btnResetFilter" title="Reset Semua Filter">
+                <div class="col-lg-3 col-sm-6">
+                    <button class="btn btn-outline-danger w-100" id="btnResetFilter" title="Reset Semua Filter">
                         <i class="bx bx-refresh me-1"></i> Reset Filter
                     </button>
                 </div>
@@ -164,14 +175,28 @@
                             </td>
                         </tr>
                     <?php else: ?>
-                        <?php $no = 1; foreach ($barang as $row): ?>
+                        <?php
+                        $no = 1;
+                        foreach ($barang as $row): ?>
                             <tr>
-                                <td><?= sprintf('%02d', $no++) ?></td>
+                                <td><?= sprintf("%02d", $no++) ?></td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar avatar-md me-3 bg-light rounded overflow-hidden">
-                                            <?php if (!empty($row['foto']) && file_exists(FCPATH . 'uploads/barang/' . $row['foto'])): ?>
-                                                <img src="<?= base_url('uploads/barang/' . $row['foto']) ?>" alt="<?= esc($row['nama_barang']) ?>" class="w-100 h-100 object-fit-cover rounded">
+                                            <?php if (
+                                                !empty($row["foto"]) &&
+                                                file_exists(
+                                                    FCPATH .
+                                                        "uploads/barang/" .
+                                                        $row["foto"],
+                                                )
+                                            ): ?>
+                                                <img src="<?= base_url(
+                                                    "uploads/barang/" .
+                                                        $row["foto"],
+                                                ) ?>" alt="<?= esc(
+    $row["nama_barang"],
+) ?>" class="w-100 h-100 object-fit-cover rounded">
                                             <?php else: ?>
                                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-label-primary text-primary fw-bold">
                                                     <i class="bx bx-image-alt fs-4"></i>
@@ -179,44 +204,74 @@
                                             <?php endif; ?>
                                         </div>
                                         <div>
-                                            <strong class="d-block text-dark"><?= esc($row['nama_barang']) ?></strong>
+                                            <strong class="d-block text-dark"><?= esc(
+                                                $row["nama_barang"],
+                                            ) ?></strong>
                                             <small class="text-primary">
-                                                <i class="bx bx-purchase-tag-alt"></i> <?= esc($row['nama_kategori'] ?? '-') ?>
-                                                <?php if (!empty($row['nama_sub_kategori'])): ?>
-                                                    <span class="text-muted">/ <?= esc($row['nama_sub_kategori']) ?></span>
+                                                <i class="bx bx-purchase-tag-alt"></i> <?= esc(
+                                                    $row["nama_kategori"] ??
+                                                        "-",
+                                                ) ?>
+                                                <?php if (
+                                                    !empty(
+                                                        $row[
+                                                            "nama_sub_kategori"
+                                                        ]
+                                                    )
+                                                ): ?>
+                                                    <span class="text-muted">/ <?= esc(
+                                                        $row[
+                                                            "nama_sub_kategori"
+                                                        ],
+                                                    ) ?></span>
                                                 <?php endif; ?>
                                             </small>
                                         </div>
                                     </div>
                                 </td>
-                                <td><span class="badge bg-label-secondary fs-6 font-monospace"><?= esc($row['kode_aset']) ?></span></td>
+                                <td><span class="badge bg-label-secondary fs-6 font-monospace"><?= esc(
+                                    $row["kode_aset"],
+                                ) ?></span></td>
                                 <td>
-                                    <strong><?= esc($row['merek'] ?: '-') ?></strong><br>
-                                    <small class="text-muted">Type: <?= esc($row['tipe'] ?: '-') ?></small>
+                                    <strong><?= esc(
+                                        $row["merek"] ?: "-",
+                                    ) ?></strong><br>
+                                    <small class="text-muted">Type: <?= esc(
+                                        $row["tipe"] ?: "-",
+                                    ) ?></small>
                                 </td>
                                 <td>
-                                    <i class="bx bx-map-pin text-danger me-1"></i> <?= esc($row['nama_ruang'] ?? '-') ?>
+                                    <i class="bx bx-map-pin text-danger me-1"></i> <?= esc(
+                                        $row["nama_ruang"] ?? "-",
+                                    ) ?>
                                 </td>
                                 <td>
-                                    <?php if ($row['is_active'] == 1): ?>
+                                    <?php if ($row["is_active"] == 1): ?>
                                         <span class="badge bg-label-success rounded-pill px-3">Aktif</span>
                                     <?php else: ?>
                                         <span class="badge bg-label-secondary rounded-pill px-3">Non-Aktif</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('barang/detail/' . $row['id']) ?>" class="btn btn-sm btn-icon btn-outline-primary me-1" title="Detail">
+                                    <a href="<?= base_url(
+                                        "barang/detail/" . $row["id"],
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-primary me-1" title="Detail">
                                         <i class="bx bx-show"></i>
                                     </a>
-                                    <a href="<?= base_url('barang/edit/' . $row['id']) ?>" class="btn btn-sm btn-icon btn-outline-warning me-1" title="Edit">
+                                    <a href="<?= base_url(
+                                        "barang/edit/" . $row["id"],
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-warning me-1" title="Edit">
                                         <i class="bx bx-pencil"></i>
                                     </a>
-                                    <a href="<?= base_url('barang/hapus/' . $row['id']) ?>" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus barang ini?')">
+                                    <a href="<?= base_url(
+                                        "barang/hapus/" . $row["id"],
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus barang ini?')">
                                         <i class="bx bx-trash"></i>
                                     </a>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach;
+                        ?>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -224,7 +279,9 @@
 
         <!-- Pagination -->
         <div class="card-footer d-flex justify-content-between align-items-center">
-            <small class="text-muted">Menampilkan <?= count($barang ?? []) ?> dari <?= number_format($totalAset ?? 0) ?> entri aset</small>
+            <small class="text-muted">Menampilkan <?= count(
+                $barang ?? [],
+            ) ?> dari <?= number_format($totalAset ?? 0) ?> entri aset</small>
         </div>
     </div>
 </div>

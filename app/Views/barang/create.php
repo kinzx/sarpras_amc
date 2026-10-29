@@ -45,7 +45,9 @@
 
     <!-- endbuild -->
 
-    <!-- Page CSS -->
+    <!-- FilePond: enhanced foto upload -->
+    <link href="https://cdn.jsdelivr.net/npm/filepond@4.32.7/dist/filepond.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/filepond-plugin-image-preview@4.6.12/dist/filepond-plugin-image-preview.min.css" rel="stylesheet" />
 
     <!-- Helpers -->
     <script src="../../assets/vendor/js/helpers.js"></script>
@@ -65,7 +67,7 @@
         <div class="layout-container">
             <!-- Menu -->
 
-            <?= view('adds/sidebar'); ?>
+            <?= view("adds/sidebar") ?>
 
             <div class="menu-mobile-toggler d-xl-none rounded-1">
                 <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
@@ -77,7 +79,7 @@
             <!-- Layout container -->
             <div class="layout-page">
                 <!-- Navbar -->
-                <?= view('adds/navbar'); ?>
+                <?= view("adds/navbar") ?>
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <!-- Content -->
@@ -86,7 +88,9 @@
                         <!-- Breadcrumb -->
                         <nav aria-label="breadcrumb" class="mb-4">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="<?= base_url('barang') ?>">Inventaris Alat</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url(
+                                    "barang",
+                                ) ?>">Inventaris Alat</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Tambah Barang</li>
                             </ol>
                         </nav>
@@ -97,10 +101,15 @@
                             </div>
 
                             <div class="card-body">
-                                <?php if (session()->getFlashdata('errors')): ?>
+                                <?php if (session()->getFlashdata("errors")): ?>
                                     <div class="alert alert-danger alert-dismissible" role="alert">
                                         <ul class="mb-0">
-                                            <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                                            <?php foreach (
+                                                session()->getFlashdata(
+                                                    "errors",
+                                                )
+                                                as $error
+                                            ): ?>
                                                 <li><?= esc($error) ?></li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -109,7 +118,9 @@
                                 <?php endif; ?>
 
                                 <!-- ACTION mengarah ke fungsi simpan di Controller -->
-                                <form action="<?= base_url('barang/simpan') ?>" method="POST" enctype="multipart/form-data" id="barangForm">
+                                <form action="<?= base_url(
+                                    "barang/simpan",
+                                ) ?>" method="POST" enctype="multipart/form-data" id="barangForm">
                                     <?= csrf_field() ?>
 
                                     <div class="row g-3">
@@ -118,7 +129,12 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Kode Barang <span class="badge bg-label-info ms-1">Otomatis</span></label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control bg-light" name="kode_aset" value="<?= esc(old('kode_aset', $autoKode ?? '')) ?>" readonly>
+                                                    <input type="text" class="form-control bg-light" name="kode_aset" value="<?= esc(
+                                                        old(
+                                                            "kode_aset",
+                                                            $autoKode ?? "",
+                                                        ),
+                                                    ) ?>" readonly>
                                                     <span class="input-group-text"><i class="bx bx-barcode"></i></span>
                                                 </div>
                                                 <small class="text-muted">Kode barcode unik dibuat otomatis oleh sistem</small>
@@ -128,8 +144,17 @@
                                                 <label class="form-label">Kategori <span class="text-danger">*</span></label>
                                                 <select class="form-select" name="kategori_id" id="kategori_id" required>
                                                     <option value="">-- Pilih Kategori --</option>
-                                                    <?php foreach ($kategori as $row): ?>
-                                                        <option value="<?= $row['id'] ?>" <?= old('kategori_id') == $row['id'] ? 'selected' : '' ?>><?= esc($row['nama_kategori']) ?></option>
+                                                    <?php foreach (
+                                                        $kategori
+                                                        as $row
+                                                    ): ?>
+                                                        <option value="<?= $row[
+                                                            "id"
+                                                        ] ?>" <?= old(
+    "kategori_id",
+) == $row["id"]
+    ? "selected"
+    : "" ?>><?= esc($row["nama_kategori"]) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -144,19 +169,25 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label">Merek <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="merek" value="<?= esc(old('merek')) ?>" placeholder="Contoh: Daikin" required>
+                                                <input type="text" class="form-control" name="merek" value="<?= esc(
+                                                    old("merek"),
+                                                ) ?>" placeholder="Contoh: Daikin" required>
                                                 <small class="text-muted">Merek atau brand barang</small>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">No. Seri <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="no_seri" value="<?= esc(old('no_seri')) ?>" placeholder="Masukkan nomor seri barang" required>
+                                                <input type="text" class="form-control" name="no_seri" value="<?= esc(
+                                                    old("no_seri"),
+                                                ) ?>" placeholder="Masukkan nomor seri barang" required>
                                                 <small class="text-muted">Masukkan nomor seri barang</small>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Daya (Watt) <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="daya" value="<?= esc(old('daya')) ?>" placeholder="Contoh: 1900" required>
+                                                <input type="text" class="form-control" name="daya" value="<?= esc(
+                                                    old("daya"),
+                                                ) ?>" placeholder="Contoh: 1900" required>
                                                 <small class="text-muted">Daya listrik yang dibutuhkan</small>
                                             </div>
 
@@ -164,15 +195,28 @@
                                                 <label class="form-label d-block">Kepemilikan <span class="text-danger">*</span></label>
                                                 <div class="d-flex align-items-center gap-4 mt-2">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_rs" value="RS" <?= old('kepemilikan', 'RS') === 'RS' ? 'checked' : '' ?> required>
+                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_rs" value="RS" <?= old(
+                                                            "kepemilikan",
+                                                            "RS",
+                                                        ) === "RS"
+                                                            ? "checked"
+                                                            : "" ?> required>
                                                         <label class="form-check-label" for="kepemilikan_rs">RS</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_kso" value="KSO" <?= old('kepemilikan') === 'KSO' ? 'checked' : '' ?>>
+                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_kso" value="KSO" <?= old(
+                                                            "kepemilikan",
+                                                        ) === "KSO"
+                                                            ? "checked"
+                                                            : "" ?>>
                                                         <label class="form-check-label" for="kepemilikan_kso">KSO</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_pt" value="PT" <?= old('kepemilikan') === 'PT' ? 'checked' : '' ?>>
+                                                        <input class="form-check-input" type="radio" name="kepemilikan" id="kepemilikan_pt" value="PT" <?= old(
+                                                            "kepemilikan",
+                                                        ) === "PT"
+                                                            ? "checked"
+                                                            : "" ?>>
                                                         <label class="form-check-label" for="kepemilikan_pt">PT</label>
                                                     </div>
                                                 </div>
@@ -183,7 +227,9 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Nama Barang <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="nama_barang" value="<?= esc(old('nama_barang')) ?>" placeholder="Masukkan nama barang" required>
+                                                <input type="text" class="form-control" name="nama_barang" value="<?= esc(
+                                                    old("nama_barang"),
+                                                ) ?>" placeholder="Masukkan nama barang" required>
                                                 <small class="text-muted">Masukkan nama barang</small>
                                             </div>
 
@@ -191,8 +237,17 @@
                                                 <label class="form-label">Ruangan <span class="text-danger">*</span></label>
                                                 <select class="form-select" name="ruang_id" id="ruang_id" required>
                                                     <option value="">-- Pilih Ruangan --</option>
-                                                    <?php foreach ($ruang as $row): ?>
-                                                        <option value="<?= $row['id'] ?>" data-lantai="<?= esc($row['lantai'] ?? '') ?>" <?= old('ruang_id') == $row['id'] ? 'selected' : '' ?>><?= esc($row['nama_ruang']) ?></option>
+                                                    <?php foreach (
+                                                        $ruang
+                                                        as $row
+                                                    ): ?>
+                                                        <option value="<?= $row[
+                                                            "id"
+                                                        ] ?>" data-lantai="<?= esc(
+    $row["lantai"] ?? "",
+) ?>" <?= old("ruang_id") == $row["id"] ? "selected" : "" ?>><?= esc(
+    $row["nama_ruang"],
+) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                                 <small class="text-muted">Pilih ruangan tempat barang berada</small>
@@ -206,23 +261,47 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label">Tipe <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="tipe" value="<?= esc(old('tipe')) ?>" placeholder="Contoh: Inverter / Wall Mounted" required>
+                                                <input type="text" class="form-control" name="tipe" value="<?= esc(
+                                                    old("tipe"),
+                                                ) ?>" placeholder="Contoh: Inverter / Wall Mounted" required>
                                                 <small class="text-muted">Tipe atau model barang</small>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Tahun Pembelian <span class="text-danger">*</span></label>
-                                                <input type="number" class="form-control" name="tahun_pembelian" value="<?= esc(old('tahun_pembelian') ?: date('Y')) ?>" placeholder="<?= date('Y') ?>" min="1990" max="<?= date('Y') ?>" required>
+                                                <input type="number" class="form-control" name="tahun_pembelian" value="<?= esc(
+                                                    old("tahun_pembelian") ?:
+                                                    date("Y"),
+                                                ) ?>" placeholder="<?= date(
+    "Y",
+) ?>" min="1990" max="<?= date("Y") ?>" required>
                                                 <small class="text-muted">Tahun pembelian barang</small>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Kondisi <span class="text-danger">*</span></label>
                                                 <select class="form-select" name="kondisi_barang" required>
-                                                    <option value="Baik" <?= old('kondisi_barang', 'Baik') === 'Baik' ? 'selected' : '' ?>>Baik</option>
-                                                    <option value="Cukup" <?= old('kondisi_barang') === 'Cukup' ? 'selected' : '' ?>>Cukup</option>
-                                                    <option value="Rusak Ringan" <?= old('kondisi_barang') === 'Rusak Ringan' ? 'selected' : '' ?>>Rusak Ringan</option>
-                                                    <option value="Rusak Berat" <?= old('kondisi_barang') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat</option>
+                                                    <option value="Baik" <?= old(
+                                                        "kondisi_barang",
+                                                        "Baik",
+                                                    ) === "Baik"
+                                                        ? "selected"
+                                                        : "" ?>>Baik</option>
+                                                    <option value="Cukup" <?= old(
+                                                        "kondisi_barang",
+                                                    ) === "Cukup"
+                                                        ? "selected"
+                                                        : "" ?>>Cukup</option>
+                                                    <option value="Rusak Ringan" <?= old(
+                                                        "kondisi_barang",
+                                                    ) === "Rusak Ringan"
+                                                        ? "selected"
+                                                        : "" ?>>Rusak Ringan</option>
+                                                    <option value="Rusak Berat" <?= old(
+                                                        "kondisi_barang",
+                                                    ) === "Rusak Berat"
+                                                        ? "selected"
+                                                        : "" ?>>Rusak Berat</option>
                                                 </select>
                                                 <small class="text-muted">Default Baik. Diperbarui lewat menu Pemeliharaan</small>
                                             </div>
@@ -230,8 +309,17 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                                 <select class="form-select" name="is_active" required>
-                                                    <option value="1" <?= old('is_active', '1') === '1' ? 'selected' : '' ?>>Aktif</option>
-                                                    <option value="0" <?= old('is_active') === '0' ? 'selected' : '' ?>>Nonaktif</option>
+                                                    <option value="1" <?= old(
+                                                        "is_active",
+                                                        "1",
+                                                    ) === "1"
+                                                        ? "selected"
+                                                        : "" ?>>Aktif</option>
+                                                    <option value="0" <?= old(
+                                                        "is_active",
+                                                    ) === "0"
+                                                        ? "selected"
+                                                        : "" ?>>Nonaktif</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -240,20 +328,20 @@
                                     <!-- Upload Foto & Keterangan -->
                                     <div class="row g-3 mt-2">
                                         <div class="col-12">
-                                            <label class="form-label">Foto Barang <span class="text-danger">*</span></label>
-                                            <div class="border border-2 border-dashed rounded-3 p-4 text-center bg-light position-relative" style="cursor: pointer;" onclick="document.getElementById('foto').click();">
-                                                <i class="bx bx-cloud-upload text-primary mb-2" style="font-size: 2.5rem;"></i>
-                                                <div class="fw-semibold">Pilih atau seret foto barang</div>
-                                                <div class="small text-muted">JPG, PNG, atau WEBP. Maksimal 2 MB</div>
-                                                <div class="small text-danger mt-1">Wajib diisi</div>
-                                                <div id="foto_label" class="small text-primary mt-2 fw-semibold"></div>
-                                                <input type="file" class="d-none" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" required onchange="document.getElementById('foto_label').innerText = this.files[0] ? this.files[0].name : '';">
+                                            <label for="foto" class="form-label fw-semibold">Foto Barang <span class="text-danger">*</span></label>
+                                            <div class="rounded-3 border bg-light p-3">
+                                                <input type="file" class="filepond" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" required>
+                                                <div class="small text-muted mt-2">
+                                                    <i class="bx bx-info-circle me-1"></i>Format JPG, PNG, atau WEBP. Maksimal 2 MB.
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
                                             <label class="form-label">Keterangan Tambahan</label>
-                                            <textarea class="form-control" name="keterangan" rows="3" placeholder="Catatan Tambahan mengenai kondisi barang"><?= esc(old('keterangan')) ?></textarea>
+                                            <textarea class="form-control" name="keterangan" rows="3" placeholder="Catatan Tambahan mengenai kondisi barang"><?= esc(
+                                                old("keterangan"),
+                                            ) ?></textarea>
                                         </div>
                                     </div>
 
@@ -263,12 +351,22 @@
                                         <div class="row g-3">
                                             <div class="col-md-4">
                                                 <label class="form-label">Tanggal Masuk / Servis Terakhir</label>
-                                                <input type="date" class="form-control" name="tanggal_perbaikan_terakhir" id="tanggal_perbaikan_terakhir" value="<?= esc(old('tanggal_perbaikan_terakhir') ?: date('Y-m-d')) ?>" required>
+                                                <input type="date" class="form-control" name="tanggal_perbaikan_terakhir" id="tanggal_perbaikan_terakhir" value="<?= esc(
+                                                    old(
+                                                        "tanggal_perbaikan_terakhir",
+                                                    ) ?:
+                                                    date("Y-m-d"),
+                                                ) ?>" required>
                                                 <small class="text-muted">Tanggal barang mulai aktif / servis terakhir</small>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Interval Maintenance (Hari)</label>
-                                                <input type="number" class="form-control" name="interval_maintenance_hari" id="interval_maintenance_hari" value="<?= esc(old('interval_maintenance_hari', '90')) ?>" min="1" max="1825" required>
+                                                <input type="number" class="form-control" name="interval_maintenance_hari" id="interval_maintenance_hari" value="<?= esc(
+                                                    old(
+                                                        "interval_maintenance_hari",
+                                                        "90",
+                                                    ),
+                                                ) ?>" min="1" max="1825" required>
                                                 <small class="text-muted">Bisa disesuaikan per unit barang</small>
                                             </div>
                                             <div class="col-md-4">
@@ -288,7 +386,9 @@
 
                                     <!-- Tombol Aksi -->
                                     <div class="mt-4 text-end">
-                                        <a href="<?= base_url('barang') ?>" class="btn btn-outline-secondary me-2">Batal</a>
+                                        <a href="<?= base_url(
+                                            "barang",
+                                        ) ?>" class="btn btn-outline-secondary me-2">Batal</a>
                                         <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan</button>
                                     </div>
 
@@ -298,7 +398,7 @@
                     </div>
                     <!-- / Content -->
                     <!-- Footer -->
-                    <?= view('adds/footer'); ?>
+                    <?= view("adds/footer") ?>
                     <!-- / Footer -->
                     <div class="content-backdrop fade"></div>
                 </div>
@@ -316,16 +416,55 @@
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
-    <script src="<?= base_url('assets/vendor/libs/jquery/jquery.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/popper/popper.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/js/bootstrap.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/@algolia/autocomplete-js.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/pickr/pickr.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/hammer/hammer.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/libs/i18n/i18n.js') ?>"></script>
-    <script src="<?= base_url('assets/vendor/js/menu.js') ?>"></script>
-    <script src="<?= base_url('assets/js/main.js') ?>"></script>
+    <script src="<?= base_url(
+        "assets/vendor/libs/jquery/jquery.js",
+    ) ?>"></script>
+    <script src="<?= base_url(
+        "assets/vendor/libs/popper/popper.js",
+    ) ?>"></script>
+    <script src="<?= base_url("assets/vendor/js/bootstrap.js") ?>"></script>
+    <script src="<?= base_url(
+        "assets/vendor/libs/@algolia/autocomplete-js.js",
+    ) ?>"></script>
+    <script src="<?= base_url("assets/vendor/libs/pickr/pickr.js") ?>"></script>
+    <script src="<?= base_url(
+        "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
+    ) ?>"></script>
+    <script src="<?= base_url(
+        "assets/vendor/libs/hammer/hammer.js",
+    ) ?>"></script>
+    <script src="<?= base_url("assets/vendor/libs/i18n/i18n.js") ?>"></script>
+    <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
+    <script src="<?= base_url("assets/js/main.js") ?>"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/filepond@4.32.7/dist/filepond.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/filepond-plugin-file-validate-type@1.2.9/dist/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/filepond-plugin-file-validate-size@2.2.8/dist/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/filepond-plugin-image-preview@4.6.12/dist/filepond-plugin-image-preview.min.js"></script>
+
+    <script>
+        if (window.FilePond) {
+            FilePond.registerPlugin(
+                FilePondPluginFileValidateType,
+                FilePondPluginFileValidateSize,
+                FilePondPluginImagePreview
+            );
+
+            FilePond.create(document.querySelector('#foto'), {
+                name: 'foto',
+                allowMultiple: false,
+                required: true,
+                storeAsFile: true,
+                maxFileSize: '2MB',
+                acceptedFileTypes: ['image/jpeg', 'image/png', 'image/webp'],
+                imagePreviewHeight: 180,
+                labelIdle: 'Seret dan lepaskan foto atau <span class="filepond--label-action">Pilih file</span>',
+                labelFileTypeNotAllowed: 'Format file tidak didukung',
+                labelMaxFileSizeExceeded: 'Ukuran file terlalu besar',
+                labelMaxFileSize: 'Ukuran maksimal adalah {filesize}'
+            });
+        }
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -372,7 +511,9 @@
 
                 if (kategori_id) {
                     $.ajax({
-                        url: "<?= site_url('barang/getSubKategori') ?>/" + encodeURIComponent(kategori_id),
+                        url: "<?= site_url(
+                            "barang/getSubKategori",
+                        ) ?>/" + encodeURIComponent(kategori_id),
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -404,7 +545,9 @@
     </script>
 
     <!-- Page JS -->
-    <a href="<?= base_url('scan') ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
+    <a href="<?= base_url(
+        "scan",
+    ) ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
         style="width: 65px; height: 65px; bottom: 30px; right: 30px; z-index: 9999;">
         <i class="bx bx-qr-scan text-white" style="font-size: 2rem;"></i>
     </a>
