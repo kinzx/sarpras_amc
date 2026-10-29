@@ -528,40 +528,7 @@ $waktuRelatif = function ($datetime) {
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-5">
-                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-end gap-4">
-                        <div class="hero-health">
-                            <div class="hero-ring" style="--ring-value: <?= $persenBaik ?>;" role="img"
-                                 aria-label="Persentase aset kondisi baik <?= $persenBaik ?> persen">
-                                <div class="hero-ring__inner">
-                                    <span class="hero-ring__value"><?= $persenBaik ?>%</span>
-                                    <span class="hero-ring__label">Kondisi Baik</span>
-                                </div>
-                            </div>
-                            <div class="hero-mini-stats">
-                                <div>
-                                    <span class="hero-mini-stats__value"><?= number_format(
-                                        $totalAsetVal,
-                                    ) ?></span>
-                                    <span class="hero-mini-stats__label">Total Aset</span>
-                                </div>
-                                <div>
-                                    <span class="hero-mini-stats__value"><?= number_format(
-                                        count($chartLabels ?? []),
-                                    ) ?></span>
-                                    <span class="hero-mini-stats__label">Kategori</span>
-                                </div>
-                                <div>
-                                    <span class="hero-mini-stats__value"><?= number_format(
-                                        (int) ($perluMaintenanceCount ?? 0),
-                                    ) ?></span>
-                                    <span class="hero-mini-stats__label">Perlu Servis</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div>
-                </div>
+                
             </div>
         </div>
     </div>
