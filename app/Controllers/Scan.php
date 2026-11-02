@@ -16,23 +16,38 @@ class Scan extends BaseController
         $this->barangModel = new BarangModel();
     }
 
+    public function index()
+    {
+        $data = [
+            "title" => "Pemindai QR Code & Barcode Aset",
+        ];
+
+        return view("scan/index", $data);
+    }
+
     public function detail($kodeAset = null)
     {
         if (empty($kodeAset)) {
-            throw PageNotFoundException::forPageNotFound('Kode aset tidak disertakan.');
+            throw PageNotFoundException::forPageNotFound(
+                "Kode aset tidak disertakan.",
+            );
         }
 
         $barang = $this->barangModel->getBarangForGuest($kodeAset);
 
         if (!$barang) {
-            throw PageNotFoundException::forPageNotFound('Barang dengan kode aset ' . esc($kodeAset) . ' tidak ditemukan.');
+            throw PageNotFoundException::forPageNotFound(
+                "Barang dengan kode aset " .
+                    esc($kodeAset) .
+                    " tidak ditemukan.",
+            );
         }
 
         $data = [
-            'title'  => 'Detail Barang - ' . $barang['nama_barang'],
-            'barang' => $barang,
+            "title" => "Detail Barang - " . $barang["nama_barang"],
+            "barang" => $barang,
         ];
 
-        return view('scan/detail', $data);
+        return view("scan/detail", $data);
     }
 }

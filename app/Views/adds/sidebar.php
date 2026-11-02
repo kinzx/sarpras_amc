@@ -190,6 +190,14 @@
         </a>
       </li>
 
+      <!-- Scanner QR Code Internal -->
+      <li class="menu-item <?= url_is("scan*") ? "active" : "" ?>">
+        <a href="<?= base_url("scan") ?>" class="menu-link">
+          <i class="menu-icon icon-base bx bx-qr-scan text-primary"></i>
+          <div data-i18n="Scan QR Aset">Scan QR Aset</div>
+        </a>
+      </li>
+
       <li class="menu-header small text-uppercase">
         <span class="menu-header-text">Data Master & Manajemen</span>
       </li>

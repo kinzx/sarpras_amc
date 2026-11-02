@@ -37,13 +37,36 @@ class Perbaikan extends BaseController
     // Halaman Form / Daftar Perbaikan (Menu sidebar: perbaikan/create)
     public function create()
     {
+        $db = \Config\Database::connect();
         $barangId = (int) $this->request->getGet("barang_id");
+
+        // Ambil teknisi & admin aktif
+        $petugas = $db
+            ->table("users u")
+            ->select("u.id, u.username, u.email, g.name as role_name")
+            ->join("auth_groups_users agu", "agu.user_id = u.id", "inner")
+            ->join("auth_groups g", "g.id = agu.group_id", "inner")
+            ->where("u.active", 1)
+            ->whereIn("g.name", ["admin", "teknisi"])
+            ->groupBy("u.id")
+            ->orderBy("u.username", "ASC")
+            ->get()
+            ->getResultArray();
+
+        $kategori = $db
+            ->table("sarpras_kategori")
+            ->where("is_active", 1)
+            ->orderBy("nama_kategori", "ASC")
+            ->get()
+            ->getResultArray();
 
         $data = [
             "title" => "Daftar & Input Perbaikan",
             "barang" => $this->barangModel->getBarangWithRelations(),
             "barangRusak" => $this->perbaikanModel->getDaftarBarangRusak(),
             "selectedBarangId" => $barangId,
+            "petugas" => $petugas,
+            "kategori" => $kategori,
         ];
 
         return view("perbaikan/create", $data);
@@ -54,6 +77,7 @@ class Perbaikan extends BaseController
     {
         $rules = [
             "barang_id" => "required|is_natural_no_zero",
+            "user_id" => "required|is_natural_no_zero",
             "tanggal_perbaikan" => "required|valid_date[Y-m-d]",
             "laporan_kerusakan" => "required|min_length[3]",
             "analisa_kerusakan" => "permit_empty",
@@ -83,9 +107,7 @@ class Perbaikan extends BaseController
             $fileFoto->move(FCPATH . "uploads/perbaikan", $namaFoto);
         }
 
-        $userId = function_exists("user_id")
-            ? user_id()
-            : session()->get("logged_in_user")["id"] ?? 1;
+        $userId = (int) $this->request->getPost("user_id");
 
         $this->perbaikanModel->save([
             "barang_id" => $barangId,

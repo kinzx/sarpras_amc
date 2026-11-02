@@ -428,7 +428,38 @@ class Barang extends BaseController
             ->with("error", "Barang tidak ditemukan.");
     }
 
-    // 7. Unduh Label / Tag Kartu Aset (Format Print Card)
+    // 7. Ambil barang berdasarkan Kategori / Sub-Kategori (JSON untuk Dependent Dropdown)
+    public function getBarangByKategori()
+    {
+        $kategoriId = $this->request->getGet("kategori_id");
+        $subKategoriId = $this->request->getGet("sub_kategori_id");
+
+        $builder = $this->barangModel
+            ->select(
+                "sarpras_barang.id, sarpras_barang.nama_barang, sarpras_barang.kode_aset, sarpras_barang.kondisi_barang, sarpras_barang.interval_maintenance_hari, sarpras_ruang.nama_ruang",
+            )
+            ->join(
+                "sarpras_ruang",
+                "sarpras_ruang.id = sarpras_barang.ruang_id",
+                "left",
+            )
+            ->where("sarpras_barang.is_active", 1);
+
+        if (!empty($kategoriId)) {
+            $builder->where("sarpras_barang.kategori_id", $kategoriId);
+        }
+        if (!empty($subKategoriId)) {
+            $builder->where("sarpras_barang.sub_kategori_id", $subKategoriId);
+        }
+
+        $items = $builder
+            ->orderBy("sarpras_barang.nama_barang", "ASC")
+            ->findAll();
+
+        return $this->response->setJSON($items);
+    }
+
+    // 8. Unduh Label / Tag Kartu Aset (Format Print Card)
     public function labelAset($id)
     {
         $item = $this->barangModel->getBarangWithRelations($id);
