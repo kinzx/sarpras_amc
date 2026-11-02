@@ -223,6 +223,11 @@
               <div data-i18n="Ruangan">Ruangan</div>
             </a>
           </li>
+          <li class="menu-item <?= url_is("pengguna*") ? "active" : "" ?>">
+            <a href="<?= base_url("pengguna") ?>" class="menu-link">
+              <div data-i18n="Pengguna & Role">Pengguna & Role</div>
+            </a>
+          </li>
         </ul>
       </li>
 
@@ -297,7 +302,11 @@
       <a href="<?= base_url(
           "logout",
       ) ?>" class="btn btn-sm btn-outline-danger w-100 d-flex align-items-center justify-content-center sidebar-logout-btn" title="Keluar">
-        <i class="icon-base bx bx-power-off"></i>
+        <!--<i class="icon-base bx bx-logout"></i>-->
+        <svg class="icon-base" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+        </svg>
+
         <span class="logout-text ms-1">Keluar</span>
       </a>
     </div>
