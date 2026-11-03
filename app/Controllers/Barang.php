@@ -120,24 +120,7 @@ class Barang extends BaseController
             ->getResultArray();
 
         // Generate Kode Barang Otomatis: AMC-YYYYMMDD-XXXX
-        $todayPrefix = "AMC-" . date("Ymd") . "-";
-        $lastBarang = $db
-            ->table("sarpras_barang")
-            ->like("kode_aset", $todayPrefix, "after")
-            ->orderBy("id", "DESC")
-            ->get()
-            ->getFirstRow("array");
-
-        $nextNumber = 1;
-        if ($lastBarang && !empty($lastBarang["kode_aset"])) {
-            $parts = explode("-", $lastBarang["kode_aset"]);
-            $lastSeq = end($parts);
-            if (is_numeric($lastSeq)) {
-                $nextNumber = (int) $lastSeq + 1;
-            }
-        }
-        $autoKode =
-            $todayPrefix . str_pad((string) $nextNumber, 4, "0", STR_PAD_LEFT);
+        $autoKode = $this->barangModel->generateKodeAset();
 
         $data = [
             "title" => "Tambah Barang Baru",
@@ -209,27 +192,15 @@ class Barang extends BaseController
         }
 
         $kodeAset = trim((string) $this->request->getPost("kode_aset"));
-        if (empty($kodeAset)) {
-            $db = \Config\Database::connect();
-            $todayPrefix = "AMC-" . date("Ymd") . "-";
-            $lastBarang = $db
-                ->table("sarpras_barang")
-                ->like("kode_aset", $todayPrefix, "after")
-                ->orderBy("id", "DESC")
-                ->get()
-                ->getFirstRow("array");
+        // Cek jika kosong atau sudah pernah ada di DB, generate kode unik baru
+        $existsKode = !empty($kodeAset)
+            ? $this->barangModel
+                ->where("kode_aset", $kodeAset)
+                ->countAllResults()
+            : 0;
 
-            $nextNumber = 1;
-            if ($lastBarang && !empty($lastBarang["kode_aset"])) {
-                $parts = explode("-", $lastBarang["kode_aset"]);
-                $lastSeq = end($parts);
-                if (is_numeric($lastSeq)) {
-                    $nextNumber = (int) $lastSeq + 1;
-                }
-            }
-            $kodeAset =
-                $todayPrefix .
-                str_pad((string) $nextNumber, 4, "0", STR_PAD_LEFT);
+        if (empty($kodeAset) || $existsKode > 0) {
+            $kodeAset = $this->barangModel->generateKodeAset();
         }
 
         // --- Simpan ke Database ---
@@ -263,9 +234,10 @@ class Barang extends BaseController
         // 1. Ambil ID Barang yang baru saja disimpan
         $barangId = $this->barangModel->getInsertID();
 
-        // Catat Log
+        // Catat Log dengan format baru ($modul, $aksi, $message)
         catat_log(
-            "CREATE",
+            "barang",
+            "create",
             "Menambahkan barang baru: " .
                 $this->request->getPost("nama_barang"),
         );
@@ -399,7 +371,8 @@ class Barang extends BaseController
         ]);
 
         catat_log(
-            "EDIT",
+            "barang",
+            "update",
             "Mengubah data barang: " . $this->request->getPost("nama_barang"),
         );
 
@@ -415,7 +388,8 @@ class Barang extends BaseController
         if ($barang) {
             $this->barangModel->update($id, ["is_active" => 0]);
             catat_log(
-                "DELETE",
+                "barang",
+                "delete",
                 "Menonaktifkan barang: " . $barang["nama_barang"],
             );
             return redirect()

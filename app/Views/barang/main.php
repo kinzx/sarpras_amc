@@ -255,17 +255,23 @@
                                 <td class="text-center">
                                     <a href="<?= base_url(
                                         "barang/detail/" . $row["id"],
-                                    ) ?>" class="btn btn-sm btn-icon btn-outline-primary me-1" title="Detail">
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-primary me-1" title="Detail" aria-label="Detail <?= esc(
+    $row["nama_barang"],
+) ?>">
                                         <i class="bx bx-show"></i>
                                     </a>
                                     <a href="<?= base_url(
                                         "barang/edit/" . $row["id"],
-                                    ) ?>" class="btn btn-sm btn-icon btn-outline-warning me-1" title="Edit">
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-warning me-1" title="Edit" aria-label="Edit <?= esc(
+    $row["nama_barang"],
+) ?>">
                                         <i class="bx bx-pencil"></i>
                                     </a>
                                     <a href="<?= base_url(
                                         "barang/hapus/" . $row["id"],
-                                    ) ?>" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus barang ini?')">
+                                    ) ?>" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus" aria-label="Hapus <?= esc(
+    $row["nama_barang"],
+) ?>" onclick="return confirm('Yakin ingin menghapus barang ini?')">
                                         <i class="bx bx-trash"></i>
                                     </a>
                                 </td>

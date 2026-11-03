@@ -190,9 +190,9 @@
         </a>
       </li>
 
-      <!-- Scanner QR Code Internal -->
-      <li class="menu-item <?= url_is("scan*") ? "active" : "" ?>">
-        <a href="<?= base_url("scan") ?>" class="menu-link">
+      <!-- Scanner QR Code Internal (Popup Modal) -->
+      <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link" data-bs-toggle="modal" data-bs-target="#modalScanQr">
           <i class="menu-icon icon-base bx bx-qr-scan text-primary"></i>
           <div data-i18n="Scan QR Aset">Scan QR Aset</div>
         </a>
@@ -231,11 +231,13 @@
               <div data-i18n="Ruangan">Ruangan</div>
             </a>
           </li>
+          <?php if (in_groups(["superadmin", "admin"])): ?>
           <li class="menu-item <?= url_is("pengguna*") ? "active" : "" ?>">
             <a href="<?= base_url("pengguna") ?>" class="menu-link">
               <div data-i18n="Pengguna & Role">Pengguna & Role</div>
             </a>
           </li>
+          <?php endif; ?>
         </ul>
       </li>
 
@@ -250,7 +252,7 @@
               ? "active"
               : "" ?>">
             <a href="<?= base_url("maintenance/create") ?>" class="menu-link">
-              <div data-i18n="Input Maintenance">Daftar Maintenance</div>
+              <div data-i18n="Daftar Maintenance">Daftar Maintenance</div>
             </a>
           </li>
           <li class="menu-item <?= url_is("maintenance") ? "active" : "" ?>">
@@ -297,6 +299,14 @@
         <a href="<?= base_url("laporan") ?>" class="menu-link">
           <i class="menu-icon icon-base bx bx-bar-chart-alt-2"></i>
           <div data-i18n="Laporan">Laporan</div>
+        </a>
+      </li>
+
+      <!-- 8. Log Aktivitas -->
+      <li class="menu-item <?= url_is("log-activity*") ? "active" : "" ?>">
+        <a href="<?= base_url("log-activity") ?>" class="menu-link">
+          <i class="menu-icon icon-base bx bx-history"></i>
+          <div data-i18n="Log Aktivitas">Log Aktivitas</div>
         </a>
       </li>
     </ul>

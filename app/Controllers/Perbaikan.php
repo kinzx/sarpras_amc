@@ -40,15 +40,20 @@ class Perbaikan extends BaseController
         $db = \Config\Database::connect();
         $barangId = (int) $this->request->getGet("barang_id");
 
-        // Ambil teknisi & admin aktif
+        // Ambil teknisi & admin aktif (kompatibel sql_mode=only_full_group_by)
         $petugas = $db
             ->table("users u")
-            ->select("u.id, u.username, u.email, g.name as role_name")
+            ->select("u.id, u.username, u.email, MAX(g.name) as role_name")
             ->join("auth_groups_users agu", "agu.user_id = u.id", "inner")
             ->join("auth_groups g", "g.id = agu.group_id", "inner")
             ->where("u.active", 1)
-            ->whereIn("g.name", ["admin", "teknisi"])
-            ->groupBy("u.id")
+            ->whereIn("g.name", [
+                "superadmin",
+                "admin",
+                "admin_teknisi",
+                "teknisi",
+            ])
+            ->groupBy("u.id, u.username, u.email")
             ->orderBy("u.username", "ASC")
             ->get()
             ->getResultArray();
@@ -108,10 +113,24 @@ class Perbaikan extends BaseController
         }
 
         $userId = (int) $this->request->getPost("user_id");
+        $pendampingPost = $this->request->getPost("teknisi_pendamping");
+        $pendampingJson = null;
+        if (!empty($pendampingPost) && is_array($pendampingPost)) {
+            $filtered = array_values(
+                array_filter(
+                    array_map("intval", $pendampingPost),
+                    fn($id) => $id > 0 && $id !== $userId,
+                ),
+            );
+            if (!empty($filtered)) {
+                $pendampingJson = json_encode($filtered);
+            }
+        }
 
         $this->perbaikanModel->save([
             "barang_id" => $barangId,
             "user_id" => $userId ?: 1,
+            "teknisi_pendamping" => $pendampingJson,
             "tanggal_perbaikan" => $this->request->getPost("tanggal_perbaikan"),
             "laporan_kerusakan" => $this->request->getPost("laporan_kerusakan"),
             "foto_sebelum" => $namaFoto,

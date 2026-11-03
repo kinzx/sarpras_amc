@@ -13,7 +13,7 @@
   <meta charset="utf-8" />
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    content="width=device-width, initial-scale=1.0" />
 
   <title><?= esc($title ?? "Pemeliharaan") ?> | RS AMC</title>
 
@@ -130,12 +130,6 @@
   <script src="<?= base_url("assets/js/main.js") ?>"></script>
 
   <!-- Page JS -->
-  <a href="<?= base_url(
-      "scan",
-  ) ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
-    style="width: 65px; height: 65px; bottom: 30px; right: 30px; z-index: 9999;">
-    <i class="bx bx-qr-scan text-white" style="font-size: 2rem;"></i>
-  </a>
 </body>
 
 </html>

@@ -1,23 +1,25 @@
 <div class="container-xxl flex-grow-1 container-p-y">
   <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
+      <li class="breadcrumb-item"><a href="<?= base_url(
+          "dashboard",
+      ) ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a></li>
       <li class="breadcrumb-item">Data Master</li>
       <li class="breadcrumb-item active" aria-current="page">Pengguna & Role</li>
     </ol>
   </nav>
 
-  <?php if (session()->getFlashdata('message')): ?>
+  <?php if (session()->getFlashdata("message")): ?>
     <div class="alert alert-success alert-dismissible" role="alert">
-      <?= esc(session()->getFlashdata('message')) ?>
+      <?= esc(session()->getFlashdata("message")) ?>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <?php endif; ?>
 
-  <?php if (session()->getFlashdata('errors')): ?>
+  <?php if (session()->getFlashdata("errors")): ?>
     <div class="alert alert-danger alert-dismissible" role="alert">
       <ul class="mb-0">
-        <?php foreach (session()->getFlashdata('errors') as $error): ?>
+        <?php foreach (session()->getFlashdata("errors") as $error): ?>
           <li><?= esc($error) ?></li>
         <?php endforeach; ?>
       </ul>
@@ -62,21 +64,27 @@
                     <div class="avatar avatar-sm me-2 bg-label-primary rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bx bx-user"></i>
                     </div>
-                    <strong><?= esc($u['username']) ?></strong>
+                    <strong><?= esc($u["username"]) ?></strong>
                   </div>
                 </td>
-                <td><?= esc($u['email']) ?></td>
+                <td><?= esc($u["email"]) ?></td>
                 <td>
-                  <?php if (($u['role_name'] ?? '') === 'admin'): ?>
+                  <?php if (($u["role_name"] ?? "") === "superadmin"): ?>
+                    <span class="badge bg-label-dark"><i class="bx bx-crown me-1"></i>Super Admin</span>
+                  <?php elseif (($u["role_name"] ?? "") === "admin"): ?>
                     <span class="badge bg-label-danger"><i class="bx bx-shield-quarter me-1"></i>Administrator</span>
-                  <?php elseif (($u['role_name'] ?? '') === 'teknisi'): ?>
+                  <?php elseif (($u["role_name"] ?? "") === "admin_teknisi"): ?>
+                    <span class="badge bg-label-info"><i class="bx bx-hard-hat me-1"></i>Admin Teknisi</span>
+                  <?php elseif (($u["role_name"] ?? "") === "teknisi"): ?>
                     <span class="badge bg-label-primary"><i class="bx bx-wrench me-1"></i>Teknisi</span>
                   <?php else: ?>
-                    <span class="badge bg-label-secondary"><?= esc($u['role_name'] ?? 'Guest/Staff') ?></span>
+                    <span class="badge bg-label-secondary"><?= esc(
+                        $u["role_name"] ?? "Guest/Staff",
+                    ) ?></span>
                   <?php endif; ?>
                 </td>
                 <td>
-                  <?php if ($u['active'] == 1): ?>
+                  <?php if ($u["active"] == 1): ?>
                     <span class="badge bg-label-success">Aktif</span>
                   <?php else: ?>
                     <span class="badge bg-label-danger">Nonaktif</span>
@@ -85,14 +93,18 @@
                 <td class="text-center">
                   <button type="button" class="btn btn-sm btn-icon btn-outline-warning btn-edit-user"
                     data-bs-toggle="modal" data-bs-target="#modalEditUser"
-                    data-id="<?= $u['id'] ?>"
-                    data-username="<?= esc($u['username']) ?>"
-                    data-email="<?= esc($u['email']) ?>"
-                    data-group="<?= esc($u['group_id']) ?>">
-                    <i class="bx bx-edit"></i>
+                    data-id="<?= $u["id"] ?>"
+                    data-username="<?= esc($u["username"]) ?>"
+                    data-email="<?= esc($u["email"]) ?>"
+                    data-group="<?= esc($u["group_name"] ?? "") ?>"
+                    aria-label="Edit akun <?= esc($u["username"]) ?>"
+                    title="Edit User">
+                    <i class="bx bx-pencil"></i>
                   </button>
-                  <a href="<?= base_url('pengguna/hapus/' . $u['id']) ?>"
+                  <a href="<?= base_url("pengguna/hapus/" . $u["id"]) ?>"
                      class="btn btn-sm btn-icon btn-outline-danger"
+                     aria-label="Nonaktifkan akun <?= esc($u["username"]) ?>"
+                     title="Nonaktifkan User"
                      onclick="return confirm('Yakin ingin menonaktifkan pengguna ini?');">
                     <i class="bx bx-user-x"></i>
                   </a>
@@ -110,7 +122,7 @@
 <div class="modal fade" id="modalTambahUser" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="<?= base_url('pengguna/simpan') ?>" method="POST">
+      <form action="<?= base_url("pengguna/simpan") ?>" method="POST">
         <?= csrf_field() ?>
         <div class="modal-header">
           <h5 class="modal-title">Tambah Pengguna Baru</h5>
@@ -134,7 +146,9 @@
             <select class="form-select" name="group_id" required>
               <option value="">-- Pilih Role --</option>
               <?php foreach ($groups as $g): ?>
-                <option value="<?= $g->id ?>"><?= esc(ucfirst($g->name)) ?> (<?= esc($g->description) ?>)</option>
+                <option value="<?= $g->id ?>"><?= esc(
+    ucfirst($g->name),
+) ?> (<?= esc($g->description) ?>)</option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -176,7 +190,9 @@
             <select class="form-select" name="group_id" id="edit_group_id" required>
               <option value="">-- Pilih Role --</option>
               <?php foreach ($groups as $g): ?>
-                <option value="<?= $g->id ?>"><?= esc(ucfirst($g->name)) ?> (<?= esc($g->description) ?>)</option>
+                <option value="<?= $g->id ?>"><?= esc(
+    ucfirst($g->name),
+) ?> (<?= esc($g->description) ?>)</option>
               <?php endforeach; ?>
             </select>
           </div>

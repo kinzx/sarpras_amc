@@ -71,11 +71,18 @@ $routes->group("", ["filter" => "login"], function ($routes) {
     $routes->post("kalibrasi/simpan", "Kalibrasi::simpan");
     $routes->get("kalibrasi/hapus/(:num)", 'Kalibrasi::hapus/$1');
 
-    // Manajemen Pengguna & Role
-    $routes->get("pengguna", "Pengguna::index");
-    $routes->post("pengguna/simpan", "Pengguna::simpan");
-    $routes->post("pengguna/update/(:num)", 'Pengguna::update/$1');
-    $routes->get("pengguna/hapus/(:num)", 'Pengguna::hapus/$1');
+    // Manajemen Pengguna & Role (Khusus superadmin & admin)
+    $routes->group("", ["filter" => "group:superadmin,admin"], function (
+        $routes,
+    ) {
+        $routes->get("pengguna", "Pengguna::index");
+        $routes->post("pengguna/simpan", "Pengguna::simpan");
+        $routes->post("pengguna/update/(:num)", 'Pengguna::update/$1');
+        $routes->get("pengguna/hapus/(:num)", 'Pengguna::hapus/$1');
+    });
+
+    // Log Aktivitas Sistem
+    $routes->get("log-activity", "LogActivity::index");
 
     // --- Logout ---
     $routes->get("logout", "AuthController::logout");

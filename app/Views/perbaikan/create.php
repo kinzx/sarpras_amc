@@ -4,7 +4,7 @@
 ) ?>" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $title ?? "Daftar & Input Perbaikan" ?> | RS AMC</title>
   <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
       "AMC-tanpa-nama-pad.png",
@@ -156,10 +156,10 @@
 
                       <!-- Pilih Petugas & Filter Berjenjang -->
                       <div class="row g-3 mb-3">
-                        <div class="col-md-12">
-                          <label class="form-label">Petugas / Teknisi yang Mengerjakan <span class="text-danger">*</span></label>
+                        <div class="col-md-6">
+                          <label class="form-label">Teknisi Utama / Penanggung Jawab <span class="text-danger">*</span></label>
                           <select class="form-select select2" name="user_id" id="user_id" required>
-                            <option value="">-- Pilih Petugas / Teknisi --</option>
+                            <option value="">-- Pilih Teknisi Utama --</option>
                             <?php foreach ($petugas as $p): ?>
                               <option value="<?= $p["id"] ?>" <?= (string) old(
     "user_id",
@@ -169,10 +169,24 @@
     : "" ?>>
                                 <?= esc($p["username"]) ?> (<?= esc(
      ucfirst($p["role_name"]),
- ) ?>) - <?= esc($p["email"]) ?>
+ ) ?>)
                               </option>
                             <?php endforeach; ?>
                           </select>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label class="form-label">Teknisi Pendamping / Tim (Bisa > 1)</label>
+                          <select class="form-select select2" name="teknisi_pendamping[]" id="teknisi_pendamping" multiple data-placeholder="-- Pilih Teknisi Pendamping --">
+                            <?php foreach ($petugas as $p): ?>
+                              <option value="<?= $p["id"] ?>">
+                                <?= esc($p["username"]) ?> (<?= esc(
+     ucfirst($p["role_name"]),
+ ) ?>)
+                              </option>
+                            <?php endforeach; ?>
+                          </select>
+                          <small class="text-muted" style="font-size: 0.75rem;">Bisa pilih lebih dari satu teknisi pembantu/second</small>
                         </div>
 
                         <!-- Filter Kategori & Sub-Kategori (Pencarian Berjenjang) -->
@@ -301,7 +315,7 @@
                         <a href="<?= base_url(
                             "perbaikan",
                         ) ?>" class="btn btn-outline-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan Catatan Perbaikan</button>
+                        <button type="submit" class="btn btn-primary" id="btnSubmitPerbaikan"><i class="bx bx-save me-1"></i> Simpan Catatan Perbaikan</button>
                       </div>
                     </form>
                   </div>
@@ -448,6 +462,16 @@
         $('html, body').animate({
           scrollTop: $('#barang_id').offset().top - 100
         }, 300);
+      });
+
+      // Cegah double submit form perbaikan
+      $('form[action*="perbaikan/simpan"]').on('submit', function(e) {
+        var $btn = $('#btnSubmitPerbaikan');
+        if ($btn.prop('disabled')) {
+          e.preventDefault();
+          return false;
+        }
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
       });
     });
   </script>
