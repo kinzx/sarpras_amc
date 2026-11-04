@@ -120,24 +120,7 @@ class Barang extends BaseController
             ->getResultArray();
 
         // Generate Kode Barang Otomatis: AMC-YYYYMMDD-XXXX
-        $todayPrefix = "AMC-" . date("Ymd") . "-";
-        $lastBarang = $db
-            ->table("sarpras_barang")
-            ->like("kode_aset", $todayPrefix, "after")
-            ->orderBy("id", "DESC")
-            ->get()
-            ->getFirstRow("array");
-
-        $nextNumber = 1;
-        if ($lastBarang && !empty($lastBarang["kode_aset"])) {
-            $parts = explode("-", $lastBarang["kode_aset"]);
-            $lastSeq = end($parts);
-            if (is_numeric($lastSeq)) {
-                $nextNumber = (int) $lastSeq + 1;
-            }
-        }
-        $autoKode =
-            $todayPrefix . str_pad((string) $nextNumber, 4, "0", STR_PAD_LEFT);
+        $autoKode = $this->barangModel->generateKodeAset();
 
         $data = [
             "title" => "Tambah Barang Baru",
@@ -209,27 +192,15 @@ class Barang extends BaseController
         }
 
         $kodeAset = trim((string) $this->request->getPost("kode_aset"));
-        if (empty($kodeAset)) {
-            $db = \Config\Database::connect();
-            $todayPrefix = "AMC-" . date("Ymd") . "-";
-            $lastBarang = $db
-                ->table("sarpras_barang")
-                ->like("kode_aset", $todayPrefix, "after")
-                ->orderBy("id", "DESC")
-                ->get()
-                ->getFirstRow("array");
+        // Cek jika kosong atau sudah pernah ada di DB, generate kode unik baru
+        $existsKode = !empty($kodeAset)
+            ? $this->barangModel
+                ->where("kode_aset", $kodeAset)
+                ->countAllResults()
+            : 0;
 
-            $nextNumber = 1;
-            if ($lastBarang && !empty($lastBarang["kode_aset"])) {
-                $parts = explode("-", $lastBarang["kode_aset"]);
-                $lastSeq = end($parts);
-                if (is_numeric($lastSeq)) {
-                    $nextNumber = (int) $lastSeq + 1;
-                }
-            }
-            $kodeAset =
-                $todayPrefix .
-                str_pad((string) $nextNumber, 4, "0", STR_PAD_LEFT);
+        if (empty($kodeAset) || $existsKode > 0) {
+            $kodeAset = $this->barangModel->generateKodeAset();
         }
 
         // --- Simpan ke Database ---
@@ -263,9 +234,10 @@ class Barang extends BaseController
         // 1. Ambil ID Barang yang baru saja disimpan
         $barangId = $this->barangModel->getInsertID();
 
-        // Catat Log
+        // Catat Log dengan format baru ($modul, $aksi, $message)
         catat_log(
-            "CREATE",
+            "barang",
+            "create",
             "Menambahkan barang baru: " .
                 $this->request->getPost("nama_barang"),
         );
@@ -399,7 +371,8 @@ class Barang extends BaseController
         ]);
 
         catat_log(
-            "EDIT",
+            "barang",
+            "update",
             "Mengubah data barang: " . $this->request->getPost("nama_barang"),
         );
 
@@ -415,7 +388,8 @@ class Barang extends BaseController
         if ($barang) {
             $this->barangModel->update($id, ["is_active" => 0]);
             catat_log(
-                "DELETE",
+                "barang",
+                "delete",
                 "Menonaktifkan barang: " . $barang["nama_barang"],
             );
             return redirect()
@@ -428,7 +402,38 @@ class Barang extends BaseController
             ->with("error", "Barang tidak ditemukan.");
     }
 
-    // 7. Unduh Label / Tag Kartu Aset (Format Print Card)
+    // 7. Ambil barang berdasarkan Kategori / Sub-Kategori (JSON untuk Dependent Dropdown)
+    public function getBarangByKategori()
+    {
+        $kategoriId = $this->request->getGet("kategori_id");
+        $subKategoriId = $this->request->getGet("sub_kategori_id");
+
+        $builder = $this->barangModel
+            ->select(
+                "sarpras_barang.id, sarpras_barang.nama_barang, sarpras_barang.kode_aset, sarpras_barang.kondisi_barang, sarpras_barang.interval_maintenance_hari, sarpras_ruang.nama_ruang",
+            )
+            ->join(
+                "sarpras_ruang",
+                "sarpras_ruang.id = sarpras_barang.ruang_id",
+                "left",
+            )
+            ->where("sarpras_barang.is_active", 1);
+
+        if (!empty($kategoriId)) {
+            $builder->where("sarpras_barang.kategori_id", $kategoriId);
+        }
+        if (!empty($subKategoriId)) {
+            $builder->where("sarpras_barang.sub_kategori_id", $subKategoriId);
+        }
+
+        $items = $builder
+            ->orderBy("sarpras_barang.nama_barang", "ASC")
+            ->findAll();
+
+        return $this->response->setJSON($items);
+    }
+
+    // 8. Unduh Label / Tag Kartu Aset (Format Print Card)
     public function labelAset($id)
     {
         $item = $this->barangModel->getBarangWithRelations($id);

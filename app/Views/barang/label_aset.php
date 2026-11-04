@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Label Aset - <?= esc($item['kode_aset']) ?></title>
+    <title>Label Aset - <?= esc($item["kode_aset"]) ?></title>
     <!-- html2canvas untuk unduh sebagai gambar PNG -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -41,7 +41,7 @@
             align-items: center;
             gap: 8px;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .btn-download {
@@ -254,7 +254,9 @@
 <body>
 
     <div class="action-bar">
-        <a href="<?= base_url('barang/detail/' . $item['id']) ?>" class="btn btn-back">
+        <a href="<?= base_url(
+            "barang/detail/" . $item["id"],
+        ) ?>" class="btn btn-back">
             &larr; Kembali
         </a>
         <button type="button" onclick="downloadCard()" class="btn btn-download" id="btnDownload">
@@ -272,10 +274,12 @@
         <!-- Header -->
         <div class="card-header">
             <div class="brand-section">
-                <img src="<?= base_url('Logo-amc.png') ?>" alt="Logo RS AMC" class="brand-logo">
+                <img src="<?= base_url(
+                    "Logo-amc.png",
+                ) ?>" alt="Logo RS AMC" class="brand-logo">
             </div>
             <div class="badge-pill">
-                <?= esc($item['nama_kategori'] ?? 'ASET') ?>
+                <?= esc($item["nama_kategori"] ?? "ASET") ?>
             </div>
         </div>
 
@@ -284,10 +288,12 @@
             <!-- Kolom Kiri: QR Code + Kode Aset -->
             <div class="left-col">
                 <div class="qr-wrapper">
-                    <img src="<?= base_url('barang/qrcode/' . $item['kode_aset']) ?>" alt="QR Code" class="qr-image" crossOrigin="anonymous">
+                    <img src="<?= base_url(
+                        "barang/qrcode/" . $item["kode_aset"],
+                    ) ?>" alt="QR Code" class="qr-image" crossOrigin="anonymous">
                 </div>
                 <div class="code-pill">
-                    <?= esc($item['kode_aset']) ?>
+                    <?= esc($item["kode_aset"]) ?>
                 </div>
             </div>
 
@@ -295,19 +301,29 @@
             <div class="right-col">
                 <div class="info-row">
                     <span class="info-label">Nama Barang:</span>
-                    <span class="info-value"><?= esc($item['nama_barang']) ?></span>
+                    <span class="info-value"><?= esc(
+                        $item["nama_barang"],
+                    ) ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Lokasi:</span>
-                    <span class="info-value"><?= esc($item['nama_ruang'] ?? '-') ?> - Lantai <?= esc($item['lantai'] ?? '1') ?></span>
+                    <span class="info-value"><?= esc(
+                        $item["nama_ruang"] ?? "-",
+                    ) ?> - Lantai <?= esc($item["lantai"] ?? "1") ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Kategori / Merek:</span>
-                    <span class="info-value"><?= esc($item['nama_kategori'] ?? '-') ?> / <?= esc($item['merek'] ?? '-') ?></span>
+                    <span class="info-value"><?= esc(
+                        $item["nama_kategori"] ?? "-",
+                    ) ?> / <?= esc($item["merek"] ?? "-") ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Kepemilikan:</span>
-                    <span class="info-value value-green"><?= $item['kepemilikan'] === 'milik_rs' || $item['kepemilikan'] === 'RS' ? 'Milik RS' : 'Milik Vendor' ?></span>
+                    <span class="info-value value-green"><?= $item[
+                        "kepemilikan"
+                    ] === "milik_rs" || $item["kepemilikan"] === "RS"
+                        ? "Milik RS"
+                        : "Milik Vendor" ?></span>
                 </div>
             </div>
         </div>
@@ -328,7 +344,7 @@
                 backgroundColor: '#ffffff'
             }).then(function(canvas) {
                 var link = document.createElement('a');
-                link.download = 'Label-Aset-<?= esc($item['kode_aset']) ?>.png';
+                link.download = 'Label-Aset-<?= esc($item["kode_aset"]) ?>.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 

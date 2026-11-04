@@ -29,21 +29,24 @@
                             <td colspan="5" class="text-center py-4">Belum ada data ruangan.</td>
                         </tr>
                     <?php else: ?>
-                        <?php $no = 1;
+                        <?php
+                        $no = 1;
                         foreach ($ruang as $row): ?>
                             <tr>
                                 <!-- Kolom 1: No -->
                                 <td><?= $no++ ?></td>
 
                                 <!-- Kolom 2: Nama Ruangan -->
-                                <td><strong><?= $row['nama_ruang'] ?></strong></td>
+                                <td><strong><?= $row[
+                                    "nama_ruang"
+                                ] ?></strong></td>
 
                                 <!-- Kolom 3: Lantai -->
-                                <td>Lantai <?= $row['lantai'] ?></td>
+                                <td>Lantai <?= $row["lantai"] ?></td>
 
                                 <!-- Kolom 4: Status -->
                                 <td>
-                                    <?php if ($row['is_active'] == 1): ?>
+                                    <?php if ($row["is_active"] == 1): ?>
                                         <span class="badge bg-label-success">Aktif</span>
                                     <?php else: ?>
                                         <span class="badge bg-label-danger">Non-Aktif</span>
@@ -52,24 +55,37 @@
 
                                 <!-- Kolom 5: Aksi (Tombol Edit & Hapus) -->
                                 <td>
-                                    <?php if ($row['is_active'] == 1): ?>
+                                    <?php if ($row["is_active"] == 1): ?>
                                         <!-- Tombol Edit -->
                                         <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-edit"
-                                            data-id="<?= $row['id'] ?>"
-                                            data-nama="<?= $row['nama_ruang'] ?>"
-                                            data-lantai="<?= $row['lantai'] ?>"
-                                            data-bs-toggle="modal" data-bs-target="#modalEditRuang">
+                                            data-id="<?= $row["id"] ?>"
+                                            data-nama="<?= esc(
+                                                $row["nama_ruang"],
+                                            ) ?>"
+                                            data-lantai="<?= esc(
+                                                $row["lantai"],
+                                            ) ?>"
+                                            data-bs-toggle="modal" data-bs-target="#modalEditRuang"
+                                            aria-label="Edit ruangan <?= esc(
+                                                $row["nama_ruang"],
+                                            ) ?>"
+                                            title="Edit Ruangan">
                                             <i class="bx bx-pencil"></i>
                                         </button>
 
                                         <!-- Tombol Hapus -->
-                                        <a href="<?= base_url('ruang/hapus/' . $row['id']) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Yakin ingin menonaktifkan ruangan ini?')">
+                                        <a href="<?= base_url(
+                                            "ruang/hapus/" . $row["id"],
+                                        ) ?>" class="btn btn-sm btn-icon btn-outline-danger" aria-label="Nonaktifkan ruangan <?= esc(
+    $row["nama_ruang"],
+) ?>" title="Nonaktifkan Ruangan" onclick="return confirm('Yakin ingin menonaktifkan ruangan ini?')">
                                             <i class="bx bx-trash"></i>
                                         </a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach;
+                        ?>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -85,7 +101,9 @@
                 <h5 class="modal-title">Tambah Ruangan Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url('ruang/simpan') ?>" method="POST" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = 'Menyimpan...';">
+            <form action="<?= base_url(
+                "ruang/simpan",
+            ) ?>" method="POST" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = 'Menyimpan...';">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="mb-3">

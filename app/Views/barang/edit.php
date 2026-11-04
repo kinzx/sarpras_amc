@@ -2,7 +2,7 @@
 <html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="../../assets/" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?= esc($title ?? "Edit Barang") ?> | AMC</title>
 
     <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
@@ -87,7 +87,7 @@
 
                                 <form action="<?= base_url(
                                     "barang/update/" . $barang["id"],
-                                ) ?>" method="POST" enctype="multipart/form-data" id="barangForm">
+                                ) ?>" method="POST" enctype="multipart/form-data" id="barangForm" class="needs-validation" novalidate>
                                     <?= csrf_field() ?>
 
                                     <div class="row g-3">
@@ -122,6 +122,7 @@
     : "" ?>><?= esc($row["nama_kategori"]) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
+                                                <div class="invalid-feedback">Kategori perlu dipilih.</div>
                                             </div>
 
                                             <div class="mb-3">
@@ -153,6 +154,7 @@
                                                         $barang["merek"],
                                                     ),
                                                 ) ?>" placeholder="Contoh: Daikin" required>
+                                                <div class="invalid-feedback">Merek perlu diisi.</div>
                                                 <small class="text-muted">Merek atau brand barang</small>
                                             </div>
 
@@ -164,6 +166,7 @@
                                                         $barang["no_seri"],
                                                     ),
                                                 ) ?>" placeholder="Masukkan nomor seri barang" required>
+                                                <div class="invalid-feedback">Nomor seri perlu diisi.</div>
                                                 <small class="text-muted">Masukkan nomor seri barang</small>
                                             </div>
 
@@ -175,6 +178,7 @@
                                                         $barang["daya"],
                                                     ),
                                                 ) ?>" placeholder="Contoh: 1900" required>
+                                                <div class="invalid-feedback">Daya listrik perlu diisi.</div>
                                                 <small class="text-muted">Daya listrik yang dibutuhkan</small>
                                             </div>
 
@@ -221,6 +225,7 @@
                                                         $barang["nama_barang"],
                                                     ),
                                                 ) ?>" placeholder="Masukkan nama barang" required>
+                                                <div class="invalid-feedback">Nama barang perlu diisi.</div>
                                                 <small class="text-muted">Masukkan nama barang</small>
                                             </div>
 
@@ -241,6 +246,7 @@
     : "" ?>><?= esc($row["nama_ruang"]) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
+                                                <div class="invalid-feedback">Ruangan perlu dipilih.</div>
                                                 <small class="text-muted">Pilih ruangan tempat barang berada</small>
                                             </div>
 
@@ -258,6 +264,7 @@
                                                         $barang["tipe"],
                                                     ),
                                                 ) ?>" placeholder="Contoh: Inverter / Wall Mounted" required>
+                                                <div class="invalid-feedback">Tipe barang perlu diisi.</div>
                                                 <small class="text-muted">Tipe atau model barang</small>
                                             </div>
 
@@ -269,10 +276,12 @@
                                                         $barang[
                                                             "tahun_pembelian"
                                                         ],
-                                                    ),
+                                                    ) ?:
+                                                    date("Y"),
                                                 ) ?>" placeholder="<?= date(
     "Y",
 ) ?>" min="1990" max="<?= date("Y") ?>" required>
+                                                <div class="invalid-feedback">Tahun pembelian perlu diisi.</div>
                                                 <small class="text-muted">Tahun pembelian barang</small>
                                             </div>
 
@@ -406,7 +415,7 @@
                                         <a href="<?= base_url(
                                             "barang",
                                         ) ?>" class="btn btn-outline-secondary me-2">Batal</a>
-                                        <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan Perubahan</button>
+                                        <button type="submit" class="btn btn-primary" id="btnSubmitBarang"><i class="bx bx-save me-1"></i> Simpan Perubahan</button>
                                     </div>
 
                                 </form>
@@ -489,14 +498,15 @@
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
-                            $('#sub_kategori_id').prop('disabled', false);
-                            $('#sub_kategori_id').html('<option value="">-- Tanpa Sub Kategori (Opsional) --</option>');
-                            if (data.length > 0) {
+                            if (data && data.length > 0) {
+                                $('#sub_kategori_id').prop('disabled', false);
+                                $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori (Opsional) --</option>');
                                 $.each(data, function(key, value) {
                                     $('#sub_kategori_id').append('<option value="' + value.id + '">' + value.nama_sub_kategori + '</option>');
                                 });
                             } else {
-                                $('#sub_kategori_id').html('<option value="">-- Tidak ada sub kategori (Opsional) --</option>');
+                                $('#sub_kategori_id').prop('disabled', true);
+                                $('#sub_kategori_id').html('<option value="">-- Tidak Ada Sub Kategori --</option>');
                             }
                         },
                         error: function(xhr) {
@@ -510,8 +520,27 @@
                     });
                 } else {
                     $('#sub_kategori_id').prop('disabled', true);
-                    $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori --</option>');
+                    $('#sub_kategori_id').html('<option value="">-- Pilih Kategori Dahulu --</option>');
                 }
+            });
+
+            // Bootstrap client-side validation & anti-double-submit
+            $('#barangForm').on('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('was-validated');
+                    return false;
+                }
+                $(this).addClass('was-validated');
+
+                // Cegah double submit dari klik berulang
+                var $btn = $('#btnSubmitBarang');
+                if ($btn.prop('disabled')) {
+                    e.preventDefault();
+                    return false;
+                }
+                $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
             });
         });
     </script>

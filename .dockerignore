@@ -1,0 +1,12 @@
+.git
+.github
+vendor
+writable/cache/*
+writable/debugbar/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+tests
+.env
+.phpunit.result.cache
+node_modules

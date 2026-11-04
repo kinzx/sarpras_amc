@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sarpras_app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      CI_ENVIRONMENT: production
+      app.baseURL: "${APP_URL:-http://localhost:8080}"
+      database.default.hostname: db
+      database.default.database: ${DB_NAME:-db_sarpras_amc}
+      database.default.username: ${DB_USER:-sarpras_user}
+      database.default.password: ${DB_PASS:-secret123}
+      database.default.DBDriver: MySQLi
+    volumes:
+      - uploads_data:/var/www/html/public/uploads
+      - writable_data:/var/www/html/writable
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.11
+    container_name: sarpras_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-rootsecret}
+      MYSQL_DATABASE: ${DB_NAME:-db_sarpras_amc}
+      MYSQL_USER: ${DB_USER:-sarpras_user}
+      MYSQL_PASSWORD: ${DB_PASS:-secret123}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+  uploads_data:
+  writable_data:

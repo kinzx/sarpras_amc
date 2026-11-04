@@ -6,80 +6,148 @@ use CodeIgniter\Model;
 
 class BarangModel extends Model
 {
-    protected $table            = 'sarpras_barang';
-    protected $primaryKey       = 'id';
+    protected $table = "sarpras_barang";
+    protected $primaryKey = "id";
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
+    protected $returnType = "array";
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
     protected $allowedFields = [
-        'kategori_id',
-        'sub_kategori_id',
-        'ruang_id',
-        'kode_aset',
-        'nama_barang',
-        'merek',
-        'tipe',
-        'no_seri',
-        'daya',
-        'tahun_pembelian',
-        'interval_maintenance_hari',
-        'foto',
-        'keterangan',
-        'kepemilikan',
-        'kondisi_barang',
-        'tanggal_perbaikan_terakhir',
-        'is_active'
+        "kategori_id",
+        "sub_kategori_id",
+        "ruang_id",
+        "kode_aset",
+        "nama_barang",
+        "merek",
+        "tipe",
+        "no_seri",
+        "daya",
+        "tahun_pembelian",
+        "interval_maintenance_hari",
+        "foto",
+        "keterangan",
+        "kepemilikan",
+        "kondisi_barang",
+        "tanggal_perbaikan_terakhir",
+        "is_active",
     ];
 
     // Dates
     protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $dateFormat = "datetime";
+    protected $createdField = "created_at";
+    protected $updatedField = "updated_at";
 
     public function getBarangWithRelations($id = null, ?string $keyword = null)
     {
-        $builder = $this->select('
-                sarpras_barang.*, 
-                sarpras_kategori.nama_kategori, 
-                sarpras_sub_kategori.nama_sub_kategori, 
-                sarpras_ruang.nama_ruang, 
+        $builder = $this->select(
+            '
+                sarpras_barang.*,
+                sarpras_kategori.nama_kategori,
+                sarpras_sub_kategori.nama_sub_kategori,
+                sarpras_ruang.nama_ruang,
                 sarpras_ruang.lantai
-            ')
-            ->join('sarpras_kategori', 'sarpras_kategori.id = sarpras_barang.kategori_id', 'left')
-            ->join('sarpras_sub_kategori', 'sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id', 'left')
-            ->join('sarpras_ruang', 'sarpras_ruang.id = sarpras_barang.ruang_id', 'left')
-            ->where('sarpras_barang.is_active', 1);
+            ',
+        )
+            ->join(
+                "sarpras_kategori",
+                "sarpras_kategori.id = sarpras_barang.kategori_id",
+                "left",
+            )
+            ->join(
+                "sarpras_sub_kategori",
+                "sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id",
+                "left",
+            )
+            ->join(
+                "sarpras_ruang",
+                "sarpras_ruang.id = sarpras_barang.ruang_id",
+                "left",
+            )
+            ->where("sarpras_barang.is_active", 1);
 
         if ($id !== null) {
             // Mengambil 1 data (untuk halaman Detail)
-            return $builder->where('sarpras_barang.id', $id)->first();
+            return $builder->where("sarpras_barang.id", $id)->first();
         }
 
         if (!empty($keyword)) {
-            $builder->groupStart()
-                ->like('sarpras_barang.nama_barang', $keyword)
-                ->orLike('sarpras_barang.kode_aset', $keyword)
-                ->orLike('sarpras_barang.merek', $keyword)
-                ->orLike('sarpras_barang.no_seri', $keyword)
-                ->orLike('sarpras_ruang.nama_ruang', $keyword)
-                ->orLike('sarpras_kategori.nama_kategori', $keyword)
+            $builder
+                ->groupStart()
+                ->like("sarpras_barang.nama_barang", $keyword)
+                ->orLike("sarpras_barang.kode_aset", $keyword)
+                ->orLike("sarpras_barang.merek", $keyword)
+                ->orLike("sarpras_barang.no_seri", $keyword)
+                ->orLike("sarpras_ruang.nama_ruang", $keyword)
+                ->orLike("sarpras_kategori.nama_kategori", $keyword)
                 ->groupEnd();
         }
 
         // Mengambil semua data (untuk halaman Tabel Daftar Barang)
-        return $builder->orderBy('sarpras_barang.id', 'DESC')->findAll();
+        return $builder->orderBy("sarpras_barang.id", "DESC")->findAll();
     }
 
     public function getBarangForGuest(string $kodeAset): ?array
     {
-        return $this->select('sarpras_barang.*, sarpras_kategori.nama_kategori, sarpras_sub_kategori.nama_sub_kategori, sarpras_ruang.nama_ruang, sarpras_ruang.lantai')
-            ->join('sarpras_kategori', 'sarpras_kategori.id = sarpras_barang.kategori_id', 'left')
-            ->join('sarpras_sub_kategori', 'sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id', 'left')
-            ->join('sarpras_ruang', 'sarpras_ruang.id = sarpras_barang.ruang_id', 'left')
-            ->where('sarpras_barang.kode_aset', $kodeAset)
-            ->where('sarpras_barang.is_active', 1)
+        return $this->select(
+            "sarpras_barang.*, sarpras_kategori.nama_kategori, sarpras_sub_kategori.nama_sub_kategori, sarpras_ruang.nama_ruang, sarpras_ruang.lantai",
+        )
+            ->join(
+                "sarpras_kategori",
+                "sarpras_kategori.id = sarpras_barang.kategori_id",
+                "left",
+            )
+            ->join(
+                "sarpras_sub_kategori",
+                "sarpras_sub_kategori.id = sarpras_barang.sub_kategori_id",
+                "left",
+            )
+            ->join(
+                "sarpras_ruang",
+                "sarpras_ruang.id = sarpras_barang.ruang_id",
+                "left",
+            )
+            ->where("sarpras_barang.kode_aset", $kodeAset)
+            ->where("sarpras_barang.is_active", 1)
             ->first();
+    }
+
+    // Generate Kode Aset Unik Otomatis (AMC-YYYYMMDD-XXXX)
+    public function generateKodeAset(): string
+    {
+        $db = \Config\Database::connect();
+        $todayPrefix = "AMC-" . date("Ymd") . "-";
+
+        $lastRow = $db
+            ->table($this->table)
+            ->select("kode_aset")
+            ->like("kode_aset", $todayPrefix, "after")
+            ->orderBy("kode_aset", "DESC")
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
+        $nextNumber = 1;
+        if ($lastRow && !empty($lastRow["kode_aset"])) {
+            $parts = explode("-", $lastRow["kode_aset"]);
+            $lastSeq = end($parts);
+            if (is_numeric($lastSeq)) {
+                $nextNumber = (int) $lastSeq + 1;
+            }
+        }
+
+        do {
+            $kode =
+                $todayPrefix .
+                str_pad((string) $nextNumber, 4, "0", STR_PAD_LEFT);
+            $exists = $db
+                ->table($this->table)
+                ->where("kode_aset", $kode)
+                ->countAllResults();
+            if ($exists === 0) {
+                return $kode;
+            }
+            $nextNumber++;
+        } while (true);
     }
 }

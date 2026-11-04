@@ -4,24 +4,28 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<?= base_url('/') ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a>
+                <a href="<?= base_url(
+                    "/",
+                ) ?>"><i class="bx bx-home-alt me-1"></i> Beranda</a>
             </li>
             <?php
             // Mengambil URL segment (contoh URL: localhost/dashboard/kategori/edit)
-            $segment1 = service('request')->getUri()->getSegment(1);
-            $segment2 = service('request')->getUri()->getSegment(2);
+            $segment1 = service("request")->getUri()->getSegment(1);
+            $segment2 = service("request")->getUri()->getSegment(2);
 
-            if ($segment1 && $segment1 != 'dashboard') {
+            if ($segment1 && $segment1 != "dashboard") {
                 // Jika segmen 1 adalah 'kategori', buat huruf depannya kapital
-                $title1 = ucfirst(str_replace('-', ' ', $segment1));
-                echo '<li class="breadcrumb-item">' . $title1 . '</li>';
+                $title1 = ucfirst(str_replace("-", " ", $segment1));
+                echo '<li class="breadcrumb-item">' . $title1 . "</li>";
             }
 
-            if ($segment2 && $segment2 != 'index') {
-                $title2 = ucfirst(str_replace('-', ' ', $segment2));
+            if ($segment2 && $segment2 != "index") {
+                $title2 = ucfirst(str_replace("-", " ", $segment2));
                 // Jika segmen 2 adalah ID (angka), jangan ditampilkan
                 if (!is_numeric($segment2)) {
-                    echo '<li class="breadcrumb-item active" aria-current="page">' . $title2 . '</li>';
+                    echo '<li class="breadcrumb-item active" aria-current="page">' .
+                        $title2 .
+                        "</li>";
                 }
             }
             ?>
@@ -58,29 +62,41 @@
                             <div class="position-absolute top-0 end-0 m-3 d-flex gap-1 action-buttons">
                                 <!-- Tombol Edit -->
                                 <button type="button" class="btn btn-sm btn-icon btn-primary rounded-circle btn-edit"
-                                    data-id="<?= $row['id'] ?>"
-                                    data-nama="<?= $row['nama_kategori'] ?>"
-                                    data-icon="<?= $row['icon'] ?>"
-                                    data-bs-toggle="modal" data-bs-target="#modalEditKategori">
+                                    data-id="<?= $row["id"] ?>"
+                                    data-nama="<?= $row["nama_kategori"] ?>"
+                                    data-icon="<?= $row["icon"] ?>"
+                                    data-bs-toggle="modal" data-bs-target="#modalEditKategori"
+                                    aria-label="Edit kategori <?= esc(
+                                        $row["nama_kategori"],
+                                    ) ?>"
+                                    title="Edit Kategori">
                                     <i class="bx bx-pencil"></i>
                                 </button>
                                 <!-- Tombol Hapus -->
                                 <button type="button" class="btn btn-sm btn-icon btn-danger rounded-circle btn-hapus"
-                                    data-id="<?= $row['id'] ?>"
-                                    data-nama="<?= $row['nama_kategori'] ?>"
-                                    data-bs-toggle="modal" data-bs-target="#modalHapusKategori">
+                                    data-id="<?= $row["id"] ?>"
+                                    data-nama="<?= $row["nama_kategori"] ?>"
+                                    aria-label="Hapus kategori <?= esc(
+                                        $row["nama_kategori"],
+                                    ) ?>"
+                                    title="Hapus Kategori">
                                     <i class="bx bx-trash"></i>
                                 </button>
                             </div>
 
                             <!-- Ikon - Tambahkan class icon-hover -->
-                            <i class="bx <?= $row['icon'] ?? 'bx-category' ?> text-secondary mb-4 icon-hover" style="font-size: 5rem;"></i>
+                            <i class="bx <?= $row["icon"] ??
+                                "bx-category" ?> text-secondary mb-4 icon-hover" style="font-size: 5rem;"></i>
 
                             <!-- Judul -->
-                            <h4 class="card-title mb-0 fw-bold text-dark"><?= $row['nama_kategori'] ?></h4>
+                            <h4 class="card-title mb-0 fw-bold text-dark"><?= $row[
+                                "nama_kategori"
+                            ] ?></h4>
 
                             <!-- Tautan ke Sub Kategori -->
-                            <a href="<?= base_url('kategori/sub/' . $row['id']) ?>" class="btn btn-sm btn-outline-primary mt-3">
+                            <a href="<?= base_url(
+                                "kategori/sub/" . $row["id"],
+                            ) ?>" class="btn btn-sm btn-outline-primary mt-3">
                                 Lihat Sub-Kategori
                             </a>
                         </div>

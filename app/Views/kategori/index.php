@@ -13,7 +13,7 @@
   <meta charset="utf-8" />
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    content="width=device-width, initial-scale=1.0" />
 
    <title>Kategori | AMC</title>
 
@@ -65,7 +65,7 @@
   <style>
     /* Efek Card saat di-hover */
     .card-hover-effect {
-      transition: all 0.3s ease-in-out;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
       border: 1px solid transparent;
     }
 
@@ -82,7 +82,7 @@
     .action-buttons {
       opacity: 0;
       transform: translateY(-10px);
-      transition: all 0.3s ease-in-out;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     }
 
     .card-hover-effect:hover .action-buttons {

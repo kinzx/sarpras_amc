@@ -4,7 +4,7 @@
 ) ?>" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $title ?? "Kalibrasi Alat" ?> | RS AMC</title>
   <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
       "AMC-tanpa-nama-pad.png",
@@ -262,7 +262,9 @@
                           <td class="text-center">
                             <a href="<?= base_url(
                                 "kalibrasi/hapus/" . $row["id"],
-                            ) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus">
+                            ) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus" aria-label="Hapus catatan kalibrasi <?= esc(
+    $row["nama_barang"],
+) ?>">
                               <i class="bx bx-trash"></i>
                             </a>
                           </td>

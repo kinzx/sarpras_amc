@@ -13,7 +13,7 @@
     <meta charset="utf-8" />
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        content="width=device-width, initial-scale=1.0" />
 
     <title>Barang | AMC</title>
 
@@ -125,7 +125,7 @@
                                 <!-- ACTION mengarah ke fungsi simpan di Controller -->
                                 <form action="<?= base_url(
                                     "barang/simpan",
-                                ) ?>" method="POST" enctype="multipart/form-data" id="barangForm">
+                                ) ?>" method="POST" enctype="multipart/form-data" id="barangForm" class="needs-validation" novalidate>
                                     <?= csrf_field() ?>
 
                                     <div class="row g-3">
@@ -162,6 +162,7 @@
     : "" ?>><?= esc($row["nama_kategori"]) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
+                                                <div class="invalid-feedback">Kategori perlu dipilih.</div>
                                             </div>
 
                                             <div class="mb-3">
@@ -177,6 +178,7 @@
                                                 <input type="text" class="form-control" name="merek" value="<?= esc(
                                                     old("merek"),
                                                 ) ?>" placeholder="Contoh: Daikin" required>
+                                                <div class="invalid-feedback">Merek perlu diisi.</div>
                                                 <small class="text-muted">Merek atau brand barang</small>
                                             </div>
 
@@ -185,6 +187,7 @@
                                                 <input type="text" class="form-control" name="no_seri" value="<?= esc(
                                                     old("no_seri"),
                                                 ) ?>" placeholder="Masukkan nomor seri barang" required>
+                                                <div class="invalid-feedback">Nomor seri perlu diisi.</div>
                                                 <small class="text-muted">Masukkan nomor seri barang</small>
                                             </div>
 
@@ -193,6 +196,7 @@
                                                 <input type="text" class="form-control" name="daya" value="<?= esc(
                                                     old("daya"),
                                                 ) ?>" placeholder="Contoh: 1900" required>
+                                                <div class="invalid-feedback">Daya listrik perlu diisi.</div>
                                                 <small class="text-muted">Daya listrik yang dibutuhkan</small>
                                             </div>
 
@@ -235,6 +239,7 @@
                                                 <input type="text" class="form-control" name="nama_barang" value="<?= esc(
                                                     old("nama_barang"),
                                                 ) ?>" placeholder="Masukkan nama barang" required>
+                                                <div class="invalid-feedback">Nama barang perlu diisi.</div>
                                                 <small class="text-muted">Masukkan nama barang</small>
                                             </div>
 
@@ -255,6 +260,7 @@
 ) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
+                                                <div class="invalid-feedback">Ruangan perlu dipilih.</div>
                                                 <small class="text-muted">Pilih ruangan tempat barang berada</small>
                                             </div>
 
@@ -269,6 +275,7 @@
                                                 <input type="text" class="form-control" name="tipe" value="<?= esc(
                                                     old("tipe"),
                                                 ) ?>" placeholder="Contoh: Inverter / Wall Mounted" required>
+                                                <div class="invalid-feedback">Tipe barang perlu diisi.</div>
                                                 <small class="text-muted">Tipe atau model barang</small>
                                             </div>
 
@@ -280,6 +287,7 @@
                                                 ) ?>" placeholder="<?= date(
     "Y",
 ) ?>" min="1990" max="<?= date("Y") ?>" required>
+                                                <div class="invalid-feedback">Tahun pembelian perlu diisi.</div>
                                                 <small class="text-muted">Tahun pembelian barang</small>
                                             </div>
 
@@ -394,7 +402,7 @@
                                         <a href="<?= base_url(
                                             "barang",
                                         ) ?>" class="btn btn-outline-secondary me-2">Batal</a>
-                                        <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan</button>
+                                        <button type="submit" class="btn btn-primary" id="btnSubmitBarang"><i class="bx bx-save me-1"></i> Simpan</button>
                                     </div>
 
                                 </form>
@@ -522,14 +530,15 @@
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
-                            $('#sub_kategori_id').prop('disabled', false);
-                            $('#sub_kategori_id').html('<option value="">-- Tanpa Sub Kategori (Opsional) --</option>');
-                            if (data.length > 0) {
+                            if (data && data.length > 0) {
+                                $('#sub_kategori_id').prop('disabled', false);
+                                $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori (Opsional) --</option>');
                                 $.each(data, function(key, value) {
                                     $('#sub_kategori_id').append('<option value="' + value.id + '">' + value.nama_sub_kategori + '</option>');
                                 });
                             } else {
-                                $('#sub_kategori_id').html('<option value="">-- Tidak ada sub kategori (Opsional) --</option>');
+                                $('#sub_kategori_id').prop('disabled', true);
+                                $('#sub_kategori_id').html('<option value="">-- Tidak Ada Sub Kategori --</option>');
                             }
                         },
                         error: function(xhr) {
@@ -543,19 +552,32 @@
                     });
                 } else {
                     $('#sub_kategori_id').prop('disabled', true);
-                    $('#sub_kategori_id').html('<option value="">-- Pilih Sub Kategori --</option>');
+                    $('#sub_kategori_id').html('<option value="">-- Pilih Kategori Dahulu --</option>');
                 }
+            });
+
+            // Bootstrap client-side validation & anti-double-submit
+            $('#barangForm').on('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('was-validated');
+                    return false;
+                }
+                $(this).addClass('was-validated');
+
+                // Cegah double submit dari klik berulang
+                var $btn = $('#btnSubmitBarang');
+                if ($btn.prop('disabled')) {
+                    e.preventDefault();
+                    return false;
+                }
+                $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
             });
         });
     </script>
 
     <!-- Page JS -->
-    <a href="<?= base_url(
-        "scan",
-    ) ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
-        style="width: 65px; height: 65px; bottom: 30px; right: 30px; z-index: 9999;">
-        <i class="bx bx-qr-scan text-white" style="font-size: 2rem;"></i>
-    </a>
 </body>
 
 </html>

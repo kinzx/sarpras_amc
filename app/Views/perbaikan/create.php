@@ -4,7 +4,7 @@
 ) ?>" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $title ?? "Daftar & Input Perbaikan" ?> | RS AMC</title>
   <link rel="icon" type="image/png" sizes="64x64" href="<?= base_url(
       "AMC-tanpa-nama-pad.png",
@@ -25,6 +25,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/filepond-plugin-image-preview@4.6.12/dist/filepond-plugin-image-preview.min.css" />
   <link rel="stylesheet" href="<?= base_url("assets/vendor/css/core.css") ?>" />
   <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url(
+      "dist/libs/select2/select2.css",
+  ) ?>" />
   <link rel="stylesheet" href="<?= base_url(
       "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
   ) ?>" />
@@ -151,16 +154,71 @@
                     ) ?>" method="POST" enctype="multipart/form-data">
                       <?= csrf_field() ?>
 
+                      <!-- Pilih Petugas & Filter Berjenjang -->
+                      <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                          <label class="form-label">Teknisi Utama / Penanggung Jawab <span class="text-danger">*</span></label>
+                          <select class="form-select select2" name="user_id" id="user_id" required>
+                            <option value="">-- Pilih Teknisi Utama --</option>
+                            <?php foreach ($petugas as $p): ?>
+                              <option value="<?= $p["id"] ?>" <?= (string) old(
+    "user_id",
+    user_id() ?? "",
+) === (string) $p["id"]
+    ? "selected"
+    : "" ?>>
+                                <?= esc($p["username"]) ?> (<?= esc(
+     ucfirst($p["role_name"]),
+ ) ?>)
+                              </option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label class="form-label">Teknisi Pendamping / Tim (Bisa > 1)</label>
+                          <select class="form-select select2" name="teknisi_pendamping[]" id="teknisi_pendamping" multiple data-placeholder="-- Pilih Teknisi Pendamping --">
+                            <?php foreach ($petugas as $p): ?>
+                              <option value="<?= $p["id"] ?>">
+                                <?= esc($p["username"]) ?> (<?= esc(
+     ucfirst($p["role_name"]),
+ ) ?>)
+                              </option>
+                            <?php endforeach; ?>
+                          </select>
+                          <small class="text-muted" style="font-size: 0.75rem;">Bisa pilih lebih dari satu teknisi pembantu/second</small>
+                        </div>
+
+                        <!-- Filter Kategori & Sub-Kategori (Pencarian Berjenjang) -->
+                        <div class="col-md-6">
+                          <label class="form-label">Filter Kategori Barang</label>
+                          <select class="form-select select2" id="filter_kategori">
+                            <option value="">-- Semua Kategori --</option>
+                            <?php foreach ($kategori as $k): ?>
+                              <option value="<?= $k["id"] ?>"><?= esc(
+    $k["nama_kategori"],
+) ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Filter Sub-Kategori</label>
+                          <select class="form-select select2" id="filter_sub_kategori" disabled>
+                            <option value="">-- Tanpa Sub-Kategori --</option>
+                          </select>
+                        </div>
+                      </div>
+
                       <!-- Pilih Barang -->
                       <div class="mb-3">
                         <label class="form-label">Pilih Barang yang Diperbaiki <span class="text-danger">*</span></label>
-                        <select class="form-select" name="barang_id" id="barang_id" required>
-                          <option value="">-- Pilih Barang / Aset --</option>
+                        <select class="form-select select2" name="barang_id" id="barang_id" required>
+                          <option value="">-- Ketik nama atau kode aset untuk mencari --</option>
                           <?php foreach ($barang as $row): ?>
-                            <option value="<?= $row["id"] ?>" <?= old(
+                            <option value="<?= $row["id"] ?>" <?= (string) old(
     "barang_id",
     $selectedBarangId,
-) == $row["id"]
+) === (string) $row["id"]
     ? "selected"
     : "" ?>>
                               <?= esc($row["nama_barang"]) ?> (<?= esc(
@@ -171,7 +229,7 @@
                             </option>
                           <?php endforeach; ?>
                         </select>
-                        <small class="text-muted">Pilih unit barang yang selesai diperbaiki atau sedang ditangani</small>
+                        <small class="text-muted">Ketik nama barang, kode aset, atau saring lewat filter kategori di atas</small>
                       </div>
 
                       <div class="row g-3">
@@ -257,7 +315,7 @@
                         <a href="<?= base_url(
                             "perbaikan",
                         ) ?>" class="btn btn-outline-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan Catatan Perbaikan</button>
+                        <button type="submit" class="btn btn-primary" id="btnSubmitPerbaikan"><i class="bx bx-save me-1"></i> Simpan Catatan Perbaikan</button>
                       </div>
                     </form>
                   </div>
@@ -283,6 +341,7 @@
   ) ?>"></script>
   <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
   <script src="<?= base_url("assets/js/main.js") ?>"></script>
+  <script src="<?= base_url("dist/libs/select2/select2.js") ?>"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/filepond@4.32.7/dist/filepond.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/filepond-plugin-file-validate-type@1.2.9/dist/filepond-plugin-file-validate-type.min.js"></script>
@@ -315,12 +374,104 @@
 
   <script>
     $(document).ready(function() {
+      // Inisialisasi Searchable Dropdown (Select2)
+      $('.select2').select2({
+        width: '100%',
+        placeholder: function() {
+          return $(this).data('placeholder') || '-- Pilih --';
+        }
+      });
+
+      // Logika Dependent Dropdown Kategori -> Sub-Kategori -> Barang
+      $('#filter_kategori').on('change', function() {
+        var katId = $(this).val();
+        var $subSelect = $('#filter_sub_kategori');
+
+        $subSelect.html('<option value="">Memuat...</option>').prop('disabled', true);
+
+        if (katId) {
+          $.ajax({
+            url: "<?= site_url(
+                "barang/getSubKategori",
+            ) ?>/" + encodeURIComponent(katId),
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+              $subSelect.html('<option value="">-- Semua Sub-Kategori --</option>');
+              if (data && data.length > 0) {
+                $.each(data, function(i, item) {
+                  $subSelect.append('<option value="' + item.id + '">' + item.nama_sub_kategori + '</option>');
+                });
+                $subSelect.prop('disabled', false);
+              } else {
+                $subSelect.html('<option value="">-- Tanpa Sub-Kategori --</option>').prop('disabled', true);
+              }
+              $subSelect.trigger('change.select2');
+              muatBarangFilter();
+            },
+            error: function() {
+              $subSelect.html('<option value="">-- Gagal memuat sub --</option>').prop('disabled', true);
+              $subSelect.trigger('change.select2');
+            }
+          });
+        } else {
+          $subSelect.html('<option value="">-- Tanpa Sub-Kategori --</option>').prop('disabled', true);
+          $subSelect.trigger('change.select2');
+          muatBarangFilter();
+        }
+      });
+
+      $('#filter_sub_kategori').on('change', function() {
+        muatBarangFilter();
+      });
+
+      function muatBarangFilter() {
+        var katId = $('#filter_kategori').val();
+        var subId = $('#filter_sub_kategori').val();
+        var $barangSelect = $('#barang_id');
+
+        $barangSelect.html('<option value="">Memuat daftar barang...</option>');
+
+        $.ajax({
+          url: "<?= site_url("barang/getBarangByKategori") ?>",
+          type: "GET",
+          data: { kategori_id: katId, sub_kategori_id: subId },
+          dataType: "JSON",
+          success: function(res) {
+            $barangSelect.html('<option value="">-- Ketik nama atau kode aset untuk mencari --</option>');
+            if (res && res.length > 0) {
+              $.each(res, function(i, b) {
+                var ruang = b.nama_ruang ? b.nama_ruang : '-';
+                var optText = b.nama_barang + ' (' + b.kode_aset + ') - ' + ruang + ' [' + (b.kondisi_barang || 'Baik') + ']';
+                var opt = $('<option></option>')
+                  .val(b.id)
+                  .text(optText);
+                $barangSelect.append(opt);
+              });
+            } else {
+              $barangSelect.html('<option value="">-- Tidak ada barang di kategori ini --</option>');
+            }
+            $barangSelect.trigger('change.select2');
+          }
+        });
+      }
+
       $('.select-barang-btn').click(function() {
         var id = $(this).data('id');
         $('#barang_id').val(id).trigger('change');
         $('html, body').animate({
           scrollTop: $('#barang_id').offset().top - 100
         }, 300);
+      });
+
+      // Cegah double submit form perbaikan
+      $('form[action*="perbaikan/simpan"]').on('submit', function(e) {
+        var $btn = $('#btnSubmitPerbaikan');
+        if ($btn.prop('disabled')) {
+          e.preventDefault();
+          return false;
+        }
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
       });
     });
   </script>

@@ -13,7 +13,7 @@
     <meta charset="utf-8" />
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        content="width=device-width, initial-scale=1.0" />
 
     <title><?= esc($title ?? "Input Pemeliharaan") ?> | RS AMC</title>
 
@@ -49,6 +49,9 @@
         "assets/vendor/css/core.css",
     ) ?>" />
     <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+    <link rel="stylesheet" href="<?= base_url(
+        "dist/libs/select2/select2.css",
+    ) ?>" />
 
     <!-- FilePond CSS -->
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
@@ -166,10 +169,88 @@
                                         ) ?>" method="POST" enctype="multipart/form-data" id="maintenanceForm">
                                             <?= csrf_field() ?>
 
+                                            <!-- Pilih Petugas & Filter Berjenjang -->
+                                            <div class="row g-3 mb-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Teknisi Utama / Penanggung Jawab <span class="text-danger">*</span></label>
+                                                    <select class="form-select select2" name="user_id" id="user_id" required>
+                                                        <option value="">-- Pilih Teknisi Utama --</option>
+                                                        <?php foreach (
+                                                            $petugas
+                                                            as $p
+                                                        ): ?>
+                                                            <option value="<?= $p[
+                                                                "id"
+                                                            ] ?>" <?= (string) old(
+    "user_id",
+    user_id() ?? "",
+) === (string) $p["id"]
+    ? "selected"
+    : "" ?>>
+                                                                <?= esc(
+                                                                    $p[
+                                                                        "username"
+                                                                    ],
+                                                                ) ?> (<?= esc(
+     ucfirst($p["role_name"]),
+ ) ?>)
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Teknisi Pendamping / Tim (Bisa > 1)</label>
+                                                    <select class="form-select select2" name="teknisi_pendamping[]" id="teknisi_pendamping" multiple data-placeholder="-- Pilih Teknisi Pendamping --">
+                                                        <?php foreach (
+                                                            $petugas
+                                                            as $p
+                                                        ): ?>
+                                                            <option value="<?= $p[
+                                                                "id"
+                                                            ] ?>">
+                                                                <?= esc(
+                                                                    $p[
+                                                                        "username"
+                                                                    ],
+                                                                ) ?> (<?= esc(
+     ucfirst($p["role_name"]),
+ ) ?>)
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <small class="text-muted" style="font-size: 0.75rem;">Bisa pilih lebih dari satu teknisi pembantu/second</small>
+                                                </div>
+
+                                                <!-- Filter Kategori & Sub-Kategori (Pencarian Berjenjang) -->
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Filter Kategori Barang</label>
+                                                    <select class="form-select select2" id="filter_kategori">
+                                                        <option value="">-- Semua Kategori --</option>
+                                                        <?php foreach (
+                                                            $kategori
+                                                            as $k
+                                                        ): ?>
+                                                            <option value="<?= $k[
+                                                                "id"
+                                                            ] ?>"><?= esc(
+    $k["nama_kategori"],
+) ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Filter Sub-Kategori</label>
+                                                    <select class="form-select select2" id="filter_sub_kategori" disabled>
+                                                        <option value="">-- Tanpa Sub-Kategori --</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="mb-3">
-                                                <label class="form-label">Barang <span class="text-danger">*</span></label>
-                                                <select class="form-select" name="barang_id" id="barang_id" required>
-                                                    <option value="">-- Pilih Barang --</option>
+                                                <label class="form-label">Pilih Barang <span class="text-danger">*</span></label>
+                                                <select class="form-select select2" name="barang_id" id="barang_id" required>
+                                                    <option value="">-- Ketik nama atau kode aset untuk mencari --</option>
                                                     <?php foreach (
                                                         $barang
                                                         as $row
@@ -187,6 +268,16 @@
                                                                     "tanggal_perbaikan_terakhir"
                                                                 ] ?? "",
                                                             ) ?>"
+                                                            data-kategori="<?= esc(
+                                                                $row[
+                                                                    "kategori_id"
+                                                                ] ?? "",
+                                                            ) ?>"
+                                                            data-sub="<?= esc(
+                                                                $row[
+                                                                    "sub_kategori_id"
+                                                                ] ?? "",
+                                                            ) ?>"
                                                             <?= (string) old(
                                                                 "barang_id",
                                                                 $barangId,
@@ -200,11 +291,13 @@
                                                                 ],
                                                             ) ?> (<?= esc(
      $row["kode_aset"],
- ) ?>) - <?= esc($row["nama_ruang"] ?? "-") ?>
+ ) ?>) - <?= esc($row["nama_ruang"] ?? "-") ?> [<?= esc(
+     $row["kondisi_barang"] ?? "Baik",
+ ) ?>]
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <small class="text-muted">Pilih barang yang selesai dipelihara</small>
+                                                <small class="text-muted">Ketik nama barang, kode aset, atau saring lewat filter kategori di atas</small>
                                             </div>
 
                                             <div class="row g-3">
@@ -289,7 +382,7 @@
                                                 <a href="<?= base_url(
                                                     "maintenance",
                                                 ) ?>" class="btn btn-outline-secondary me-2">Batal</a>
-                                                <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan</button>
+                                                <button type="submit" class="btn btn-primary" id="btnSubmitMaintenance"><i class="bx bx-save me-1"></i> Simpan</button>
                                             </div>
                                         </form>
                                     </div>
@@ -416,9 +509,93 @@
     <script src="<?= base_url("assets/vendor/libs/i18n/i18n.js") ?>"></script>
     <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
     <script src="<?= base_url("assets/js/main.js") ?>"></script>
+    <script src="<?= base_url("dist/libs/select2/select2.js") ?>"></script>
 
     <script>
         $(document).ready(function() {
+            // Inisialisasi Searchable Dropdown (Select2)
+            $('.select2').select2({
+                width: '100%',
+                placeholder: function() {
+                    return $(this).data('placeholder') || '-- Pilih --';
+                }
+            });
+
+            // Logika Dependent Dropdown Kategori -> Sub-Kategori -> Barang
+            $('#filter_kategori').on('change', function() {
+                var katId = $(this).val();
+                var $subSelect = $('#filter_sub_kategori');
+
+                $subSelect.html('<option value="">Memuat...</option>').prop('disabled', true);
+
+                if (katId) {
+                    $.ajax({
+                        url: "<?= site_url(
+                            "barang/getSubKategori",
+                        ) ?>/" + encodeURIComponent(katId),
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function(data) {
+                            $subSelect.html('<option value="">-- Semua Sub-Kategori --</option>');
+                            if (data && data.length > 0) {
+                                $.each(data, function(i, item) {
+                                    $subSelect.append('<option value="' + item.id + '">' + item.nama_sub_kategori + '</option>');
+                                });
+                                $subSelect.prop('disabled', false);
+                            } else {
+                                $subSelect.html('<option value="">-- Tanpa Sub-Kategori --</option>').prop('disabled', true);
+                            }
+                            $subSelect.trigger('change.select2');
+                            muatBarangFilter();
+                        },
+                        error: function() {
+                            $subSelect.html('<option value="">-- Gagal memuat sub --</option>').prop('disabled', true);
+                            $subSelect.trigger('change.select2');
+                        }
+                    });
+                } else {
+                    $subSelect.html('<option value="">-- Tanpa Sub-Kategori --</option>').prop('disabled', true);
+                    $subSelect.trigger('change.select2');
+                    muatBarangFilter();
+                }
+            });
+
+            $('#filter_sub_kategori').on('change', function() {
+                muatBarangFilter();
+            });
+
+            function muatBarangFilter() {
+                var katId = $('#filter_kategori').val();
+                var subId = $('#filter_sub_kategori').val();
+                var $barangSelect = $('#barang_id');
+
+                $barangSelect.html('<option value="">Memuat daftar barang...</option>');
+
+                $.ajax({
+                    url: "<?= site_url("barang/getBarangByKategori") ?>",
+                    type: "GET",
+                    data: { kategori_id: katId, sub_kategori_id: subId },
+                    dataType: "JSON",
+                    success: function(res) {
+                        $barangSelect.html('<option value="">-- Ketik nama atau kode aset untuk mencari --</option>');
+                        if (res && res.length > 0) {
+                            $.each(res, function(i, b) {
+                                var ruang = b.nama_ruang ? b.nama_ruang : '-';
+                                var optText = b.nama_barang + ' (' + b.kode_aset + ') - ' + ruang + ' [' + (b.kondisi_barang || 'Baik') + ']';
+                                var opt = $('<option></option>')
+                                    .val(b.id)
+                                    .text(optText)
+                                    .attr('data-interval', b.interval_maintenance_hari || 90);
+                                $barangSelect.append(opt);
+                            });
+                        } else {
+                            $barangSelect.html('<option value="">-- Tidak ada barang di kategori ini --</option>');
+                        }
+                        $barangSelect.trigger('change');
+                    }
+                });
+            }
+
             function hitungJadwal() {
                 var interval = parseInt($('#barang_id option:selected').data('interval'), 10) || 90;
                 $('#interval_display').val(interval + ' hari');
@@ -443,6 +620,16 @@
 
             $('#barang_id, #tanggal_maintenance').on('change input', hitungJadwal);
             hitungJadwal();
+
+            // Cegah double submit form maintenance
+            $('form[action*="maintenance/simpan"]').on('submit', function(e) {
+                var $btn = $('#btnSubmitMaintenance');
+                if ($btn.prop('disabled')) {
+                    e.preventDefault();
+                    return false;
+                }
+                $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...');
+            });
         });
     </script>
 
@@ -472,12 +659,6 @@
     </script>
 
     <!-- Page JS -->
-    <a href="<?= base_url(
-        "scan",
-    ) ?>" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center"
-        style="width: 65px; height: 65px; bottom: 30px; right: 30px; z-index: 9999;">
-        <i class="bx bx-qr-scan text-white" style="font-size: 2rem;"></i>
-    </a>
 </body>
 
 </html>

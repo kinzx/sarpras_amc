@@ -1,0 +1,12 @@
+{
+  "appId": "com.amc.sarpras",
+  "appName": "SIM-SARPRAS AMC",
+  "webDir": "public",
+  "server": {
+    "url": "http://10.0.2.2:8080",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

@@ -37,13 +37,41 @@ class Perbaikan extends BaseController
     // Halaman Form / Daftar Perbaikan (Menu sidebar: perbaikan/create)
     public function create()
     {
+        $db = \Config\Database::connect();
         $barangId = (int) $this->request->getGet("barang_id");
+
+        // Ambil teknisi & admin aktif (kompatibel sql_mode=only_full_group_by)
+        $petugas = $db
+            ->table("users u")
+            ->select("u.id, u.username, u.email, MAX(g.name) as role_name")
+            ->join("auth_groups_users agu", "agu.user_id = u.id", "inner")
+            ->join("auth_groups g", "g.id = agu.group_id", "inner")
+            ->where("u.active", 1)
+            ->whereIn("g.name", [
+                "superadmin",
+                "admin",
+                "admin_teknisi",
+                "teknisi",
+            ])
+            ->groupBy("u.id, u.username, u.email")
+            ->orderBy("u.username", "ASC")
+            ->get()
+            ->getResultArray();
+
+        $kategori = $db
+            ->table("sarpras_kategori")
+            ->where("is_active", 1)
+            ->orderBy("nama_kategori", "ASC")
+            ->get()
+            ->getResultArray();
 
         $data = [
             "title" => "Daftar & Input Perbaikan",
             "barang" => $this->barangModel->getBarangWithRelations(),
             "barangRusak" => $this->perbaikanModel->getDaftarBarangRusak(),
             "selectedBarangId" => $barangId,
+            "petugas" => $petugas,
+            "kategori" => $kategori,
         ];
 
         return view("perbaikan/create", $data);
@@ -54,6 +82,7 @@ class Perbaikan extends BaseController
     {
         $rules = [
             "barang_id" => "required|is_natural_no_zero",
+            "user_id" => "required|is_natural_no_zero",
             "tanggal_perbaikan" => "required|valid_date[Y-m-d]",
             "laporan_kerusakan" => "required|min_length[3]",
             "analisa_kerusakan" => "permit_empty",
@@ -83,13 +112,25 @@ class Perbaikan extends BaseController
             $fileFoto->move(FCPATH . "uploads/perbaikan", $namaFoto);
         }
 
-        $userId = function_exists("user_id")
-            ? user_id()
-            : session()->get("logged_in_user")["id"] ?? 1;
+        $userId = (int) $this->request->getPost("user_id");
+        $pendampingPost = $this->request->getPost("teknisi_pendamping");
+        $pendampingJson = null;
+        if (!empty($pendampingPost) && is_array($pendampingPost)) {
+            $filtered = array_values(
+                array_filter(
+                    array_map("intval", $pendampingPost),
+                    fn($id) => $id > 0 && $id !== $userId,
+                ),
+            );
+            if (!empty($filtered)) {
+                $pendampingJson = json_encode($filtered);
+            }
+        }
 
         $this->perbaikanModel->save([
             "barang_id" => $barangId,
             "user_id" => $userId ?: 1,
+            "teknisi_pendamping" => $pendampingJson,
             "tanggal_perbaikan" => $this->request->getPost("tanggal_perbaikan"),
             "laporan_kerusakan" => $this->request->getPost("laporan_kerusakan"),
             "foto_sebelum" => $namaFoto,

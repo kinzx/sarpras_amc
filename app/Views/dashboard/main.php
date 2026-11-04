@@ -521,14 +521,12 @@ $waktuRelatif = function ($datetime) {
                         ) ?>" class="btn btn-hero-ghost">
                             <i class="bx bx-calendar-check me-1 align-middle"></i> Jadwal Pemeliharaan
                         </a>
-                        <a href="<?= base_url(
-                            "scan",
-                        ) ?>" class="btn btn-hero-ghost">
+                        <button type="button" class="btn btn-hero-ghost" data-bs-toggle="modal" data-bs-target="#modalScanQr">
                             <i class="bx bx-qr-scan me-1 align-middle"></i> Buka Scanner
-                        </a>
+                        </button>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -860,7 +858,11 @@ $waktuRelatif = function ($datetime) {
                     <small class="text-muted">7 catatan terakhir</small>
                 </div>
             </div>
-            <span class="badge bg-label-primary">Log Aplikasi</span>
+            <a href="<?= base_url(
+                "log-activity",
+            ) ?>" class="btn btn-sm btn-label-primary">
+                <i class="bx bx-list-ul me-1"></i> Semua Log
+            </a>
         </div>
         <div class="activity-feed">
             <?php if (empty($logs)): ?>
