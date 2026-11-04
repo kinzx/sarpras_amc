@@ -124,3 +124,14 @@ _modules/*
 
 /results/
 /phpunit.xml
+
+# Node
+node_modules/
+npm-debug.log
+
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/build/
+android/captures/
+
