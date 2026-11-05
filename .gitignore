@@ -135,3 +135,5 @@ android/app/build/
 android/build/
 android/captures/
 
+
+.hermes-tmp.*/
