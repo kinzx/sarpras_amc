@@ -61,9 +61,7 @@
   </div>
 </div>
 
-<!-- Library html5-qrcode -->
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
+<!-- Library html5-qrcode: lazy-loaded saat modal pertama kali dibuka -->
 <script>
   (function() {
     var modalEl = document.getElementById('modalScanQr');
@@ -72,6 +70,23 @@
     var html5QrCode = null;
     var scanStatus = document.getElementById('modal-scan-status');
     var isScanning = false;
+    var qrLibLoaded = false;
+    var qrLibLoading = false;
+
+    function loadQrLib(cb) {
+      if (qrLibLoaded) return cb();
+      if (qrLibLoading) { modalEl.addEventListener('shown.bs.modal', cb, {once:true}); return; }
+      qrLibLoading = true;
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+      s.onload = function() { qrLibLoaded = true; qrLibLoading = false; cb(); };
+      s.onerror = function() {
+        qrLibLoading = false;
+        scanStatus.className = 'alert alert-danger py-2 px-3 small mb-3';
+        scanStatus.innerHTML = '<i class="bx bx-error me-1"></i> Gagal memuat library QR scanner.';
+      };
+      document.head.appendChild(s);
+    }
 
     function handleResult(decodedText) {
       if (!decodedText) return;
@@ -147,9 +162,9 @@
       });
     }
 
-    // Lifecycle modal
+    // Lifecycle modal — load lib on first open
     modalEl.addEventListener('shown.bs.modal', function() {
-      startScanner();
+      loadQrLib(function() { startScanner(); });
     });
 
     modalEl.addEventListener('hidden.bs.modal', function() {
