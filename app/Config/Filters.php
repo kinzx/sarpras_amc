@@ -35,7 +35,8 @@ class Filters extends BaseFilters
         "pagecache" => PageCache::class,
         "performance" => PerformanceMetrics::class,
         "login" => \Myth\Auth\Filters\LoginFilter::class,
-        "group" => \Myth\Auth\Filters\GroupFilter::class,
+        "group" => \Myth\Auth\Filters\RoleFilter::class,
+        "role" => \Myth\Auth\Filters\RoleFilter::class,
     ];
 
     /**

@@ -14,15 +14,22 @@ class PerbaikanModel extends Model
     protected $protectFields = true;
     protected $allowedFields = [
         "barang_id",
+        "pelapor_id",
+        "teknisi_id",
+        "pegawai_id",
+        "pelapor_teknisi_id",
+        "teknisi_utama_id",
+        "status",
+        "tanggal_penanganan",
+        "jam_penanganan",
+        "deskripsi_penanganan",
         "user_id",
         "teknisi_pendamping",
         "tanggal_perbaikan",
         "laporan_kerusakan",
         "foto_sebelum",
-        "analisa_kerusakan",
         "tindakan_dilakukan",
         "kondisi_setelah",
-        "kesimpulan",
         "is_active",
     ];
 
@@ -34,15 +41,18 @@ class PerbaikanModel extends Model
     public function getRiwayat(
         ?string $keyword = null,
         ?string $bulan = null,
+        ?string $status = null,
     ): array {
         $builder = $this->db
             ->table($this->table . " p")
             ->select(
-                "p.*, b.nama_barang, b.kode_aset, b.merek, b.foto AS foto_barang, k.nama_kategori, r.nama_ruang, r.lantai, u.username AS nama_petugas",
+                "p.*, b.nama_barang, b.kode_aset, b.merek, b.foto AS foto_barang, k.nama_kategori, r.nama_ruang, r.lantai, up.username AS nama_pelapor, ut.username AS nama_teknisi, COALESCE(ut.username, u.username) AS nama_petugas",
             )
             ->join("sarpras_barang b", "b.id = p.barang_id", "left")
             ->join("sarpras_kategori k", "k.id = b.kategori_id", "left")
             ->join("sarpras_ruang r", "r.id = b.ruang_id", "left")
+            ->join("users up", "up.id = p.pelapor_id", "left")
+            ->join("users ut", "ut.id = p.teknisi_id", "left")
             ->join("users u", "u.id = p.user_id", "left")
             ->where("p.is_active", 1);
 
@@ -53,18 +63,23 @@ class PerbaikanModel extends Model
                 ->orLike("b.kode_aset", $keyword)
                 ->orLike("p.laporan_kerusakan", $keyword)
                 ->orLike("p.tindakan_dilakukan", $keyword)
+                ->orLike("up.username", $keyword)
+                ->orLike("ut.username", $keyword)
                 ->groupEnd();
         }
 
         if (!empty($bulan)) {
             $builder->where(
-                "DATE_FORMAT(p.tanggal_perbaikan, '%Y-%m') =",
+                "DATE_FORMAT(COALESCE(p.tanggal_perbaikan, p.created_at), '%Y-%m') =",
                 $bulan,
             );
         }
 
+        if (!empty($status)) {
+            $builder->where("p.status", $status);
+        }
+
         return $builder
-            ->orderBy("p.tanggal_perbaikan", "DESC")
             ->orderBy("p.id", "DESC")
             ->get()
             ->getResultArray();
@@ -97,7 +112,7 @@ class PerbaikanModel extends Model
 
         $bulanIni = date("Y-m");
         $bulanIniCount = $this->where("is_active", 1)
-            ->where("DATE_FORMAT(tanggal_perbaikan, '%Y-%m') =", $bulanIni)
+            ->where("DATE_FORMAT(COALESCE(tanggal_perbaikan, created_at), '%Y-%m') =", $bulanIni)
             ->countAllResults();
 
         $perluPerbaikan = $this->db

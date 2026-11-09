@@ -252,12 +252,12 @@
               ? "active"
               : "" ?>">
             <a href="<?= base_url("maintenance/create") ?>" class="menu-link">
-              <div data-i18n="Daftar Maintenance">Daftar Maintenance</div>
+              <div data-i18n="Daftar Maintenance">Daftar Pemeliharaan</div>
             </a>
           </li>
           <li class="menu-item <?= url_is("maintenance") ? "active" : "" ?>">
             <a href="<?= base_url("maintenance") ?>" class="menu-link">
-              <div data-i18n="Riwayat Maintenance">Riwayat Maintenance</div>
+              <div data-i18n="Riwayat Maintenance">Riwayat Pemeliharaan</div>
             </a>
           </li>
 

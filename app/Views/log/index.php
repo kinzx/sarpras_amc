@@ -10,11 +10,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url('assets/vendor/fonts/iconify-icons.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/vendor/fonts/boxicons.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/vendor/css/core.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/css/demo.css') ?>" />
+  <link rel="stylesheet" href="<?= base_url('assets/css/industrial.css') ?>" />
   <link rel="stylesheet" href="<?= base_url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') ?>" />
 
   <script src="<?= base_url('assets/vendor/js/helpers.js') ?>"></script>
@@ -38,82 +41,79 @@
 
         <div class="content-wrapper">
           <div class="container-xxl flex-grow-1 container-p-y">
-            <!-- Header Halaman -->
-            <div class="card mb-4 border-0 shadow-sm">
-              <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                <div>
-                  <h4 class="card-title mb-1 d-flex align-items-center gap-2">
-                    <i class="bx bx-history text-primary"></i> Log Aktivitas Sistem
-                  </h4>
-                  <p class="text-muted mb-0">Catatan riwayat audit aktivitas pengguna pada modul sarana dan prasarana.</p>
+            <!-- Header Halaman (Industrial: Tanpa Card Template) -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+              <div>
+                <h1 class="page-header-title">Log Aktivitas Sistem</h1>
+                <p class="page-header-desc">Catatan riwayat audit transaksi pengguna pada seluruh modul sarana dan prasarana.</p>
+              </div>
+              
+            </div>
+
+            <!-- Form Pencarian & Filter Modul (Industrial) -->
+            <div class="filter-card-industrial mb-4">
+              <form action="<?= base_url('log-activity') ?>" method="GET" class="row g-2 align-items-end">
+                <div class="col-md-5">
+                  <label class="form-label text-dark fw-medium small mb-1">Pencarian</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-radius: 4px 0 0 4px;"><i class="bx bx-search"></i></span>
+                    <input type="text" name="q" class="form-control border-start-0" placeholder="Cari username atau pesan aktivitas…" value="<?= esc($search ?? '') ?>">
+                  </div>
                 </div>
-                <span class="badge bg-label-primary px-3 py-2">
-                  <i class="bx bx-shield-quarter me-1"></i> Audit Trail
-                </span>
-              </div>
+
+                <div class="col-md-4">
+                  <label class="form-label text-dark fw-medium small mb-1">Filter Modul</label>
+                  <select name="modul" class="form-select">
+                    <option value="">-- Semua Modul --</option>
+                    <?php foreach ($modulList as $m): ?>
+                      <option value="<?= esc($m) ?>" <?= (string) ($selectedModul ?? '') === (string) $m ? 'selected' : '' ?>>
+                        <?= esc(strtoupper($m)) ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="bx bx-filter-alt me-1"></i> Terapkan
+                  </button>
+                  <?php if (!empty($search) || !empty($selectedModul)): ?>
+                    <a href="<?= base_url('log-activity') ?>" class="btn btn-outline-secondary" title="Reset Filter" aria-label="Reset Filter">
+                      <i class="bx bx-refresh"></i>
+                    </a>
+                  <?php endif; ?>
+                </div>
+              </form>
             </div>
 
-            <!-- Form Pencarian & Filter Modul -->
-            <div class="card mb-4 border-0 shadow-sm">
-              <div class="card-body">
-                <form action="<?= base_url('log-activity') ?>" method="GET" class="row g-3 align-items-end">
-                  <div class="col-md-5">
-                    <label class="form-label fw-semibold">Pencarian</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bx bx-search"></i></span>
-                      <input type="text" name="q" class="form-control" placeholder="Cari username atau pesan aktivitas…" value="<?= esc($search ?? '') ?>">
-                    </div>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label fw-semibold">Filter Modul</label>
-                    <select name="modul" class="form-select">
-                      <option value="">-- Semua Modul --</option>
-                      <?php foreach ($modulList as $m): ?>
-                        <option value="<?= esc($m) ?>" <?= (string) ($selectedModul ?? '') === (string) $m ? 'selected' : '' ?>>
-                          <?= esc(strtoupper($m)) ?>
-                        </option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-
-                  <div class="col-md-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary flex-grow-1">
-                      <i class="bx bx-filter-alt me-1"></i> Terapkan
-                    </button>
-                    <?php if (!empty($search) || !empty($selectedModul)): ?>
-                      <a href="<?= base_url('log-activity') ?>" class="btn btn-outline-secondary" title="Reset Filter" aria-label="Reset Filter">
-                        <i class="bx bx-refresh"></i>
-                      </a>
-                    <?php endif; ?>
-                  </div>
-                </form>
+            <!-- Tabel Data Log (Industrial) -->
+            <div class="table-card-industrial">
+              <div class="card-header-industrial d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 fw-semibold text-dark">Daftar Rekaman Audit Aktivitas</h6>
+                <span class="text-muted small">Menampilkan <?= count($logs ?? []) ?> entri terakhir</span>
               </div>
-            </div>
-
-            <!-- Tabel Data Log -->
-            <div class="card border-0 shadow-sm">
-              <div class="card-header border-bottom d-flex justify-content-between align-items-center py-3">
-                <h5 class="card-title mb-0">Daftar Rekaman Aktivitas</h5>
-                <small class="text-muted">Menampilkan <?= count($logs ?? []) ?> entri terakhir</small>
-              </div>
-              <div class="table-responsive text-nowrap">
-                <table class="table table-hover align-middle mb-0">
-                  <thead class="table-light">
+              <div class="table-responsive">
+                <table class="table-industrial w-100">
+                  <thead>
                     <tr>
-                      <th style="width: 16%;">Waktu</th>
-                      <th style="width: 14%;">User</th>
-                      <th style="width: 12%;">Modul</th>
-                      <th style="width: 12%;">Aksi</th>
-                      <th>Pesan</th>
+                      <th style="width: 180px;">WAKTU & IP</th>
+                      <th style="width: 160px;">OPERATOR</th>
+                      <th style="width: 120px;">MODUL</th>
+                      <th style="width: 120px;">AKSI</th>
+                      <th>RINCIAN PERUBAHAN</th>
                     </tr>
                   </thead>
-                  <tbody class="table-border-bottom-0">
+                  <tbody>
                     <?php if (empty($logs)): ?>
                       <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
-                          <i class="bx bx-info-circle fs-3 d-block mb-2"></i>
-                          Belum ada catatan log aktivitas yang sesuai.
+                        <td colspan="5" class="p-0">
+                          <div class="empty-state-container">
+                            <div class="empty-state-icon">
+                              <i class="bx bx-history"></i>
+                            </div>
+                            <h6 class="fw-semibold text-dark mb-1">Belum Ada Catatan Log</h6>
+                            <p class="text-muted small mb-0">Tidak ditemukan log aktivitas yang sesuai dengan parameter filter.</p>
+                          </div>
                         </td>
                       </tr>
                     <?php else: ?>
@@ -121,59 +121,52 @@
                         <?php
                           $aksiLower = strtolower($row['aksi'] ?? '');
                           $badgeAksi = match ($aksiLower) {
-                            'create', 'tambah' => 'bg-label-success',
-                            'update', 'edit', 'ubah' => 'bg-label-warning',
-                            'delete', 'hapus' => 'bg-label-danger',
-                            default => 'bg-label-info',
+                            'create', 'tambah' => 'badge-status-box active',
+                            'update', 'edit', 'ubah' => 'badge-status-box warning',
+                            'delete', 'hapus' => 'badge-status-box danger',
+                            default => 'badge-status-box neutral',
                           };
 
                           $modulLower = strtolower($row['modul'] ?? 'sistem');
-                          $badgeModul = match ($modulLower) {
-                            'barang'      => 'bg-label-primary',
-                            'maintenance' => 'bg-label-info',
-                            'perbaikan'   => 'bg-label-danger',
-                            'kalibrasi'   => 'bg-label-success',
-                            'kategori'    => 'bg-label-secondary',
-                            'ruang'       => 'bg-label-dark',
-                            'user', 'pengguna' => 'bg-label-warning',
-                            default       => 'bg-label-secondary',
-                          };
                         ?>
                         <tr>
                           <td>
-                            <strong class="d-block text-dark">
+                            <span class="d-block text-dark fw-medium" style="font-size: 0.85rem;">
                               <?= !empty($row['created_at']) ? date('d M Y', strtotime($row['created_at'])) : '-' ?>
-                            </strong>
-                            <small class="text-muted font-monospace">
+                            </span>
+                            <span class="text-muted font-monospace" style="font-size: 0.73rem;">
                               <?= !empty($row['created_at']) ? date('H:i:s', strtotime($row['created_at'])) : '-' ?> &bull; <?= esc($row['ipaddress'] ?? '::1') ?>
-                            </small>
+                            </span>
                           </td>
                           <td>
                             <div class="d-flex align-items-center gap-2">
-                              <span class="avatar-initial rounded-circle bg-label-secondary d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
-                                <i class="bx bx-user" style="font-size: 0.9rem;"></i>
+                              <span class="d-inline-flex align-items-center justify-content-center text-slate-700" style="width: 26px; height: 26px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem;">
+                                <i class="bx bx-user"></i>
                               </span>
-                              <span class="fw-semibold text-dark"><?= esc($row['username'] ?: 'Guest') ?></span>
+                              <span class="fw-medium text-dark" style="font-size: 0.85rem;"><?= esc($row['username'] ?: 'Guest') ?></span>
                             </div>
                           </td>
                           <td>
-                            <span class="badge <?= $badgeModul ?> text-uppercase">
+                            <span class="badge-code text-uppercase">
                               <?= esc($modulLower) ?>
                             </span>
                           </td>
                           <td>
-                            <span class="badge <?= $badgeAksi ?>">
+                            <span class="<?= $badgeAksi ?>">
                               <?= esc($aksiLower) ?>
                             </span>
                           </td>
-                          <td class="text-wrap" style="max-width: 480px;">
-                            <?= esc($row['message'] ?? '-') ?>
+                          <td>
+                            <span class="text-slate-700" style="font-size: 0.85rem; line-height: 1.5;"><?= esc($row['message'] ?? '-') ?></span>
                           </td>
                         </tr>
                       <?php endforeach; ?>
                     <?php endif; ?>
                   </tbody>
                 </table>
+              </div>
+              <div class="table-footer-industrial d-flex justify-content-between align-items-center">
+                <span>Total <?= count($logs ?? []) ?> catatan audit aktivitas</span>
               </div>
             </div>
           </div>

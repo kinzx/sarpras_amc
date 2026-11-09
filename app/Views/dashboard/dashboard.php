@@ -5,7 +5,7 @@
   class="layout-navbar-fixed layout-menu-fixed layout-compact"
   dir="ltr"
   data-skin="default"
-  data-assets-path="../../assets/"
+  data-assets-path="<?= base_url("assets/") ?>/"
   data-template="vertical-menu-template"
   data-bs-theme="light">
   <head>

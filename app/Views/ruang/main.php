@@ -1,94 +1,97 @@
 <div class="container-xxl flex-grow-1 container-p-y">
-    <!-- Breadcrumb & Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header Halaman -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h4 class="mb-1"><span class="text-primary me-2">|</span> Data Master Ruangan</h4>
-            <p class="text-muted mb-0">Kelola data ruangan dan lokasi lantai.</p>
+            <h1 class="page-header-title">Data Master Ruangan</h1>
+            <p class="page-header-desc">Kelola penomoran lokasi, lantai, dan ketersediaan ruangan rumah sakit.</p>
         </div>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahRuang">
-            <i class="bx bx-plus-circle me-1"></i> Tambah Ruangan
+            <i class="bx bx-plus me-1"></i> Tambah Ruangan
         </button>
     </div>
 
     <!-- Tabel Ruangan -->
-    <div class="card">
+    <div class="table-card-industrial">
+        <div class="card-header-industrial d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-semibold text-dark">Daftar Ruangan Terdaftar</h6>
+            <span class="text-muted small">Total: <?= count($ruang ?? []) ?> Ruangan</span>
+        </div>
         <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
-                <thead class="table-light">
+            <table class="table-industrial">
+                <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nama Ruangan</th>
-                        <th>Lantai</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th style="width: 60px;">NO.</th>
+                        <th>NAMA RUANGAN</th>
+                        <th>LANTAI</th>
+                        <th>STATUS</th>
+                        <th style="width: 100px;" class="text-center">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($ruang)): ?>
                         <tr>
-                            <td colspan="5" class="text-center py-4">Belum ada data ruangan.</td>
+                            <td colspan="5" class="p-0">
+                                <div class="empty-state-container">
+                                    <div class="empty-state-icon">
+                                        <i class="bx bx-door-open"></i>
+                                    </div>
+                                    <h6 class="fw-semibold text-dark mb-1">Belum Ada Data Ruangan</h6>
+                                    <p class="text-muted small mb-3">Data master ruangan rumah sakit belum ditambahkan.</p>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahRuang">
+                                        <i class="bx bx-plus me-1"></i> Tambah Ruangan Baru
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     <?php else: ?>
                         <?php
                         $no = 1;
                         foreach ($ruang as $row): ?>
                             <tr>
-                                <!-- Kolom 1: No -->
-                                <td><?= $no++ ?></td>
-
-                                <!-- Kolom 2: Nama Ruangan -->
-                                <td><strong><?= $row[
-                                    "nama_ruang"
-                                ] ?></strong></td>
-
-                                <!-- Kolom 3: Lantai -->
-                                <td>Lantai <?= $row["lantai"] ?></td>
-
-                                <!-- Kolom 4: Status -->
+                                <td class="text-muted font-monospace" style="font-size: 0.8rem;"><?= sprintf("%02d", $no++) ?></td>
+                                <td>
+                                    <span class="fw-semibold text-dark"><?= esc($row["nama_ruang"]) ?></span>
+                                </td>
+                                <td>
+                                    <span class="badge-code-mono">Lantai <?= esc($row["lantai"]) ?></span>
+                                </td>
                                 <td>
                                     <?php if ($row["is_active"] == 1): ?>
-                                        <span class="badge bg-label-success">Aktif</span>
+                                        <span class="badge-status-box active">Aktif</span>
                                     <?php else: ?>
-                                        <span class="badge bg-label-danger">Non-Aktif</span>
+                                        <span class="badge-status-box inactive">Non-Aktif</span>
                                     <?php endif; ?>
                                 </td>
-
-                                <!-- Kolom 5: Aksi (Tombol Edit & Hapus) -->
-                                <td>
+                                <td class="text-center">
                                     <?php if ($row["is_active"] == 1): ?>
-                                        <!-- Tombol Edit -->
-                                        <button type="button" class="btn btn-sm btn-icon btn-outline-warning me-1 btn-edit"
-                                            data-id="<?= $row["id"] ?>"
-                                            data-nama="<?= esc(
-                                                $row["nama_ruang"],
-                                            ) ?>"
-                                            data-lantai="<?= esc(
-                                                $row["lantai"],
-                                            ) ?>"
-                                            data-bs-toggle="modal" data-bs-target="#modalEditRuang"
-                                            aria-label="Edit ruangan <?= esc(
-                                                $row["nama_ruang"],
-                                            ) ?>"
-                                            title="Edit Ruangan">
-                                            <i class="bx bx-pencil"></i>
-                                        </button>
-
-                                        <!-- Tombol Hapus -->
-                                        <a href="<?= base_url(
-                                            "ruang/hapus/" . $row["id"],
-                                        ) ?>" class="btn btn-sm btn-icon btn-outline-danger" aria-label="Nonaktifkan ruangan <?= esc(
-    $row["nama_ruang"],
-) ?>" title="Nonaktifkan Ruangan" onclick="return confirm('Yakin ingin menonaktifkan ruangan ini?')">
-                                            <i class="bx bx-trash"></i>
-                                        </a>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <button type="button" class="action-btn-ghost action-btn-ghost-warning btn-edit"
+                                                data-id="<?= $row["id"] ?>"
+                                                data-nama="<?= esc($row["nama_ruang"]) ?>"
+                                                data-lantai="<?= esc($row["lantai"]) ?>"
+                                                data-bs-toggle="modal" data-bs-target="#modalEditRuang"
+                                                aria-label="Edit ruangan <?= esc($row["nama_ruang"]) ?>"
+                                                title="Edit Ruangan">
+                                                <i class="bx bx-pencil"></i>
+                                            </button>
+                                            <a href="<?= base_url("ruang/hapus/" . $row["id"]) ?>" 
+                                                class="action-btn-ghost btn-ghost-danger" 
+                                                aria-label="Nonaktifkan ruangan <?= esc($row["nama_ruang"]) ?>" 
+                                                title="Nonaktifkan Ruangan" 
+                                                onclick="return confirm('Yakin ingin menonaktifkan ruangan ini?')">
+                                                <i class="bx bx-trash"></i>
+                                            </a>
+                                        </div>
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach;
-                        ?>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+        <div class="table-footer-industrial d-flex justify-content-between align-items-center">
+            <span>Menampilkan <?= count($ruang ?? []) ?> data ruangan</span>
         </div>
     </div>
 </div>
@@ -98,12 +101,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Ruangan Baru</h5>
+                <h6 class="modal-title fw-bold text-dark mb-0">Tambah Ruangan Baru</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url(
-                "ruang/simpan",
-            ) ?>" method="POST" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = 'Menyimpan...';">
+            <form action="<?= base_url("ruang/simpan") ?>" method="POST" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = 'Menyimpan...';">
                 <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -129,10 +130,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Ruangan</h5>
+                <h6 class="modal-title fw-bold text-dark mb-0">Edit Data Ruangan</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <!-- Action akan diisi secara otomatis oleh JavaScript -->
             <form id="formEditRuang" method="POST" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = 'Menyimpan...';">
                 <?= csrf_field() ?>
                 <div class="modal-body">

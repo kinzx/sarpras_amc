@@ -3,10 +3,23 @@
   "appName": "SIM-SARPRAS AMC",
   "webDir": "public",
   "server": {
-    "url": "https://rs.kinaraurasae.my.id",
+    "url": "http://100.77.33.9:8080/",
     "cleartext": true
   },
   "android": {
     "allowMixedContent": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#ffffff",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": true,
+      "androidSpinnerColor": "#1e40af",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    }
   }
 }

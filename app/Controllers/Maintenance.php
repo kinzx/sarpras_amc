@@ -39,19 +39,14 @@ class Maintenance extends BaseController
         $db = \Config\Database::connect();
         $barangId = (int) $this->request->getGet("barang_id");
 
-        // Ambil teknisi & admin aktif (kompatibel sql_mode=only_full_group_by)
+        // Ambil teknisi aktif (kompatibel sql_mode=only_full_group_by)
         $petugas = $db
             ->table("users u")
             ->select("u.id, u.username, u.email, MAX(g.name) as role_name")
             ->join("auth_groups_users agu", "agu.user_id = u.id", "inner")
             ->join("auth_groups g", "g.id = agu.group_id", "inner")
             ->where("u.active", 1)
-            ->whereIn("g.name", [
-                "superadmin",
-                "admin",
-                "admin_teknisi",
-                "teknisi",
-            ])
+            ->where("g.name", "teknisi")
             ->groupBy("u.id, u.username, u.email")
             ->orderBy("u.username", "ASC")
             ->get()

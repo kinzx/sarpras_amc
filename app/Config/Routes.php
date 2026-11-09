@@ -64,6 +64,8 @@ $routes->group("", ["filter" => "login"], function ($routes) {
     $routes->get("perbaikan", "Perbaikan::index");
     $routes->get("perbaikan/create", "Perbaikan::create");
     $routes->post("perbaikan/simpan", "Perbaikan::simpan");
+    $routes->post("perbaikan/tindak-lanjut", "Perbaikan::tindakLanjut");
+    $routes->get("perbaikan/get-log/(:num)", 'Perbaikan::getLog/$1');
     $routes->get("perbaikan/hapus/(:num)", 'Perbaikan::hapus/$1');
 
     // Kalibrasi

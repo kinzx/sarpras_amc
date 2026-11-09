@@ -14,7 +14,9 @@
   ) ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url(
       "assets/vendor/fonts/iconify-icons.css",
   ) ?>" />
@@ -23,13 +25,55 @@
   ) ?>" />
   <link rel="stylesheet" href="<?= base_url("assets/vendor/css/core.css") ?>" />
   <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
 
   <!-- FilePond CSS -->
   <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
   <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+  
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <style>
     .filepond--root { margin-bottom: 0; font-family: inherit; }
     .filepond--panel-root { background-color: #f8f9fa; border: 2px dashed #d9dee3; border-radius: 0.5rem; }
+    
+    /* Select2 Bootstrap 5 & Industrial Integration */
+    .select2-container--default .select2-selection--single {
+      height: 38px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 6px;
+      font-size: 0.88rem;
+      background-color: #fff;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #0f172a;
+      line-height: normal;
+      padding-left: 4px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 36px;
+      right: 6px;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--single,
+    .select2-container--default.select2-container--open .select2-selection--single {
+      border-color: #1e40af;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+      outline: none;
+    }
+    .select2-dropdown {
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08);
+      z-index: 1060;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #1e40af;
+      color: #ffffff;
+    }
   </style>
   <link rel="stylesheet" href="<?= base_url(
       "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
@@ -86,132 +130,99 @@
               </div>
             <?php endif; ?>
 
-            <!-- HEADER -->
-            <div class="card mb-4">
-              <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                <div>
-                  <h4 class="card-title mb-1">
-                    <span class="text-primary me-2">|</span> Kalibrasi Alat Medis
-                  </h4>
-                  <p class="text-muted mb-0">Kelola sertifikasi, jadwal kalibrasi tahunan, dan kepatuhan standar mutu alat medis rumah sakit.</p>
-                </div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKalibrasi">
-                  <i class="bx bx-plus me-1"></i> Upload Sertifikat Kalibrasi
-                </button>
+            <!-- HEADER HALAMAN (Industrial: Menyatu tanpa Card Template) -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+              <div>
+                <h1 class="page-header-title">Kalibrasi Alat Medis</h1>
+                <p class="page-header-desc">Sertifikasi kepatuhan, jadwal kalibrasi tahunan, dan standar mutu instrumen medis rumah sakit.</p>
               </div>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahKalibrasi">
+                <i class="bx bx-plus me-1"></i> Upload Sertifikat Kalibrasi
+              </button>
             </div>
 
-            <!-- STATISTIC CARDS -->
-            <div class="row mb-4">
-              <div class="col-md-4 col-sm-6 mb-3">
-                <div class="card h-100">
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                      <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">TOTAL SERTIFIKASI</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format(
-                          $ringkasan["total"] ?? 0,
-                      ) ?></h3>
-                    </div>
-                    <div class="bg-label-primary rounded p-3">
-                      <i class="bx bx-certification fs-3"></i>
-                    </div>
-                  </div>
+            <!-- STATISTIC CARDS (Industrial) -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-industrial">
+                  <i class="bx bx-certification stat-icon"></i>
+                  <div class="stat-label">TOTAL SERTIFIKASI</div>
+                  <div class="stat-value"><?= number_format($ringkasan["total"] ?? 0) ?></div>
                 </div>
               </div>
-              <div class="col-md-4 col-sm-6 mb-3">
-                <div class="card h-100">
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                      <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">DIKALIBRASI TAHUN INI</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format(
-                          $ringkasan["tahun_ini"] ?? 0,
-                      ) ?></h3>
-                    </div>
-                    <div class="bg-label-success rounded p-3">
-                      <i class="bx bx-check-shield fs-3"></i>
-                    </div>
-                  </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-industrial">
+                  <i class="bx bx-check-shield stat-icon"></i>
+                  <div class="stat-label">DIKALIBRASI TAHUN INI</div>
+                  <div class="stat-value text-success"><?= number_format($ringkasan["tahun_ini"] ?? 0) ?></div>
                 </div>
               </div>
-              <div class="col-md-4 col-sm-6 mb-3">
-                <div class="card h-100">
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                      <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">TOTAL ALAT MEDIS</p>
-                      <h3 class="mb-0 fw-bolder"><?= number_format(
-                          $ringkasan["total_alat_medis"] ?? 0,
-                      ) ?></h3>
-                    </div>
-                    <div class="bg-label-info rounded p-3">
-                      <i class="bx bx-pulse fs-3"></i>
-                    </div>
-                  </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="stat-card-industrial">
+                  <i class="bx bx-pulse stat-icon"></i>
+                  <div class="stat-label">TOTAL ALAT MEDIS</div>
+                  <div class="stat-value"><?= number_format($ringkasan["total_alat_medis"] ?? 0) ?></div>
                 </div>
               </div>
             </div>
 
-            <!-- FILTER & SEARCH -->
-            <div class="card mb-4">
-              <div class="card-body">
-                <form method="GET" action="<?= base_url(
-                    "kalibrasi",
-                ) ?>" class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label">Cari Nama Alat / No. Seri / Kode Aset</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bx bx-search"></i></span>
-                      <input type="text" name="q" class="form-control" placeholder="Contoh: Defibrillator, AMC-20261028-0001, SN12345..." value="<?= esc(
-                          $keyword ?? "",
-                      ) ?>">
-                    </div>
+            <!-- FILTER & SEARCH (Industrial) -->
+            <div class="filter-card-industrial mb-4">
+              <form method="GET" action="<?= base_url("kalibrasi") ?>" class="row g-2 align-items-end">
+                <div class="col-md-6">
+                  <label class="form-label text-dark fw-medium small mb-1">Cari Alat / No. Seri / Kode Aset</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-radius: 4px 0 0 4px;"><i class="bx bx-search"></i></span>
+                    <input type="text" name="q" class="form-control border-start-0" placeholder="Contoh: Defibrillator, AMC-20261028-0001, SN12345..." value="<?= esc($keyword ?? "") ?>">
                   </div>
-                  <div class="col-md-3">
-                    <label class="form-label">Tahun</label>
-                    <input type="number" name="tahun" class="form-control" placeholder="Contoh: <?= date(
-                        "Y",
-                    ) ?>" min="2020" max="2099" value="<?= esc(
-    $tahun ?? "",
-) ?>">
-                  </div>
-                  <div class="col-md-3 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary w-100"><i class="bx bx-filter-alt me-1"></i> Filter</button>
-                    <?php if (!empty($keyword) || !empty($tahun)): ?>
-                      <a href="<?= base_url(
-                          "kalibrasi",
-                      ) ?>" class="btn btn-outline-secondary">Reset</a>
-                    <?php endif; ?>
-                  </div>
-                </form>
-              </div>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label text-dark fw-medium small mb-1">Tahun Kalibrasi</label>
+                  <input type="number" name="tahun" class="form-control" placeholder="Contoh: <?= date("Y") ?>" min="2020" max="2099" value="<?= esc($tahun ?? "") ?>">
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary flex-grow-1"><i class="bx bx-filter-alt me-1"></i> Filter</button>
+                  <?php if (!empty($keyword) || !empty($tahun)): ?>
+                    <a href="<?= base_url("kalibrasi") ?>" class="btn btn-outline-secondary" title="Reset filter"><i class="bx bx-refresh"></i></a>
+                  <?php endif; ?>
+                </div>
+              </form>
             </div>
 
-            <!-- TABEL KALIBRASI -->
-            <div class="card">
-              <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Daftar Sertifikat Kalibrasi</h5>
-                <span class="badge bg-label-info"><?= count(
-                    $riwayat,
-                ) ?> Sertifikat</span>
+            <!-- TABEL KALIBRASI (Industrial) -->
+            <div class="table-card-industrial">
+              <div class="card-header-industrial d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 fw-semibold text-dark">Daftar Sertifikat Kalibrasi Alat</h6>
+                <span class="text-muted small">Total: <?= count($riwayat ?? []) ?> Sertifikat</span>
               </div>
               <div class="table-responsive text-nowrap">
-                <table class="table table-hover">
-                  <thead class="table-light">
+                <table class="table-industrial">
+                  <thead>
                     <tr>
-                      <th style="width: 50px;">No</th>
-                      <th>Tanggal Kalibrasi</th>
-                      <th>Nama Alat & Kode Aset</th>
-                      <th>Ruangan</th>
-                      <th>No. Seri / Merek</th>
-                      <th>Sertifikat</th>
-                      <th>Catatan</th>
-                      <th class="text-center" style="width: 100px;">Aksi</th>
+                      <th style="width: 50px;">NO.</th>
+                      <th>TANGGAL KALIBRASI</th>
+                      <th>ALAT MEDIS & KODE</th>
+                      <th>LOKASI RUANGAN</th>
+                      <th>NO. SERI / MEREK</th>
+                      <th>DOKUMEN</th>
+                      <th>CATATAN</th>
+                      <th style="width: 70px;" class="text-center">AKSI</th>
                     </tr>
                   </thead>
-                  <tbody class="table-border-bottom-0">
+                  <tbody>
                     <?php if (empty($riwayat)): ?>
                       <tr>
-                        <td colspan="8" class="text-center py-5 text-muted">
-                          Belum ada catatan kalibrasi alat.
+                        <td colspan="8" class="p-0">
+                          <div class="empty-state-container">
+                            <div class="empty-state-icon">
+                              <i class="bx bx-certification"></i>
+                            </div>
+                            <h6 class="fw-semibold text-dark mb-1">Belum Ada Dokumen Kalibrasi</h6>
+                            <p class="text-muted small mb-3">Tidak ditemukan catatan kalibrasi alat medis untuk parameter saat ini.</p>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahKalibrasi">
+                              <i class="bx bx-plus me-1"></i> Upload Sertifikat Kalibrasi
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     <?php else: ?>
@@ -219,61 +230,47 @@
                       $no = 1;
                       foreach ($riwayat as $row): ?>
                         <tr>
-                          <td><?= sprintf("%02d", $no++) ?></td>
+                          <td class="text-muted font-monospace" style="font-size: 0.8rem;"><?= sprintf("%02d", $no++) ?></td>
                           <td>
-                            <span class="fw-semibold"><?= date(
-                                "d M Y",
-                                strtotime($row["tanggal_kalibrasi"]),
-                            ) ?></span>
+                            <strong class="d-block text-dark"><?= date("d M Y", strtotime($row["tanggal_kalibrasi"])) ?></strong>
                           </td>
                           <td>
-                            <strong><?= esc($row["nama_barang"]) ?></strong>
-                            <small class="text-muted d-block font-monospace"><?= esc(
-                                $row["kode_aset"] ?? "-",
-                            ) ?></small>
+                            <strong class="text-dark d-block"><?= esc($row["nama_barang"]) ?></strong>
+                            <span class="badge-code"><?= esc($row["kode_aset"] ?? "-") ?></span>
                           </td>
                           <td>
-                            <?= esc($row["nama_ruang"] ?? "-") ?>
-                            <small class="text-muted d-block">Lantai <?= esc(
-                                $row["lantai"] ?? "1",
-                            ) ?></small>
+                            <span class="text-dark fw-medium"><?= esc($row["nama_ruang"] ?? "-") ?></span>
+                            <small class="text-muted d-block font-monospace" style="font-size: 0.72rem;">Lantai <?= esc($row["lantai"] ?? "1") ?></small>
                           </td>
                           <td>
-                            <?= esc($row["no_seri"] ?: "-") ?><br>
-                            <small class="text-muted"><?= esc(
-                                $row["merek"] ?: "-",
-                            ) ?></small>
+                            <div class="text-dark font-monospace small"><?= esc($row["no_seri"] ?: "-") ?></div>
+                            <small class="text-muted"><?= esc($row["merek"] ?: "-") ?></small>
                           </td>
                           <td>
                             <?php if (!empty($row["file_sertifikat"])): ?>
-                              <a href="<?= base_url(
-                                  "uploads/kalibrasi/" .
-                                      $row["file_sertifikat"],
-                              ) ?>" target="_blank" class="btn btn-sm btn-outline-primary">
-                                <i class="bx bx-file me-1"></i> Lihat File
+                              <a href="<?= base_url("uploads/kalibrasi/" . $row["file_sertifikat"]) ?>" target="_blank" class="btn btn-sm btn-outline-secondary py-1 px-2" style="font-size: 0.78rem; border-radius: 4px;">
+                                <i class="bx bx-file me-1"></i> Sertifikat
                               </a>
                             <?php else: ?>
-                              <span class="text-muted">-</span>
+                              <span class="text-muted small">-</span>
                             <?php endif; ?>
                           </td>
                           <td style="max-width: 250px; white-space: normal;">
-                            <small><?= esc($row["catatan"] ?: "-") ?></small>
+                            <span class="small text-slate-700" style="line-height: 1.4;"><?= esc($row["catatan"] ?: "-") ?></span>
                           </td>
                           <td class="text-center">
-                            <a href="<?= base_url(
-                                "kalibrasi/hapus/" . $row["id"],
-                            ) ?>" class="btn btn-sm btn-icon btn-outline-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus" aria-label="Hapus catatan kalibrasi <?= esc(
-    $row["nama_barang"],
-) ?>">
+                            <a href="<?= base_url("kalibrasi/hapus/" . $row["id"]) ?>" class="action-btn-ghost btn-ghost-danger" onclick="return confirm('Hapus catatan kalibrasi ini?')" title="Hapus Kalibrasi">
                               <i class="bx bx-trash"></i>
                             </a>
                           </td>
                         </tr>
-                      <?php endforeach;
-                      ?>
+                      <?php endforeach; ?>
                     <?php endif; ?>
                   </tbody>
                 </table>
+              </div>
+              <div class="table-footer-industrial d-flex justify-content-between align-items-center">
+                <span>Menampilkan <?= count($riwayat ?? []) ?> data sertifikasi</span>
               </div>
             </div>
           </div>
@@ -293,13 +290,11 @@
                   <div class="modal-body">
                     <div class="mb-3">
                       <label class="form-label">Pilih Alat Medis <span class="text-danger">*</span></label>
-                      <select class="form-select" name="barang_id" required>
-                        <option value="">-- Pilih Alat --</option>
+                      <select class="form-select select2-alat" name="barang_id" id="selectAlatMedis" required style="width: 100%;">
+                        <option value="">-- Cari atau Pilih Alat Medis --</option>
                         <?php foreach ($barang as $b): ?>
                           <option value="<?= $b["id"] ?>">
-                            <?= esc($b["nama_barang"]) ?> (<?= esc(
-     $b["kode_aset"],
- ) ?>) - <?= esc($b["nama_ruang"] ?? "-") ?>
+                            <?= esc($b["nama_barang"]) ?> (<?= esc($b["kode_aset"]) ?>)
                           </option>
                         <?php endforeach; ?>
                       </select>
@@ -352,6 +347,9 @@
   <script src="<?= base_url("assets/vendor/js/menu.js") ?>"></script>
   <script src="<?= base_url("assets/js/main.js") ?>"></script>
 
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
   <!-- FilePond JS -->
   <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
   <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
@@ -378,6 +376,16 @@
         labelMaxFileSize: 'Maksimal 5 MB'
       });
     }
+
+    // Inisialisasi Select2 pada Modal Tambah Kalibrasi
+    $(document).ready(function() {
+      $('.select2-alat').select2({
+        dropdownParent: $('#modalTambahKalibrasi'),
+        placeholder: '-- Cari atau Pilih Alat Medis --',
+        allowClear: true,
+        width: '100%'
+      });
+    });
   </script>
 </body>
 </html>

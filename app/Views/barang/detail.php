@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet" />
 
     <link rel="stylesheet" href="<?= base_url(
@@ -49,6 +49,7 @@
         "assets/vendor/css/core.css",
     ) ?>" />
     <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+    <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
 
     <!-- FilePond CSS -->
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
@@ -129,13 +130,13 @@
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y mt-4">
 
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Header (Industrial) -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
                             <div>
-                                <h4 class="mb-1">Detail Barang</h4>
-                                <p class="text-muted mb-0">Informasi barang, jadwal, dan riwayat maintenance</p>
+                                <h1 class="page-header-title">Detail Barang & Fasilitas</h1>
+                                <p class="page-header-desc">Spesifikasi teknis, kartu garansi, riwayat perbaikan, dan jadwal pemeliharaan berkala.</p>
                             </div>
-                            <div>
+                            <div class="d-flex gap-2">
                                 <a href="<?= base_url(
                                     "barang",
                                 ) ?>" class="btn btn-outline-secondary me-2">Kembali</a>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="../../assets/" data-template="vertical-menu-template" data-bs-theme="light">
+<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url("assets/") ?>/" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,12 +13,15 @@
     ) ?>" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/vendor/fonts/iconify-icons.css" />
-    <link rel="stylesheet" href="../../assets/vendor/fonts/boxicons.css" />
-    <link rel="stylesheet" href="../../assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="../../assets/css/demo.css" />
-    <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/fonts/iconify-icons.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/css/core.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/css/demo.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <style>
         @media print {
@@ -38,9 +41,9 @@
         .print-header { display: none; }
     </style>
 
-    <script src="../../assets/vendor/js/helpers.js"></script>
-    <script src="../../assets/vendor/js/template-customizer.js"></script>
-    <script src="../../assets/js/config.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/helpers.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/template-customizer.js"></script>
+    <script src="<?= base_url("assets/") ?>/js/config.js"></script>
 </head>
 <body>
     <div class="layout-wrapper layout-content-navbar">
@@ -60,18 +63,11 @@
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
 
-                        <!-- Header & Breadcrumb -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Header Halaman (Industrial) -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
                             <div>
-                                <h4 class="fw-bold mb-1"><i class="bx bx-bar-chart-alt-2 me-2"></i>Pusat Laporan Sarpras</h4>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="<?= base_url(
-                                            "dashboard",
-                                        ) ?>">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">Laporan</li>
-                                    </ol>
-                                </nav>
+                                <h1 class="page-header-title">Pusat Laporan Sarpras</h1>
+                                <p class="page-header-desc">Kompilasi audit inventaris, jadwal pemeliharaan, dan riwayat perbaikan fasilitas RS.</p>
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="button" onclick="window.print()" class="btn btn-outline-secondary">
@@ -83,51 +79,27 @@
                             </div>
                         </div>
 
-                        <!-- 1. Ringkasan Kartu Statistik -->
+                        <!-- 1. Ringkasan Kartu Statistik (Industrial) -->
                         <div class="row g-3 mb-4">
                             <div class="col-sm-6 col-lg-4">
-                                <div class="card card-border-shadow-primary h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="avatar avatar-md me-3 bg-label-primary rounded p-2">
-                                            <i class="bx bx-box fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-muted d-block small">Total Aset Aktif</span>
-                                            <h4 class="mb-0 fw-bold"><?= number_format(
-                                                $statistik["total_barang"] ?? 0,
-                                            ) ?></h4>
-                                        </div>
-                                    </div>
+                                <div class="stat-card-industrial">
+                                    <i class="bx bx-box stat-icon"></i>
+                                    <div class="stat-label">TOTAL ASET AKTIF</div>
+                                    <div class="stat-value"><?= number_format($statistik["total_barang"] ?? 0) ?></div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-lg-4">
-                                <div class="card card-border-shadow-success h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="avatar avatar-md me-3 bg-label-success rounded p-2">
-                                            <i class="bx bx-check-circle fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-muted d-block small">Kondisi Baik</span>
-                                            <h4 class="mb-0 fw-bold"><?= number_format(
-                                                $statistik["total_baik"] ?? 0,
-                                            ) ?></h4>
-                                        </div>
-                                    </div>
+                                <div class="stat-card-industrial">
+                                    <i class="bx bx-check-circle stat-icon"></i>
+                                    <div class="stat-label">KONDISI BAIK</div>
+                                    <div class="stat-value text-success"><?= number_format($statistik["total_baik"] ?? 0) ?></div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-lg-4">
-                                <div class="card card-border-shadow-danger h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="avatar avatar-md me-3 bg-label-danger rounded p-2">
-                                            <i class="bx bx-wrench fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-muted d-block small">Perlu Perbaikan / Rusak</span>
-                                            <h4 class="mb-0 fw-bold"><?= number_format(
-                                                $statistik["total_rusak"] ?? 0,
-                                            ) ?></h4>
-                                        </div>
-                                    </div>
+                                <div class="stat-card-industrial">
+                                    <i class="bx bx-wrench stat-icon"></i>
+                                    <div class="stat-label">PERLU PERBAIKAN / RUSAK</div>
+                                    <div class="stat-value text-danger"><?= number_format($statistik["total_rusak"] ?? 0) ?></div>
                                 </div>
                             </div>
                         </div>
@@ -417,11 +389,11 @@
     </div>
 
     <!-- Core JS -->
-    <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../../assets/vendor/js/bootstrap.js"></script>
-    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="../../assets/vendor/js/menu.js"></script>
-    <script src="../../assets/js/main.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/libs/jquery/jquery.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/libs/popper/popper.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/bootstrap.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/menu.js"></script>
+    <script src="<?= base_url("assets/") ?>/js/main.js"></script>
 </body>
 </html>
