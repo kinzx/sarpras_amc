@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/AMC-tanpa-nama-pad.png" alt="Logo AMC" width="120">
+</p>
+
 # SIM-SARPRAS RS AMC (Sistem Informasi Manajemen Sarana & Prasarana)
 
 Sistem Informasi Manajemen Sarana dan Prasarana (SARPRAS) untuk **Rumah Sakit AMC**, dibangun menggunakan framework **CodeIgniter 4** dan database **MySQL/MariaDB**. Aplikasi ini dirancang untuk mendata, memantau, serta mengelola siklus pemeliharaan aset medis dan non-medis rumah sakit secara terintegrasi dan efisien.
