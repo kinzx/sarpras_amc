@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="../../assets/" data-template="vertical-menu-template" data-bs-theme="light">
+<html lang="id" class="layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr" data-skin="default" data-assets-path="<?= base_url("assets/") ?>/" data-template="vertical-menu-template" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,12 +13,15 @@
     ) ?>" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/vendor/fonts/iconify-icons.css" />
-    <link rel="stylesheet" href="../../assets/vendor/fonts/boxicons.css" />
-    <link rel="stylesheet" href="../../assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="../../assets/css/demo.css" />
-    <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/fonts/iconify-icons.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/css/core.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/css/demo.css" />
+    <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
+    <link rel="stylesheet" href="<?= base_url("assets/") ?>/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- FilePond CSS -->
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
@@ -28,9 +31,9 @@
         .filepond--panel-root { background-color: #f8f9fa; border: 2px dashed #d9dee3; border-radius: 0.5rem; }
     </style>
 
-    <script src="../../assets/vendor/js/helpers.js"></script>
-    <script src="../../assets/vendor/js/template-customizer.js"></script>
-    <script src="../../assets/js/config.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/helpers.js"></script>
+    <script src="<?= base_url("assets/") ?>/vendor/js/template-customizer.js"></script>
+    <script src="<?= base_url("assets/") ?>/js/config.js"></script>
 </head>
 <body>
     <div class="layout-wrapper layout-content-navbar">

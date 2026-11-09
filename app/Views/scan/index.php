@@ -18,9 +18,6 @@
     <link rel="stylesheet" href="<?= base_url(
         "assets/vendor/css/core.css",
     ) ?>" />
-    <link rel="stylesheet" href="<?= base_url(
-        "assets/vendor/css/theme-default.css",
-    ) ?>" />
 
     <!-- html5-qrcode scanner library -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>

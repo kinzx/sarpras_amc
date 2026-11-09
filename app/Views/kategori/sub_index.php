@@ -15,7 +15,9 @@
   ) ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url(
       "assets/vendor/fonts/iconify-icons.css",
   ) ?>" />
@@ -25,6 +27,7 @@
   ) ?>" />
   <link rel="stylesheet" href="<?= base_url("assets/vendor/css/core.css") ?>" />
   <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
+  <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
   <link rel="stylesheet" href="<?= base_url(
       "assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css",
   ) ?>" />
@@ -64,29 +67,19 @@
           <!-- ========================================== -->
           <div class="container-xxl flex-grow-1 container-p-y">
 
-              <!-- Header Card -->
-              <div class="card mb-4">
-                  <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                      <div class="mb-3 mb-md-0">
-                          <h4 class="card-title mb-1">
-                              <span class="text-primary me-2">|</span> Sub Kategori: <?= $kategoriInduk[
-                                  "nama_kategori"
-                              ] ?>
-                          </h4>
-                          <p class="text-muted mb-0">Daftar pengelompokan spesifik di bawah <?= $kategoriInduk[
-                              "nama_kategori"
-                          ] ?>.</p>
-                      </div>
-                      <div class="d-flex gap-2">
-                          <a href="<?= base_url(
-                              "kategori",
-                          ) ?>" class="btn btn-outline-secondary">
-                              <i class="bx bx-arrow-back me-1"></i> Kembali
-                          </a>
-                          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSub">
-                              <i class="bx bx-plus-circle me-1"></i> Tambah Sub
-                          </button>
-                      </div>
+              <!-- Header Halaman (Industrial Clean) -->
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                  <div>
+                      <h1 class="page-header-title">Sub Kategori: <?= esc($kategoriInduk["nama_kategori"]) ?></h1>
+                      <p class="page-header-desc">Daftar pengelompokan spesifik di bawah kategori <?= esc($kategoriInduk["nama_kategori"]) ?>.</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                      <a href="<?= base_url("kategori") ?>" class="btn btn-outline-secondary">
+                          <i class="bx bx-arrow-back me-1"></i> Kembali
+                      </a>
+                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSub">
+                          <i class="bx bx-plus me-1"></i> Tambah Sub
+                      </button>
                   </div>
               </div>
 
@@ -102,10 +95,7 @@
                   <div class="alert alert-danger alert-dismissible fade show" role="alert">
                       <strong>Sub-kategori belum tersimpan:</strong>
                       <ul class="mb-0 mt-2">
-                          <?php foreach (
-                              session()->getFlashdata("errors")
-                              as $error
-                          ): ?>
+                          <?php foreach (session()->getFlashdata("errors") as $error): ?>
                               <li><?= esc($error) ?></li>
                           <?php endforeach; ?>
                       </ul>
@@ -113,52 +103,65 @@
                   </div>
               <?php endif; ?>
 
-              <!-- Tabel Sub Kategori -->
-              <div class="card">
+              <!-- Tabel Sub Kategori (Industrial) -->
+              <div class="table-card-industrial">
+                  <div class="card-header-industrial d-flex justify-content-between align-items-center">
+                      <h6 class="mb-0 fw-semibold text-dark">Daftar Sub-Kategori Terdaftar</h6>
+                      <span class="text-muted small">Total: <?= count($subKategori ?? []) ?></span>
+                  </div>
                   <div class="table-responsive text-nowrap">
-                      <table class="table table-hover">
+                      <table class="table-industrial">
                           <thead>
                               <tr>
-                                  <th width="5%">No</th>
-                                  <th>Nama Sub Kategori</th>
-                                  <th>Status</th>
-                                  <th width="15%">Aksi</th>
+                                  <th style="width: 60px;">NO.</th>
+                                  <th>NAMA SUB KATEGORI</th>
+                                  <th>STATUS</th>
+                                  <th style="width: 100px;" class="text-center">AKSI</th>
                               </tr>
                           </thead>
-                          <tbody class="table-border-bottom-0">
+                          <tbody>
                               <?php if (empty($subKategori)): ?>
                                   <tr>
-                                      <td colspan="4" class="text-center py-4 text-muted">Belum ada sub-kategori.</td>
+                                      <td colspan="4" class="p-0">
+                                          <div class="empty-state-container">
+                                              <div class="empty-state-icon">
+                                                  <i class="bx bx-git-branch"></i>
+                                              </div>
+                                              <h6 class="fw-semibold text-dark mb-1">Belum Ada Sub-Kategori</h6>
+                                              <p class="text-muted small mb-3">Silakan tambahkan sub-kategori untuk mengelompokkan aset lebih detail.</p>
+                                              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahSub">
+                                                  <i class="bx bx-plus me-1"></i> Tambah Sub Sekarang
+                                              </button>
+                                          </div>
+                                      </td>
                                   </tr>
                               <?php else: ?>
                                   <?php
                                   $no = 1;
                                   foreach ($subKategori as $sub): ?>
                                   <tr>
-                                      <td><?= $no++ ?></td>
-                                      <td><strong><?= $sub[
-                                          "nama_sub_kategori"
-                                      ] ?></strong></td>
+                                      <td class="text-muted font-monospace" style="font-size: 0.8rem;"><?= sprintf("%02d", $no++) ?></td>
+                                      <td><strong class="text-dark"><?= esc($sub["nama_sub_kategori"]) ?></strong></td>
                                       <td>
                                           <?php if ($sub["is_active"] == 1): ?>
-                                              <span class="badge bg-label-success">Aktif</span>
+                                              <span class="badge-status-box active">Aktif</span>
                                           <?php else: ?>
-                                              <span class="badge bg-label-danger">Non-Aktif</span>
+                                              <span class="badge-status-box inactive">Non-Aktif</span>
                                           <?php endif; ?>
                                       </td>
-                                      <td>
-                                          <a href="<?= base_url(
-                                              "kategori/hapus/" . $sub["id"],
-                                          ) ?>" class="btn btn-sm btn-icon btn-danger" onclick="return confirm('Yakin ingin menonaktifkan sub-kategori ini?')">
+                                      <td class="text-center">
+                                          <a href="<?= base_url("kategori/hapus/" . $sub["id"]) ?>" class="action-btn-ghost btn-ghost-danger" onclick="return confirm('Yakin ingin menonaktifkan sub-kategori ini?')" title="Hapus Sub-Kategori">
                                               <i class="bx bx-trash"></i>
                                           </a>
                                       </td>
                                   </tr>
-                                  <?php endforeach;
-                                  ?>
+                                  <?php endforeach; ?>
                               <?php endif; ?>
                           </tbody>
                       </table>
+                  </div>
+                  <div class="table-footer-industrial d-flex justify-content-between align-items-center">
+                      <span>Menampilkan <?= count($subKategori ?? []) ?> sub-kategori</span>
                   </div>
               </div>
           </div>
