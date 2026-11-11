@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('AMC-tanpa-nama-pad.png') ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="<?= base_url('assets/vendor/fonts/iconify-icons.css') ?>" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/filepond@4.32.7/dist/filepond.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/filepond-plugin-image-preview@4.6.12/dist/filepond-plugin-image-preview.min.css" />
@@ -63,7 +63,7 @@
                 <div class="card" style="border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 1px 3px rgba(15,23,42,0.05);">
                   <div class="card-header border-bottom py-3 px-4 bg-white">
                     <h5 class="card-title mb-0 fw-bold text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                      <i class="bx bx-plus-circle me-2 text-slate-700"></i> Formulir Tiket Laporan Kerusakan
+                      <i class="bx bx-plus-circle me-2 text-slate-700"></i> Laporan Kerusakan
                     </h5>
                     <small class="text-muted">Pelaporan awal kerusakan inventaris / alat medis rumah sakit.</small>
                   </div>

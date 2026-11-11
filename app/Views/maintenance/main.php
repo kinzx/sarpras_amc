@@ -33,9 +33,7 @@
             <h1 class="page-header-title">Pemeliharaan & Kalibrasi Berkala</h1>
             <p class="page-header-desc">Pemantauan siklus pemeliharaan preventif dan pencatatan riwayat fisik aset sarpras rumah sakit.</p>
         </div>
-        <a href="<?= base_url(
-            "maintenance/create",
-        ) ?>" class="btn btn-primary">
+        <a href="<?= base_url("maintenance/create") ?>" class="btn btn-primary">
             <i class="bx bx-plus me-1"></i> Input Pemeliharaan
         </a>
     </div>
@@ -96,7 +94,9 @@
                 <h6 class="mb-0 fw-semibold text-dark">Jadwal Pemeliharaan Terdekat</h6>
                 <span class="text-muted small">Barang yang jatuh tempo dalam 30 hari atau telah lewat tanggal</span>
             </div>
-            <span class="badge-code"><?= count($jadwalPerhatian) ?> Prioritas</span>
+            <span class="badge-code"><?= count(
+                $jadwalPerhatian,
+            ) ?> Prioritas</span>
         </div>
         <div class="p-3">
             <?php if (empty($jadwalPerhatian)): ?>
@@ -114,13 +114,17 @@
                         $sisa = (int) $j["sisa_hari"];
                         if ($sisa < 0) {
                             $labelStatus = "Terlambat " . abs($sisa) . " hari";
-                            $statusStyle = "background: #fef2f2; color: #991b1b; border-color: #fecaca;";
+                            $statusStyle =
+                                "background: #fef2f2; color: #991b1b; border-color: #fecaca;";
                         } elseif ($sisa === 0) {
                             $labelStatus = "Jatuh tempo hari ini";
-                            $statusStyle = "background: #fffbeb; color: #b45309; border-color: #fde68a;";
+                            $statusStyle =
+                                "background: #fffbeb; color: #b45309; border-color: #fde68a;";
                         } else {
-                            $labelStatus = "Jatuh tempo " . $sisa . " hari lagi";
-                            $statusStyle = "background: #fffbeb; color: #b45309; border-color: #fde68a;";
+                            $labelStatus =
+                                "Jatuh tempo " . $sisa . " hari lagi";
+                            $statusStyle =
+                                "background: #fffbeb; color: #b45309; border-color: #fde68a;";
                         }
                         ?>
                         <div class="col-md-6 col-xl-4">
@@ -128,8 +132,8 @@
                                 <div>
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <span class="badge-status-box" style="<?= $statusStyle ?>"><?= esc(
-                                            $labelStatus,
-                                        ) ?></span>
+    $labelStatus,
+) ?></span>
                                         <span class="text-muted font-monospace" style="font-size: 0.75rem;"><?= date(
                                             "d M Y",
                                             strtotime($j["jadwal_berikutnya"]),
@@ -139,16 +143,27 @@
                                         $j["nama_barang"],
                                     ) ?>"><?= esc($j["nama_barang"]) ?></h6>
                                     <div class="d-flex align-items-center gap-1 mb-1">
-                                        <span class="badge-code"><?= esc($j["kode_aset"]) ?></span>
-                                        <span class="text-muted small">&bull; <?= esc($j["nama_ruang"] ?? "-") ?></span>
+                                        <span class="badge-code"><?= esc(
+                                            $j["kode_aset"],
+                                        ) ?></span>
+                                        <span class="text-muted small">&bull; <?= esc(
+                                            $j["nama_ruang"] ?? "-",
+                                        ) ?></span>
                                     </div>
                                     <span class="text-muted small d-block" style="font-size: 0.75rem;">
-                                        Interval: <?= (int) $j["interval_maintenance_hari"] ?> hari &bull; Terakhir: <?= $j["tanggal_perbaikan_terakhir"] ? date("d M Y", strtotime($j["tanggal_perbaikan_terakhir"])) : "Belum ada" ?>
+                                        Interval: <?= (int) $j[
+                                            "interval_maintenance_hari"
+                                        ] ?> hari &bull; Terakhir: <?= $j[
+     "tanggal_perbaikan_terakhir"
+ ]
+     ? date("d M Y", strtotime($j["tanggal_perbaikan_terakhir"]))
+     : "Belum ada" ?>
                                     </span>
                                 </div>
                                 <div class="mt-3 pt-2" style="border-top: 1px solid var(--border-subtle);">
                                     <a href="<?= base_url(
-                                        "maintenance/create?barang_id=" . $j["id"],
+                                        "maintenance/create?barang_id=" .
+                                            $j["id"],
                                     ) ?>" class="btn btn-outline-secondary btn-sm w-100">
                                         <i class="bx bx-plus me-1"></i> Catat Pemeliharaan
                                     </a>
@@ -239,7 +254,10 @@
                         $no = 1;
                         foreach ($riwayat as $row): ?>
                             <tr>
-                                <td class="text-muted font-monospace" style="font-size: 0.8rem;"><?= sprintf("%02d", $no++) ?></td>
+                                <td class="text-muted font-monospace" style="font-size: 0.8rem;"><?= sprintf(
+                                    "%02d",
+                                    $no++,
+                                ) ?></td>
                                 <td>
                                     <strong class="d-block text-dark"><?= date(
                                         "d M Y",
@@ -265,8 +283,8 @@
                                                     "uploads/barang/" .
                                                         $row["foto_barang"],
                                                 ) ?>" alt="<?= esc(
-                                                    $row["nama_barang"],
-                                                ) ?>" class="w-100 h-100 object-fit-cover">
+    $row["nama_barang"],
+) ?>" class="w-100 h-100 object-fit-cover">
                                             <?php else: ?>
                                                 <i class="bx bx-image text-muted" style="font-size: 1.2rem;"></i>
                                             <?php endif; ?>
@@ -284,10 +302,18 @@
                                 </td>
                                 <td>
                                     <div class="small" style="font-size: 0.78rem; line-height: 1.4;">
-                                        <div><span class="text-muted">Bodi:</span> <span class="fw-medium text-dark"><?= esc($row["kondisi_bodi"]) ?></span></div>
-                                        <div><span class="text-muted">Display:</span> <span class="fw-medium text-dark"><?= esc($row["kondisi_display"]) ?></span></div>
-                                        <div><span class="text-muted">Tombol:</span> <span class="fw-medium text-dark"><?= esc($row["kondisi_tombol"]) ?></span></div>
-                                        <div><span class="text-muted">Aksesoris:</span> <span class="fw-medium text-dark"><?= esc($row["kondisi_aksesoris"]) ?></span></div>
+                                        <div><span class="text-muted">Bodi:</span> <span class="fw-medium text-dark"><?= esc(
+                                            $row["kondisi_bodi"],
+                                        ) ?></span></div>
+                                        <div><span class="text-muted">Display:</span> <span class="fw-medium text-dark"><?= esc(
+                                            $row["kondisi_display"],
+                                        ) ?></span></div>
+                                        <div><span class="text-muted">Tombol:</span> <span class="fw-medium text-dark"><?= esc(
+                                            $row["kondisi_tombol"],
+                                        ) ?></span></div>
+                                        <div><span class="text-muted">Aksesoris:</span> <span class="fw-medium text-dark"><?= esc(
+                                            $row["kondisi_aksesoris"],
+                                        ) ?></span></div>
                                     </div>
                                 </td>
                                 <td style="max-width: 260px; white-space: normal;">
@@ -335,13 +361,58 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <a href="<?= base_url(
-                                        "maintenance/hapus/" . $row["id"],
-                                    ) ?>" class="action-btn-ghost btn-ghost-danger" title="Hapus catatan" aria-label="Hapus catatan pemeliharaan <?= esc(
-                                        $row["nama_barang"],
-                                    ) ?>" onclick="return confirm('Yakin ingin menghapus catatan pemeliharaan ini?')">
-                                        <i class="bx bx-trash"></i>
-                                    </a>
+                                    <div class="d-inline-flex gap-1">
+                                        <button type="button"
+                                            class="action-btn-ghost btn-ghost-primary btn-edit-maintenance border-0 bg-transparent p-0"
+                                            title="Ubah catatan"
+                                            data-id="<?= $row["id"] ?>"
+                                            data-nama-barang="<?= esc(
+                                                $row["nama_barang"] ?? "",
+                                            ) ?>"
+                                            data-kode-aset="<?= esc(
+                                                $row["kode_aset"] ?? "",
+                                            ) ?>"
+                                            data-tanggal="<?= esc(
+                                                $row["tanggal_maintenance"],
+                                            ) ?>"
+                                            data-user-id="<?= esc(
+                                                $row["user_id"],
+                                            ) ?>"
+                                            data-pendamping='<?= esc(
+                                                json_encode(
+                                                    json_decode(
+                                                        $row[
+                                                            "teknisi_pendamping"
+                                                        ] ?? "[]",
+                                                    ),
+                                                ),
+                                                "attr",
+                                            ) ?>'
+                                            data-bodi="<?= esc(
+                                                $row["kondisi_bodi"],
+                                            ) ?>"
+                                            data-display="<?= esc(
+                                                $row["kondisi_display"],
+                                            ) ?>"
+                                            data-tombol="<?= esc(
+                                                $row["kondisi_tombol"],
+                                            ) ?>"
+                                            data-aksesoris="<?= esc(
+                                                $row["kondisi_aksesoris"],
+                                            ) ?>"
+                                            data-kesimpulan="<?= esc(
+                                                $row["kesimpulan"] ?? "",
+                                            ) ?>">
+                                            <i class="bx bx-pencil"></i>
+                                        </button>
+                                        <a href="<?= base_url(
+                                            "maintenance/hapus/" . $row["id"],
+                                        ) ?>" class="action-btn-ghost btn-ghost-danger" title="Hapus catatan" aria-label="Hapus catatan pemeliharaan <?= esc(
+    $row["nama_barang"],
+) ?>" onclick="return confirm('Yakin ingin menghapus catatan pemeliharaan ini?')">
+                                            <i class="bx bx-trash"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach;
@@ -358,3 +429,188 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Catatan Pemeliharaan -->
+<div class="modal fade" id="modalEditMaintenance" tabindex="-1" aria-labelledby="modalEditMaintenanceLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title text-white d-flex align-items-center gap-2" id="modalEditMaintenanceLabel">
+                    <i class="bx bx-pencil fs-4"></i> Edit Catatan Pemeliharaan
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <form id="formEditMaintenance" method="POST" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+                <div class="modal-body p-4">
+                    <!-- Info Barang (Readonly) -->
+                    <div class="alert alert-secondary py-2 px-3 mb-3 d-flex align-items-center justify-content-between">
+                        <div>
+                            <small class="text-muted d-block">Barang / Aset</small>
+                            <strong id="edit_info_barang" class="text-dark">-</strong>
+                        </div>
+                        <span id="edit_info_kode" class="badge bg-secondary font-monospace">-</span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Tanggal Maintenance <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal_maintenance" id="edit_tanggal" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Teknisi Utama <span class="text-danger">*</span></label>
+                            <select name="user_id" id="edit_user_id" class="form-select" required>
+                                <option value="">-- Pilih Teknisi --</option>
+                                <?php foreach ($petugas ?? [] as $p): ?>
+                                    <option value="<?= $p["id"] ?>"><?= esc(
+    $p["username"],
+) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Teknisi Pendamping (Opsional)</label>
+                            <div class="border rounded p-2 bg-light d-flex flex-wrap gap-3" id="edit_pendamping_container">
+                                <?php foreach ($petugas ?? [] as $p): ?>
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input edit-pendamping-check" type="checkbox" name="teknisi_pendamping[]" value="<?= $p[
+                                            "id"
+                                        ] ?>" id="edit_pendamping_<?= $p[
+    "id"
+] ?>">
+                                        <label class="form-check-label small" for="edit_pendamping_<?= $p[
+                                            "id"
+                                        ] ?>">
+                                            <?= esc($p["username"]) ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.72rem;">Centang teknisi lain yang turut mendampingi proses maintenance.</small>
+                        </div>
+
+                        <!-- Pemeriksaan Fisik -->
+                        <div class="col-12">
+                            <h6 class="fw-bold mb-2 text-primary border-bottom pb-1">
+                                <i class="bx bx-check-shield me-1"></i> Pemeriksaan Kondisi Fisik
+                            </h6>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Kondisi Bodi / Casing <span class="text-danger">*</span></label>
+                            <select name="kondisi_bodi" id="edit_kondisi_bodi" class="form-select form-select-sm" required>
+                                <option value="Bersih & Utuh">Bersih & Utuh</option>
+                                <option value="Baret Halus">Baret Halus</option>
+                                <option value="Retak Ringan">Retak Ringan</option>
+                                <option value="Pecah / Rusak">Pecah / Rusak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Kondisi Layar / Display <span class="text-danger">*</span></label>
+                            <select name="kondisi_display" id="edit_kondisi_display" class="form-select form-select-sm" required>
+                                <option value="Normal & Jelas">Normal & Jelas</option>
+                                <option value="Redup">Redup</option>
+                                <option value="Baret / Tergores">Baret / Tergores</option>
+                                <option value="Garis / Mati Sebagian">Garis / Mati Sebagian</option>
+                                <option value="Tidak Ada Display">Tidak Ada Display (N/A)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Kondisi Tombol / Saklar <span class="text-danger">*</span></label>
+                            <select name="kondisi_tombol" id="edit_kondisi_tombol" class="form-select form-select-sm" required>
+                                <option value="Responsif">Responsif</option>
+                                <option value="Keras / Macet">Keras / Macet</option>
+                                <option value="Longgar">Longgar</option>
+                                <option value="Rusak / Hilang">Rusak / Hilang</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Kondisi Aksesoris / Kabel <span class="text-danger">*</span></label>
+                            <select name="kondisi_aksesoris" id="edit_kondisi_aksesoris" class="form-select form-select-sm" required>
+                                <option value="Lengkap & Baik">Lengkap & Baik</option>
+                                <option value="Kabel Terkelupas">Kabel Terkelupas</option>
+                                <option value="Tidak Lengkap">Tidak Lengkap</option>
+                                <option value="Rusak">Rusak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Kesimpulan / Catatan Tambahan</label>
+                            <textarea name="kesimpulan" id="edit_kesimpulan" class="form-control" rows="3" placeholder="Catatan kondisi saat pemeliharaan..."></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Ganti Foto Fisik (Opsional)</label>
+                            <input type="file" name="foto_kondisi" class="form-control" accept="image/*">
+                            <small class="text-muted" style="font-size: 0.72rem;">Format: JPG, JPEG, PNG, WEBP (maks 2MB). Biarkan kosong jika tidak ingin mengubah foto.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var modalEl = document.getElementById('modalEditMaintenance');
+    if (!modalEl) return;
+    var modal = new bootstrap.Modal(modalEl);
+
+    document.querySelectorAll('.btn-edit-maintenance').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            var namaBarang = this.getAttribute('data-nama-barang');
+            var kodeAset = this.getAttribute('data-kode-aset');
+            var tanggal = this.getAttribute('data-tanggal');
+            var userId = this.getAttribute('data-user-id');
+            var pendampingRaw = this.getAttribute('data-pendamping');
+            var bodi = this.getAttribute('data-bodi');
+            var display = this.getAttribute('data-display');
+            var tombol = this.getAttribute('data-tombol');
+            var aksesoris = this.getAttribute('data-aksesoris');
+            var kesimpulan = this.getAttribute('data-kesimpulan');
+
+            document.getElementById('formEditMaintenance').action = '<?= site_url(
+                "maintenance/update/",
+            ) ?>' + id;
+            document.getElementById('edit_info_barang').textContent = namaBarang || '-';
+            document.getElementById('edit_info_kode').textContent = kodeAset || '-';
+            document.getElementById('edit_tanggal').value = tanggal ? tanggal.substring(0, 10) : '';
+            document.getElementById('edit_user_id').value = userId || '';
+            document.getElementById('edit_kondisi_bodi').value = bodi || 'Bersih & Utuh';
+            document.getElementById('edit_kondisi_display').value = display || 'Normal & Jelas';
+            document.getElementById('edit_kondisi_tombol').value = tombol || 'Responsif';
+            document.getElementById('edit_kondisi_aksesoris').value = aksesoris || 'Lengkap & Baik';
+            document.getElementById('edit_kesimpulan').value = kesimpulan || '';
+
+            // Reset checklist pendamping
+            document.querySelectorAll('.edit-pendamping-check').forEach(function(chk) {
+                chk.checked = false;
+            });
+
+            if (pendampingRaw) {
+                try {
+                    var pendampingArr = JSON.parse(pendampingRaw);
+                    if (Array.isArray(pendampingArr)) {
+                        pendampingArr.forEach(function(pid) {
+                            var chk = document.getElementById('edit_pendamping_' + pid);
+                            if (chk) chk.checked = true;
+                        });
+                    }
+                } catch (e) {}
+            }
+
+            modal.show();
+        });
+    });
+});
+</script>

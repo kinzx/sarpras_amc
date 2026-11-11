@@ -31,8 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet" />
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 
     <link rel="stylesheet" href="<?= base_url(
         "assets/vendor/fonts/iconify-icons.css",
@@ -49,7 +48,9 @@
         "assets/vendor/css/core.css",
     ) ?>" />
     <link rel="stylesheet" href="<?= base_url("assets/css/demo.css") ?>" />
-    <link rel="stylesheet" href="<?= base_url("assets/css/industrial.css") ?>" />
+    <link rel="stylesheet" href="<?= base_url(
+        "assets/css/industrial.css",
+    ) ?>" />
 
     <!-- FilePond CSS -->
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
@@ -102,6 +103,7 @@
             color: #ff3e1d;
         }
     </style>
+</head>
 
 <body>
     <!-- Layout wrapper -->
@@ -136,19 +138,19 @@
                                 <h1 class="page-header-title">Detail Barang & Fasilitas</h1>
                                 <p class="page-header-desc">Spesifikasi teknis, kartu garansi, riwayat perbaikan, dan jadwal pemeliharaan berkala.</p>
                             </div>
-                            <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap gap-2">
                                 <a href="<?= base_url(
                                     "barang",
-                                ) ?>" class="btn btn-outline-secondary me-2">Kembali</a>
+                                ) ?>" class="btn btn-outline-secondary">Kembali</a>
                                 <a href="<?= base_url(
                                     "barang/label/" . $item["id"],
-                                ) ?>" target="_blank" class="btn btn-outline-primary me-2"><i class="bx bx-download me-1"></i> Label QR</a>
+                                ) ?>" target="_blank" class="btn btn-outline-primary"><i class="bx bx-download me-1"></i> Label QR</a>
                                 <a href="<?= base_url(
                                     "barang/edit/" . $item["id"],
-                                ) ?>" class="btn btn-warning me-2"><i class="bx bx-pencil me-1"></i> Ubah</a>
+                                ) ?>" class="btn btn-warning"><i class="bx bx-pencil me-1"></i> Ubah</a>
 
                                 <!-- Tombol Perbaikan (Warna Merah) -->
-                                <button class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#modalPerbaikan">
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalPerbaikan">
                                     <i class="bx bx-wrench me-1"></i> Input Perbaikan
                                 </button>
 
@@ -279,14 +281,14 @@
                                         <h5 class="mb-0">Jadwal maintenance</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row bg-light rounded p-3">
-                                            <div class="col-md-3 border-end">
+                                        <div class="row g-3 bg-light rounded p-3">
+                                            <div class="col-6 col-md-3">
                                                 <small class="text-muted d-block mb-1">Interval (dari kategori)</small>
                                                 <h6 class="mb-0 fw-bold"><?= $item[
                                                     "interval_maintenance_hari"
                                                 ] ?> hari</h6>
                                             </div>
-                                            <div class="col-md-3 border-end px-3">
+                                            <div class="col-6 col-md-3">
                                                 <small class="text-muted d-block mb-1">Tanggal maintenance</small>
                                                 <h6 class="mb-0 fw-bold"><?= isset(
                                                     $maintenance[0],
@@ -301,7 +303,7 @@
                                                     )
                                                     : "-" ?></h6>
                                             </div>
-                                            <div class="col-md-3 border-end px-3">
+                                            <div class="col-6 col-md-3">
                                                 <small class="text-muted d-block mb-1">Berikutnya</small>
                                                 <h6 class="mb-0 fw-bold"><?= isset(
                                                     $maintenance[0],
@@ -321,7 +323,7 @@
                                                     )
                                                     : "-" ?></h6>
                                             </div>
-                                            <div class="col-md-3 px-3 text-end">
+                                            <div class="col-6 col-md-3 text-md-end">
                                                 <small class="text-muted d-block mb-1">Status</small>
                                                 <span class="badge bg-label-primary">Terjadwal</span>
                                             </div>
