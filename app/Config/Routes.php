@@ -58,6 +58,7 @@ $routes->group("", ["filter" => "login"], function ($routes) {
     $routes->get("maintenance", "Maintenance::index");
     $routes->get("maintenance/create", "Maintenance::create");
     $routes->post("maintenance/simpan", "Maintenance::simpan");
+    $routes->post("maintenance/update/(:num)", 'Maintenance::update/$1');
     $routes->get("maintenance/hapus/(:num)", 'Maintenance::hapus/$1');
 
     // Perbaikan

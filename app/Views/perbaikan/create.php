@@ -63,7 +63,7 @@
                 <div class="card" style="border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 1px 3px rgba(15,23,42,0.05);">
                   <div class="card-header border-bottom py-3 px-4 bg-white">
                     <h5 class="card-title mb-0 fw-bold text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                      <i class="bx bx-plus-circle me-2 text-slate-700"></i> Formulir Tiket Laporan Kerusakan
+                      <i class="bx bx-plus-circle me-2 text-slate-700"></i> Laporan Kerusakan
                     </h5>
                     <small class="text-muted">Pelaporan awal kerusakan inventaris / alat medis rumah sakit.</small>
                   </div>
