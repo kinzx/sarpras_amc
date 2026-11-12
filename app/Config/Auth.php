@@ -2,7 +2,6 @@
 
 namespace Config;
 
-
 class Auth extends \Myth\Auth\Config\Auth
 {
     /**
@@ -30,7 +29,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string
      */
-    public $landingRoute = '/';
+    public $landingRoute = "/";
 
     /**
      * --------------------------------------------------------------------
@@ -45,13 +44,13 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $reservedRoutes = [
-        'login'                   => 'login',
-        'logout'                  => 'logout',
-        'register'                => 'register',
-        'activate-account'        => 'activate-account',
-        'resend-activate-account' => 'resend-activate-account',
-        'forgot'                  => 'forgot',
-        'reset-password'          => 'reset-password',
+        "login" => "login",
+        "logout" => "logout",
+        "register" => "register",
+        "activate-account" => "activate-account",
+        "resend-activate-account" => "resend-activate-account",
+        "forgot" => "forgot",
+        "reset-password" => "reset-password",
     ];
 
     /**
@@ -62,7 +61,7 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $authenticationLibs = [
-        'local' => 'Myth\Auth\Authentication\LocalAuthenticator',
+        "local" => "Myth\Auth\Authentication\LocalAuthenticator",
     ];
 
     /**
@@ -73,12 +72,12 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $views = [
-        'login'           => 'App\Views\Auth\login',
-        'register'        => 'App\Views\Auth\register',
-        'forgot'          => 'App\Views\Auth\forgot',
-        'reset'           => 'App\Views\Auth\reset',
-        'emailForgot'     => 'App\Views\Auth\emails\forgot',
-        'emailActivation' => 'App\Views\Auth\emails\activation',
+        "login" => "App\Views\Auth\login",
+        "register" => 'App\Views\Auth\register',
+        "forgot" => 'App\Views\Auth\forgot',
+        "reset" => 'App\Views\Auth\reset',
+        "emailForgot" => 'App\Views\Auth\emails\forgot',
+        "emailActivation" => 'App\Views\Auth\emails\activation',
     ];
 
     /**
@@ -88,7 +87,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string
      */
-    public $viewLayout = 'App\Views\Auth\layout';
+    public $viewLayout = "App\Views\Auth\layout";
 
     /**
      * --------------------------------------------------------------------
@@ -99,10 +98,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string[]
      */
-    public $validFields = [
-        'email',
-        'username',
-    ];
+    public $validFields = ["email", "username"];
 
     /**
      * --------------------------------------------------------------------
@@ -173,7 +169,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var bool
      */
-    public $allowRegistration = true;
+    public $allowRegistration = false;
 
     /**
      * --------------------------------------------------------------------
@@ -185,7 +181,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string|null Name of the ActivatorInterface class
      */
-    public $requireActivation = 'Myth\Auth\Authentication\Activators\EmailActivator';
+    public $requireActivation = "Myth\Auth\Authentication\Activators\EmailActivator";
 
     /**
      * --------------------------------------------------------------------
@@ -197,7 +193,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string|null Name of the ResetterInterface class
      */
-    public $activeResetter = 'Myth\Auth\Authentication\Resetters\EmailResetter';
+    public $activeResetter = "Myth\Auth\Authentication\Resetters\EmailResetter";
 
     /**
      * --------------------------------------------------------------------
@@ -329,9 +325,9 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var string[]
      */
     public $passwordValidators = [
-        'Myth\Auth\Authentication\Passwords\CompositionValidator',
-        'Myth\Auth\Authentication\Passwords\NothingPersonalValidator',
-        'Myth\Auth\Authentication\Passwords\DictionaryValidator',
+        "Myth\Auth\Authentication\Passwords\CompositionValidator",
+        "Myth\Auth\Authentication\Passwords\NothingPersonalValidator",
+        "Myth\Auth\Authentication\Passwords\DictionaryValidator",
         // 'Myth\Auth\Authentication\Passwords\PwnedValidator',
     ];
 
@@ -345,9 +341,9 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $userActivators = [
-        'Myth\Auth\Authentication\Activators\EmailActivator' => [
-            'fromEmail' => null,
-            'fromName'  => null,
+        "Myth\Auth\Authentication\Activators\EmailActivator" => [
+            "fromEmail" => null,
+            "fromName" => null,
         ],
     ];
 
@@ -361,9 +357,9 @@ class Auth extends \Myth\Auth\Config\Auth
      * @var array
      */
     public $userResetters = [
-        'Myth\Auth\Authentication\Resetters\EmailResetter' => [
-            'fromEmail' => null,
-            'fromName'  => null,
+        "Myth\Auth\Authentication\Resetters\EmailResetter" => [
+            "fromEmail" => null,
+            "fromName" => null,
         ],
     ];
 

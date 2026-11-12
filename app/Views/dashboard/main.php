@@ -750,11 +750,6 @@ $waktuRelatif = function ($datetime) {
                     <small class="text-muted">Perlu penanganan cepat oleh teknisi</small>
                 </div>
             </div>
-            <a href="<?= base_url(
-                "perbaikan/create",
-            ) ?>" class="btn btn-sm btn-danger">
-                <i class="bx bx-wrench me-1"></i> Tangani di Modul Perbaikan
-            </a>
         </div>
         <div class="table-responsive">
             <table class="table dashboard-table align-middle">
